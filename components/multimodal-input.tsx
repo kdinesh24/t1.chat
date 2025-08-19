@@ -220,9 +220,9 @@ function PureMultimodalInput({
           >
             <Button
               data-testid="scroll-to-bottom-button"
-              className="rounded-full"
-              size="icon"
               variant="outline"
+              size="sm"
+              className="absolute bottom-4 right-4 h-8 w-8 rounded-full bg-black border border-border hover:bg-muted transition-colors"
               onClick={(event) => {
                 event.preventDefault();
                 scrollToBottom();
@@ -283,7 +283,7 @@ function PureMultimodalInput({
         value={input}
         onChange={handleInput}
         className={cx(
-          'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base bg-muted pb-10 dark:border-zinc-700',
+          'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base bg-black pb-10 border border-border shadow-sm',
           className,
         )}
         rows={2}
@@ -347,7 +347,7 @@ function PureAttachmentsButton({
   return (
     <Button
       data-testid="attachments-button"
-      className="rounded-md rounded-bl-lg p-[7px] h-fit dark:border-zinc-700 hover:dark:bg-zinc-900 hover:bg-zinc-200"
+                             className="rounded-md rounded-bl-lg p-[7px] h-fit border-border hover:bg-muted transition-colors bg-black"
       onClick={(event) => {
         event.preventDefault();
         fileInputRef.current?.click();
@@ -370,15 +370,15 @@ function PureStopButton({
   setMessages: UseChatHelpers<ChatMessage>['setMessages'];
 }) {
   return (
-    <Button
-      data-testid="stop-button"
-      className="rounded-full p-1.5 h-fit border dark:border-zinc-600"
-      onClick={(event) => {
-        event.preventDefault();
-        stop();
-        setMessages((messages) => messages);
-      }}
-    >
+          <Button
+        data-testid="stop-button"
+        className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors bg-black"
+        onClick={(event) => {
+          event.preventDefault();
+          stop();
+          setMessages((messages) => messages);
+        }}
+      >
       <StopIcon size={14} />
     </Button>
   );
@@ -396,15 +396,15 @@ function PureSendButton({
   uploadQueue: Array<string>;
 }) {
   return (
-    <Button
-      data-testid="send-button"
-      className="rounded-full p-1.5 h-fit border dark:border-zinc-600"
-      onClick={(event) => {
-        event.preventDefault();
-        submitForm();
-      }}
-      disabled={input.length === 0 || uploadQueue.length > 0}
-    >
+          <Button
+        data-testid="send-button"
+        className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors bg-black"
+        onClick={(event) => {
+          event.preventDefault();
+          submitForm();
+        }}
+        disabled={input.length === 0 || uploadQueue.length > 0}
+      >
       <ArrowUpIcon size={14} />
     </Button>
   );

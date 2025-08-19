@@ -39,7 +39,7 @@ function PureDocumentToolResult({
   return (
     <button
       type="button"
-      className="bg-background cursor-pointer border py-2 px-3 rounded-xl w-fit flex flex-row gap-3 items-start"
+      className="bg-black text-foreground hover:bg-muted cursor-pointer border border-border hover:border-border/80 py-3 px-4 rounded-xl w-fit flex flex-row gap-3 items-center transition-all duration-200 hover:shadow-sm"
       onClick={(event) => {
         if (isReadonly) {
           toast.error(
@@ -68,7 +68,7 @@ function PureDocumentToolResult({
         });
       }}
     >
-      <div className="text-muted-foreground mt-1">
+      <div className="text-muted-foreground mt-0">
         {type === 'create' ? (
           <FileIcon />
         ) : type === 'update' ? (
@@ -105,7 +105,7 @@ function PureDocumentToolCall({
   return (
     <button
       type="button"
-      className="cursor pointer w-fit border py-2 px-3 rounded-xl flex flex-row items-start justify-between gap-3"
+      className="cursor-pointer w-fit border border-border bg-black text-foreground hover:bg-muted hover:border-border/80 py-3 px-4 rounded-xl flex flex-row items-center justify-between gap-3 transition-all duration-200 hover:shadow-sm"
       onClick={(event) => {
         if (isReadonly) {
           toast.error(
@@ -130,8 +130,8 @@ function PureDocumentToolCall({
         }));
       }}
     >
-      <div className="flex flex-row gap-3 items-start">
-        <div className="text-zinc-500 mt-1">
+      <div className="flex flex-row gap-3 items-center">
+        <div className="text-zinc-500 mt-0">
           {type === 'create' ? (
             <FileIcon />
           ) : type === 'update' ? (
@@ -154,7 +154,7 @@ function PureDocumentToolCall({
         </div>
       </div>
 
-      <div className="animate-spin mt-1">{<LoaderIcon />}</div>
+      <div className="animate-spin mt-0">{<LoaderIcon />}</div>
     </button>
   );
 }
