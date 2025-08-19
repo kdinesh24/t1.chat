@@ -18,15 +18,20 @@ const components: Partial<Components> = {
       </CodeBlock>
     );
   },
-  // Ensure pre elements are not nested inside p elements
+  // Ensure pre elements and code blocks with div children are not nested inside p elements
   p: ({ children, ...props }) => {
     // Check if any child is a pre element
     const hasPreChild = React.Children.toArray(children).some(
       (child) => React.isValidElement(child) && child.type === 'pre'
     );
     
-    if (hasPreChild) {
-      // If there's a pre child, render children directly without p wrapper
+    // Check if any child is a code element that might contain div children (like CodeBlock)
+    const hasCodeWithDivChild = React.Children.toArray(children).some(
+      (child) => React.isValidElement(child) && child.type === 'code'
+    );
+    
+    if (hasPreChild || hasCodeWithDivChild) {
+      // If there's a pre child or code child, render children directly without p wrapper
       return <>{children}</>;
     }
     
