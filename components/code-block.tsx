@@ -7,8 +7,8 @@ import { Button } from './ui/button';
 
 interface CodeBlockProps {
   node: any;
-  inline: boolean;
-  className: string;
+  inline?: boolean;
+  className?: string;
   children: any;
 }
 
@@ -21,6 +21,8 @@ export function CodeBlock({
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const [html, setHtml] = useState<string | null>(null);
+
+  const codeText = useMemo(() => String(children ?? ''), [children]);
 
   const language = useMemo(() => {
     const alias = (lang: string) => {
@@ -40,23 +42,34 @@ export function CodeBlock({
       return map[lang.toLowerCase()] ?? lang;
     };
 
-    const match = /language-([\w-]+)/.exec(className || '');
-    if (match) return alias(match[1]);
-    const text = String(children ?? '').trimStart();
+    const match = /language-[\w-]+/.exec(className || '');
+    if (match) {
+      const lang = (match[0].split('language-')[1] || '').trim();
+      if (lang) return alias(lang);
+    }
+    const text = codeText.trimStart();
     if (text.startsWith('#!')) return 'bash';
     if (/\bpackage\s+main\b/.test(text) || /\bfunc\s+main\s*\(/.test(text) || /\bfmt\./.test(text))
       return 'go';
     return undefined;
-  }, [className, children]);
+  }, [className, codeText]);
+
+  // Treat explicit inline or single-line language-less code as inline
+  const treatAsInline = useMemo(() => {
+    if (inline) return true;
+    const isSingleLine = !codeText.includes('\n');
+    const hasLanguage = Boolean(language);
+    return !hasLanguage && isSingleLine;
+  }, [inline, codeText, language]);
 
   useEffect(() => {
     let isMounted = true;
     async function highlight() {
-      if (inline) return;
+      if (treatAsInline) return;
       try {
         const highlighter = await getShikiHighlighter();
         const theme = resolvePreferredShikiTheme();
-        const code = String(children ?? '');
+        const code = codeText;
         const lang = language || 'plaintext';
         const result = highlighter.codeToHtml(code, { lang, theme });
         if (isMounted) setHtml(result);
@@ -68,7 +81,7 @@ export function CodeBlock({
     return () => {
       isMounted = false;
     };
-  }, [children, inline, language]);
+  }, [codeText, treatAsInline, language]);
 
   const handleCopy = async () => {
     const text = String(children ?? '');
@@ -77,11 +90,13 @@ export function CodeBlock({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // For inline code (single line)
-  if (inline) {
+  if (treatAsInline) {
+    // Inline code (single backticks)
     return (
       <code
-        className={`${className} text-sm bg-black text-white py-0.5 px-1.5 rounded-md font-mono border border-border`}
+        className={`${
+          className || ''
+        } text-sm bg-zinc-100 dark:bg-zinc-800 py-0.5 px-1 rounded-md`}
         {...props}
       >
         {children}
@@ -89,9 +104,8 @@ export function CodeBlock({
     );
   }
 
-  // For block code (multi-line)
+  // Block code (triple backticks) — let the <pre> wrapper come from the Markdown renderer
   if (html) {
-    // Render Shiki's highlighted output
     return (
       <div className="relative group">
         <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
@@ -108,15 +122,15 @@ export function CodeBlock({
             )}
           </Button>
         </div>
-        <div 
+        <div
           className="not-prose border border-border rounded-lg overflow-hidden bg-black"
-          dangerouslySetInnerHTML={{ __html: html }} 
+          dangerouslySetInnerHTML={{ __html: html }}
         />
       </div>
     );
   }
 
-  // Fallback SSR/first paint: plain code with proper styling
+  // Fallback SSR: unhighlighted block code
   return (
     <div className="relative group">
       <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
@@ -134,7 +148,7 @@ export function CodeBlock({
         </Button>
       </div>
       <pre className="text-sm w-full overflow-x-auto p-4 bg-black border border-border rounded-lg">
-        <code className="whitespace-pre break-words font-mono text-white" {...props}>
+        <code className={`whitespace-pre break-words font-mono text-white ${className || ''}`} {...props}>
           {children}
         </code>
       </pre>
