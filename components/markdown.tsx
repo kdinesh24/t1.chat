@@ -114,7 +114,7 @@ const components: Partial<Components> = {
     </div>
   ),
   thead: ({ children, ...props }) => (
-    <thead style={{ backgroundColor: '#273b3b' }} {...props}>
+    <thead style={{ backgroundColor: '#374141' }} {...props}>
       {children}
     </thead>
   ),

@@ -39,8 +39,7 @@ function PureDocumentToolResult({
   return (
     <button
       type="button"
-      className="text-foreground hover:bg-muted cursor-pointer border border-border hover:border-border/80 py-3 px-4 rounded-xl w-fit flex flex-row gap-3 items-center transition-all duration-200 hover:shadow-sm"
-      style={{ backgroundColor: '#1a2929' }}
+      className="text-foreground hover:bg-muted cursor-pointer border border-border hover:border-border/80 py-3 px-4 rounded-xl w-fit flex flex-row gap-3 items-center transition-all duration-200 hover:shadow-sm bg-[#1a2929]"
       onClick={(event) => {
         if (isReadonly) {
           toast.error(

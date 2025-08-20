@@ -24,13 +24,13 @@ import {
       })
     : customProvider({
         languageModels: {
-          'chat-model': groq('openai/gpt-oss-120b'),
+          'chat-model': groq('llama-3.3-70b-versatile'),
           'chat-model-reasoning': wrapLanguageModel({
-            model: groq('openai/gpt-oss-120b'),
+            model: groq('llama-3.3-70b-versatile'),
             middleware: extractReasoningMiddleware({ tagName: 'think' }),
           }),
-          'title-model': google('gemini-2.5-flash'),
-          'artifact-model': groq('openai/gpt-oss-120b'),
+          'title-model': groq('llama-3.3-70b-versatile'), // Changed from google to groq for better reliability
+          'artifact-model': groq('llama-3.3-70b-versatile'),
         },
         // imageModels: {
         //   'small-model': google('gemini-2.5-flash'),

@@ -109,6 +109,7 @@ function PureMultimodalInput({
   const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
 
   const submitForm = useCallback(() => {
+    console.log('📤 Submitting message:', input);
     window.history.replaceState({}, '', `/chat/${chatId}`);
 
     sendMessage({
@@ -299,8 +300,10 @@ function PureMultimodalInput({
             event.preventDefault();
 
             if (status !== 'ready') {
+              console.log('⚠️ Model not ready, current status:', status);
               toast.error('Please wait for the model to finish its response!');
             } else {
+              console.log('✅ Submitting form via enter key');
               submitForm();
             }
           }
@@ -406,6 +409,7 @@ function PureSendButton({
         style={{ backgroundColor: '#1a2929', color: '#ffffff' }}
         onClick={(event) => {
           event.preventDefault();
+          console.log('🔘 Send button clicked, input length:', input.length, 'uploadQueue length:', uploadQueue.length);
           submitForm();
         }}
         disabled={input.length === 0 || uploadQueue.length > 0}

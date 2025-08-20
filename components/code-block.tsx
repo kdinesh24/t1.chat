@@ -28,6 +28,12 @@ export function CodeBlock({
 
   const codeText = useMemo(() => String(children ?? ''), [children]);
 
+  // Check if the code is a single line (for compact styling)
+  const isSingleLine = useMemo(() => {
+    const trimmedCode = codeText.trim();
+    return !trimmedCode.includes('\n') && trimmedCode.length < 100; // Single line and not too long
+  }, [codeText]);
+
   const language = useMemo(() => {
     const alias = (lang: string) => {
       const map: Record<string, string> = {
@@ -112,25 +118,33 @@ export function CodeBlock({
   // Block code (triple backticks) — let the <pre> wrapper come from the Markdown renderer
   if (html) {
     return (
-      <div className="relative group mb-6">
-        {!noCopyButton && (
-          <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+      <div className={`relative group mb-6 mt-4 ${isSingleLine ? 'code-block-compact' : ''}`}>
+        {/* Header with language name */}
+        <div 
+          className={`flex items-center justify-between px-4 rounded-t-lg border-b ${isSingleLine ? 'py-1' : 'py-2'}`}
+          style={{ backgroundColor: '#273b3b', borderColor: '#374141' }}
+        >
+          <span className="text-xs font-medium text-zinc-300 uppercase tracking-wider">
+            {language || 'plaintext'}
+          </span>
+          {!noCopyButton && (
             <Button
               variant="ghost"
               size="sm"
               onClick={handleCopy}
-              className="h-8 w-8 p-0 bg-black hover:bg-gray-800 text-white border border-gray-600"
+              className="h-6 w-6 p-0 opacity-70 hover:opacity-100 transition-opacity"
+              style={{ backgroundColor: 'transparent' }}
             >
               {copied ? (
-                <Check className="h-4 w-4 text-green-400" />
+                <Check className="h-3 w-3 text-green-400" />
               ) : (
-                <Copy className="h-4 w-4" />
+                <Copy className="h-3 w-3" />
               )}
             </Button>
-          </div>
-        )}
+          )}
+        </div>
         <div
-          className={`not-prose rounded-lg overflow-x-auto ${noBorder ? 'bg-[#1a2929]' : 'border border-border bg-[#1a2929]'}`}
+          className={`not-prose rounded-b-lg overflow-x-auto ${noBorder ? 'bg-[#1a2929]' : 'border-l border-r border-b border-border bg-[#1a2929]'}`}
           dangerouslySetInnerHTML={{ __html: html }}
         />
       </div>
@@ -139,24 +153,32 @@ export function CodeBlock({
 
   // Fallback SSR: unhighlighted block code
   return (
-    <div className="relative group mb-6">
-      {!noCopyButton && (
-        <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+    <div className="relative group mb-6 mt-4">
+      {/* Header with language name */}
+      <div 
+        className={`flex items-center justify-between px-4 rounded-t-lg border-b ${isSingleLine ? 'py-1' : 'py-2'}`}
+        style={{ backgroundColor: '#273b3b', borderColor: '#374141' }}
+      >
+        <span className="text-xs font-medium text-zinc-300 uppercase tracking-wider">
+          {language || 'plaintext'}
+        </span>
+        {!noCopyButton && (
           <Button
             variant="ghost"
             size="sm"
             onClick={handleCopy}
-            className="h-8 w-8 p-0 bg-black hover:bg-gray-800 text-white border border-gray-600"
+            className="h-6 w-6 p-0 opacity-70 hover:opacity-100 transition-opacity"
+            style={{ backgroundColor: 'transparent' }}
           >
             {copied ? (
-              <Check className="h-4 w-4 text-green-400" />
+              <Check className="h-3 w-3 text-green-400" />
             ) : (
-              <Copy className="h-4 w-4" />
+              <Copy className="h-3 w-3" />
             )}
           </Button>
-        </div>
-      )}
-      <pre className={`text-sm w-full overflow-x-auto p-4 rounded-lg ${noBorder ? 'bg-[#1a2929]' : 'border border-border bg-[#1a2929]'}`}>
+        )}
+      </div>
+      <pre className={`text-sm w-full overflow-x-auto rounded-b-lg ${isSingleLine ? 'px-4 py-2' : 'p-4'} ${noBorder ? 'bg-[#1a2929]' : 'border-l border-r border-b border-border bg-[#1a2929]'}`}>
         <code className={`whitespace-pre break-words font-mono text-white ${className || ''}`} {...props}>
           {children}
         </code>

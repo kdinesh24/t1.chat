@@ -264,8 +264,7 @@ function PureArtifact({
         >
           {!isMobile && (
             <motion.div
-              className="fixed h-dvh"
-              style={{ backgroundColor: '#273b3b' }}
+              className="fixed h-dvh bg-[#273b3b]"
               initial={{
                 width: isSidebarOpen ? windowWidth - 256 : windowWidth,
                 right: 0,
@@ -354,8 +353,7 @@ function PureArtifact({
           )}
 
           <motion.div
-            className="fixed h-dvh flex flex-col overflow-y-scroll md:border-l dark:border-zinc-700 border-zinc-200"
-            style={{ backgroundColor: '#1b2929' }}
+            className="fixed h-dvh flex flex-col overflow-y-scroll md:border-l dark:border-zinc-700 border-zinc-200 bg-[#1b2929]"
             initial={
               isMobile
                 ? {
@@ -457,7 +455,7 @@ function PureArtifact({
               />
             </div>
 
-            <div className="h-full overflow-y-scroll !max-w-full items-center" style={{ backgroundColor: '#1a2929' }}>
+            <div className="h-full overflow-y-scroll !max-w-full items-center bg-[#1a2929]">
               <artifactDefinition.content
                 title={artifact.title}
                 content={

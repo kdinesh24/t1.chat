@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { memo, useState } from 'react';
 import type { Vote } from '@/lib/db/schema';
 import { DocumentToolCall, DocumentToolResult } from './document';
-import { PencilEditIcon, SparklesIcon } from './icons';
+import { PencilEditIcon, SparklesIcon, CopyIcon } from './icons';
 import { Markdown } from './markdown';
 import { MessageActions } from './message-actions';
 import { PreviewAttachment } from './preview-attachment';
@@ -19,6 +19,7 @@ import { MessageReasoning } from './message-reasoning';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import type { ChatMessage } from '@/lib/types';
 import { useDataStream } from './data-stream-provider';
+import { toast } from 'sonner';
 
 // Type narrowing is handled by TypeScript's control flow analysis
 // The AI SDK provides proper discriminated unions for tool calls
@@ -110,25 +111,7 @@ const PurePreviewMessage = ({
               if (type === 'text') {
                 if (mode === 'view') {
                   return (
-                    <div key={key} className="flex flex-row gap-2 items-start">
-                      {message.role === 'user' && !isReadonly && (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              data-testid="message-edit-button"
-                              variant="ghost"
-                              className="px-2 h-fit rounded-full text-muted-foreground opacity-0 group-hover/message:opacity-100"
-                              onClick={() => {
-                                setMode('edit');
-                              }}
-                            >
-                              <PencilEditIcon />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>Edit message</TooltipContent>
-                        </Tooltip>
-                      )}
-
+                    <div key={key} className="flex flex-col gap-2 relative group/message">
                       <div
                         data-testid="message-content"
                         className={cn('flex flex-col gap-4 min-w-0 overflow-x-auto', {
@@ -138,15 +121,55 @@ const PurePreviewMessage = ({
                       >
                         <Markdown>{sanitizeText(part.text)}</Markdown>
                       </div>
+                      
+                      {message.role === 'user' && !isReadonly && (
+                        <div className="absolute -bottom-8 right-0 opacity-0 group-hover/message:opacity-100 transition-opacity duration-200 flex gap-1">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                data-testid="message-edit-button"
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 text-zinc-400 hover:text-white hover:bg-white/20 rounded-md transition-colors"
+                                onClick={() => {
+                                  setMode('edit');
+                                }}
+                              >
+                                <PencilEditIcon size={12} />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom">Edit message</TooltipContent>
+                          </Tooltip>
+                          
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 text-zinc-400 hover:text-white hover:bg-white/20 rounded-md transition-colors"
+                                onClick={async () => {
+                                  try {
+                                    await navigator.clipboard.writeText(sanitizeText(part.text));
+                                    toast.success('Copied to clipboard');
+                                  } catch (err) {
+                                    toast.error('Failed to copy to clipboard');
+                                  }
+                                }}
+                              >
+                                <CopyIcon size={12} />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom">Copy message</TooltipContent>
+                          </Tooltip>
+                        </div>
+                      )}
                     </div>
                   );
                 }
 
                 if (mode === 'edit') {
                   return (
-                    <div key={key} className="flex flex-row gap-2 items-start">
-                      <div className="size-8" />
-
+                    <div key={key} className="flex flex-col gap-2">
                       <MessageEditor
                         key={message.id}
                         message={message}

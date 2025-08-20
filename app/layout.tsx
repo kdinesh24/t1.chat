@@ -20,12 +20,16 @@ const geist = Geist({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-geist',
+  fallback: ['system-ui', 'arial'],
+  adjustFontFallback: false,
 });
 
 const geistMono = Geist_Mono({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-geist-mono',
+  fallback: ['Courier New', 'monospace'],
+  adjustFontFallback: false,
 });
 
 const LIGHT_THEME_COLOR = 'hsl(0 0% 100%)';

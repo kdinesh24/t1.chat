@@ -50,11 +50,9 @@ export function getStreamContext() {
       });
     } catch (error: any) {
       if (error.message.includes('REDIS_URL')) {
-        console.log(
-          ' > Resumable streams are disabled due to missing REDIS_URL',
-        );
+        // Resumable streams disabled due to missing REDIS_URL
       } else {
-        console.error(error);
+        // Error initializing stream context
       }
     }
   }
@@ -63,12 +61,14 @@ export function getStreamContext() {
 }
 
 export async function POST(request: Request) {
+  console.log('🔥 POST /api/chat - Request received');
   let requestBody: PostRequestBody;
 
   try {
     const json = await request.json();
     requestBody = postRequestBodySchema.parse(json);
-  } catch (_) {
+  } catch (error) {
+    console.error('❌ Request parsing failed:', error);
     return new ChatSDKError('bad_request:api').toResponse();
   }
 
@@ -88,8 +88,11 @@ export async function POST(request: Request) {
     const session = await auth();
 
     if (!session?.user) {
+      console.error('❌ No authenticated user found');
       return new ChatSDKError('unauthorized:chat').toResponse();
     }
+
+    console.log('✅ User authenticated:', session.user.id);
 
     const userType: UserType = session.user.type;
 
@@ -105,16 +108,32 @@ export async function POST(request: Request) {
     const chat = await getChatById({ id });
 
     if (!chat) {
-      const title = await generateTitleFromUserMessage({
-        message,
-      });
+      try {
+        const title = await generateTitleFromUserMessage({
+          message,
+        });
 
-      await saveChat({
-        id,
-        userId: session.user.id,
-        title,
-        visibility: selectedVisibilityType,
-      });
+        await saveChat({
+          id,
+          userId: session.user.id,
+          title,
+          visibility: selectedVisibilityType,
+        });
+      } catch (error) {
+        // Fallback: create chat with a simple title
+        const fallbackTitle = message.parts
+          .filter((part) => part.type === 'text')
+          .map((part) => part.text)
+          .join(' ')
+          .slice(0, 80) || 'New Chat';
+
+        await saveChat({
+          id,
+          userId: session.user.id,
+          title: fallbackTitle,
+          visibility: selectedVisibilityType,
+        });
+      }
     } else {
       if (chat.userId !== session.user.id) {
         return new ChatSDKError('forbidden:chat').toResponse();
@@ -150,44 +169,57 @@ export async function POST(request: Request) {
     await createStreamId({ streamId, chatId: id });
 
     const stream = createUIMessageStream({
-      execute: ({ writer: dataStream }) => {
-        const result = streamText({
-          model: myProvider.languageModel(selectedChatModel),
-          system: systemPrompt({ selectedChatModel, requestHints }),
-          messages: convertToModelMessages(uiMessages),
-          stopWhen: stepCountIs(5),
-          experimental_activeTools:
-            selectedChatModel === 'chat-model-reasoning'
-              ? []
-              : [
-                  'getWeather',
-                  'createDocument',
-                  'updateDocument',
-                  'requestSuggestions',
-                ],
-          experimental_transform: smoothStream({ chunking: 'word' }),
-          tools: {
-            getWeather,
-            createDocument: createDocument({ session, dataStream }),
-            updateDocument: updateDocument({ session, dataStream }),
-            requestSuggestions: requestSuggestions({
-              session,
-              dataStream,
-            }),
-          },
-          experimental_telemetry: {
-            isEnabled: isProductionEnvironment,
-            functionId: 'stream-text',
-          },
-        });
+      execute: async ({ writer: dataStream }) => {
+        try {
+          const result = streamText({
+            model: myProvider.languageModel(selectedChatModel),
+            system: systemPrompt({ selectedChatModel, requestHints }),
+            messages: convertToModelMessages(uiMessages),
+            stopWhen: stepCountIs(5),
+            experimental_activeTools:
+              selectedChatModel === 'chat-model-reasoning'
+                ? []
+                : [
+                    'getWeather',
+                    'createDocument',
+                    'updateDocument',
+                    'requestSuggestions',
+                  ],
+            experimental_transform: smoothStream({ chunking: 'word' }),
+            tools: {
+              getWeather,
+              createDocument: createDocument({ session, dataStream }),
+              updateDocument: updateDocument({ session, dataStream }),
+              requestSuggestions: requestSuggestions({
+                session,
+                dataStream,
+              }),
+            },
+            experimental_telemetry: {
+              isEnabled: isProductionEnvironment,
+              functionId: 'stream-text',
+            },
+          });
 
-        result.consumeStream();
-
-        dataStream.merge(
-          result.toUIMessageStream({
-            sendReasoning: true,
-          }),
-        );
+          // Handle stream consumption with error handling
+          try {
+            console.log('🚀 Starting stream consumption...');
+            result.consumeStream();
+            dataStream.merge(
+              result.toUIMessageStream({
+                sendReasoning: true,
+              }),
+            );
+            console.log('✅ Stream consumption started successfully');
+          } catch (streamError) {
+            console.error('❌ Stream consumption error:', streamError);
+            throw streamError;
+          }
+        } catch (error) {
+          console.error('❌ Stream creation error:', error);
+          // Re-throw to be handled by onError
+          throw error;
+        }
       },
       generateId: generateUUID,
       onFinish: async ({ messages }) => {
@@ -202,8 +234,13 @@ export async function POST(request: Request) {
           })),
         });
       },
-      onError: () => {
-        return 'Oops, an error occurred!';
+      onError: (error) => {
+        console.error('❌ UI Message Stream error:', error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        if (errorMessage.includes('ENOTFOUND') || errorMessage.includes('generativelanguage.googleapis.com')) {
+          return 'I apologize, but I\'m having trouble connecting to the AI service right now. This might be due to a network connectivity issue. Please check your internet connection and try again in a few moments.';
+        }
+        return 'Oops, an error occurred! Please try again.';
       },
     });
 
@@ -219,9 +256,27 @@ export async function POST(request: Request) {
       return new Response(stream.pipeThrough(new JsonToSseTransformStream()));
     }
   } catch (error) {
+    console.error('❌ Chat API Error:', error);
+    // Check if it's a specific API connection error
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    if (errorMessage.includes('ENOTFOUND') || errorMessage.includes('generativelanguage.googleapis.com') || errorMessage.includes('Failed after 3 attempts')) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Network connectivity issue. Please check your internet connection and try again.' 
+        }),
+        { 
+          status: 503,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+    
     if (error instanceof ChatSDKError) {
       return error.toResponse();
     }
+    
+    // Return a generic error for unexpected issues
+    return new ChatSDKError('bad_request:api').toResponse();
   }
 }
 
@@ -241,11 +296,23 @@ export async function DELETE(request: Request) {
 
   const chat = await getChatById({ id });
 
+  if (!chat) {
+    // Return success even if chat doesn't exist to handle race conditions
+    return Response.json({ id, message: 'Chat already deleted' }, { status: 200 });
+  }
+
   if (chat.userId !== session.user.id) {
     return new ChatSDKError('forbidden:chat').toResponse();
   }
 
-  const deletedChat = await deleteChatById({ id });
+  // Return immediately for better UX, then delete in background
+  // Fire-and-forget deletion
+  deleteChatById({ id }).then(() => {
+    // Background deletion completed
+  }).catch((error) => {
+    // Background deletion failed
+  });
 
-  return Response.json(deletedChat, { status: 200 });
+  // Return success immediately
+  return Response.json({ id, message: 'Chat deletion initiated' }, { status: 200 });
 }

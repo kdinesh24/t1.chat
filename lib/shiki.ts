@@ -72,7 +72,6 @@ export async function highlightCode(
       theme: theme,
     })
   } catch (error) {
-    console.error('Shiki highlighting error:', error)
     // Fallback to plain text if highlighting fails
     return `<pre><code>${code}</code></pre>`
   }

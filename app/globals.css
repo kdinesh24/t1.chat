@@ -205,6 +205,16 @@ pre.shiki {
     padding: 1rem 0;
 }
 
+/* Compact padding for single-line code blocks */
+.code-block-compact pre.shiki {
+    padding: 0.5rem 0;
+}
+
+.code-block-compact .shiki .line {
+    padding: 0 1rem;
+    line-height: 1.3;
+}
+
 /* Dark mode specific overrides */
 .dark .shiki {
     background-color: #1b2929 !important;

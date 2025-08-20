@@ -26,6 +26,7 @@ import type { Chat } from '@/lib/db/schema';
 import { fetcher } from '@/lib/utils';
 import { ChatItem } from './sidebar-history-item';
 import useSWRInfinite from 'swr/infinite';
+import { useSWRConfig } from 'swr';
 import { LoaderIcon } from './icons';
 
 type GroupedChats = {
@@ -107,6 +108,8 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
     fallbackData: [],
   });
 
+  const { mutate: globalMutate } = useSWRConfig();
+
   const router = useRouter();
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -120,32 +123,52 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
     : false;
 
   const handleDelete = async () => {
-    const deletePromise = fetch(`/api/chat?id=${deleteId}`, {
-      method: 'DELETE',
-    });
-
-    toast.promise(deletePromise, {
-      loading: 'Deleting chat...',
-      success: () => {
-        mutate((chatHistories) => {
-          if (chatHistories) {
-            return chatHistories.map((chatHistory) => ({
-              ...chatHistory,
-              chats: chatHistory.chats.filter((chat) => chat.id !== deleteId),
-            }));
-          }
-        });
-
-        return 'Chat deleted successfully';
-      },
-      error: 'Failed to delete chat',
-    });
-
-    setShowDeleteDialog(false);
-
-    if (deleteId === id) {
-      router.push('/');
+    const shouldRedirect = deleteId === id;
+    
+    // IMMEDIATE FRONTEND UPDATES - happens first, synchronously
+    
+    // 1. Remove from frontend immediately (optimistic update)
+    mutate((chatHistories) => {
+      if (chatHistories) {
+        return chatHistories.map((chatHistory) => ({
+          ...chatHistory,
+          chats: chatHistory.chats.filter((chat) => chat.id !== deleteId),
+        }));
+      }
+    }, { revalidate: false }); // Don't revalidate, we want immediate update
+    
+    // 2. Clear SWR cache immediately
+    globalMutate(`/api/vote?chatId=${deleteId}`, undefined, { revalidate: false });
+    
+    // 3. Redirect immediately if deleting current chat
+    if (shouldRedirect) {
+      window.location.href = '/';
     }
+    
+    // 4. Close dialog immediately
+    setShowDeleteDialog(false);
+    
+    // 5. Show immediate success toast
+    toast.success('Chat deleted successfully');
+    
+    // BACKGROUND DELETION - happens asynchronously, user doesn't wait
+    
+    // Delete from database in the background
+    fetch(`/api/chat?id=${deleteId}`, {
+      method: 'DELETE',
+    })
+    .then(response => {
+      if (!response.ok) {
+        // If backend deletion fails, show error but don't revert UI
+        // (chat is already removed from frontend)
+        toast.error('Warning: Chat may not be fully deleted from server');
+        return;
+      }
+    })
+    .catch(error => {
+      // If network error, show warning but don't revert UI
+      toast.error('Warning: Chat deletion may not be saved to server');
+    });
   };
 
   if (!user) {

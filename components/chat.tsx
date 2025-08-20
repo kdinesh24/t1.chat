@@ -19,9 +19,10 @@ import type { Session } from 'next-auth';
 import { useSearchParams } from 'next/navigation';
 import { useChatVisibility } from '@/hooks/use-chat-visibility';
 import { useAutoResume } from '@/hooks/use-auto-resume';
-import { ChatSDKError } from '@/lib/errors';
+import { ChatSDKError, type ErrorCode } from '@/lib/errors';
 import type { Attachment, ChatMessage } from '@/lib/types';
 import { useDataStream } from './data-stream-provider';
+import { useRouter } from 'next/navigation';
 
 export function Chat({
   id,
@@ -45,6 +46,7 @@ export function Chat({
     initialVisibilityType,
   });
 
+  const router = useRouter();
   const { mutate } = useSWRConfig();
   const { setDataStream } = useDataStream();
 
@@ -90,6 +92,11 @@ export function Chat({
           type: 'error',
           description: error.message,
         });
+      } else {
+        toast({
+          type: 'error',
+          description: 'An unexpected error occurred. Please try again.',
+        });
       }
     },
   });
@@ -111,10 +118,37 @@ export function Chat({
     }
   }, [query, sendMessage, hasAppendedQuery, id]);
 
-  const { data: votes } = useSWR<Array<Vote>>(
+  // Custom fetcher for votes that handles deleted chats gracefully
+  const votesFetcher = async (url: string) => {
+    try {
+      const response = await fetch(url);
+      if (response.status === 404) {
+        // Chat was deleted, redirect to home page immediately
+        window.location.href = '/';
+        return [];
+      }
+      if (!response.ok) {
+        const { code, cause } = await response.json();
+        throw new ChatSDKError(code as ErrorCode, cause);
+      }
+      return response.json();
+    } catch (error) {
+      // If fetch fails (e.g., network error), return empty votes
+      return [];
+    }
+  };
+
+  const { data: votes, error: votesError } = useSWR<Array<Vote>>(
     messages.length >= 2 ? `/api/vote?chatId=${id}` : null,
-    fetcher,
+    votesFetcher,
   );
+
+  // Handle votes error - if chat is deleted, redirect immediately
+  useEffect(() => {
+    if (votesError && votesError.message && votesError.message.includes('not_found:chat')) {
+      window.location.href = '/';
+    }
+  }, [votesError]);
 
   const [attachments, setAttachments] = useState<Array<Attachment>>([]);
   const isArtifactVisible = useArtifactSelector((state) => state.isVisible);
@@ -128,7 +162,7 @@ export function Chat({
 
   return (
     <>
-      <div className="flex flex-col min-w-0 h-dvh text-foreground" style={{ backgroundColor: '#273b3b' }}>
+      <div className="flex flex-col min-w-0 h-dvh text-foreground" style={{ backgroundColor: '#1f3333' }}>
         <ChatHeader
           chatId={id}
           selectedModelId={initialChatModel}
@@ -148,7 +182,7 @@ export function Chat({
           isArtifactVisible={isArtifactVisible}
         />
 
-        <form className="flex mx-auto px-4 pb-4 md:pb-6 gap-2 w-full md:max-w-3xl" style={{ backgroundColor: '#273b3b' }}>
+        <form className="flex mx-auto px-4 pb-4 md:pb-6 gap-2 w-full md:max-w-3xl" style={{ backgroundColor: '#1f3333' }}>
           {!isReadonly && (
             <MultimodalInput
               chatId={id}

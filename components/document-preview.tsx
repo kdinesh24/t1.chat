@@ -265,7 +265,7 @@ const DocumentContent = ({ document }: { document: Document }) => {
     // Use Shiki for smaller code snippets (less than 50 lines)
     if (lineCount < 50) {
       return (
-        <div className={cn(containerClassName, 'p-4 overflow-x-auto')} style={containerStyle}>
+        <div className={cn(containerClassName, 'p-0 overflow-x-auto')} style={containerStyle}>
           <CodeBlock
             node={null}
             inline={false}
