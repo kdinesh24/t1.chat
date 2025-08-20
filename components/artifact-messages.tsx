@@ -42,7 +42,8 @@ function PureArtifactMessages({
   return (
     <div
       ref={messagesContainerRef}
-              className="flex flex-col gap-4 h-full items-center overflow-y-scroll px-4 pt-20 bg-black text-foreground"
+      className="flex flex-col gap-4 h-full items-center overflow-y-scroll px-4 pt-20 text-foreground"
+      style={{ backgroundColor: '#273b3b' }}
     >
       {messages.map((message, index) => (
         <PreviewMessage

@@ -60,37 +60,48 @@
     }
 
     .dark {
-        --background: 0 0% 0%;
+        --background: 182 20% 21.6%;
+        /* #273b3b */
         --foreground: 0 0% 98%;
-        --card: 0 0% 0%;
+        --card: 180 25% 16.1%;
+        /* #1a2929 */
         --card-foreground: 0 0% 98%;
-        --popover: 0 0% 0%;
+        --popover: 180 25% 16.1%;
+        /* #1a2929 */
         --popover-foreground: 0 0% 98%;
         --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 0%;
-        --secondary: 0 0% 0%;
+        --primary-foreground: 180 25% 16.1%;
+        --secondary: 180 25% 16.1%;
+        /* #1a2929 */
         --secondary-foreground: 0 0% 98%;
-        --muted: 0 0% 0%;
+        --muted: 180 25% 16.1%;
+        /* #1a2929 */
         --muted-foreground: 240 5% 64.9%;
-        --accent: 0 0% 0%;
+        --accent: 180 25% 16.1%;
+        /* #1a2929 */
         --accent-foreground: 0 0% 98%;
         --destructive: 0 62.8% 30.6%;
         --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 12%;
-        --input: 0 0% 0%;
+        --border: 180 15% 25%;
+        --input: 180 20% 18%;
+        /* Slightly different for text area */
         --ring: 240 4.9% 83.9%;
         --chart-1: 220 70% 50%;
         --chart-2: 160 60% 45%;
         --chart-3: 30 80% 55%;
         --chart-4: 280 65% 60%;
         --chart-5: 340 75% 55%;
-        --sidebar-background: 0 0% 0%;
+        --sidebar-background: 180 25% 16.1%;
+        /* #1a2929 */
+        --sidebar: 180 25% 16.1%;
+        /* #1a2929 */
         --sidebar-foreground: 240 4.8% 95.9%;
         --sidebar-primary: 224.3 76.3% 48%;
         --sidebar-primary-foreground: 0 0% 100%;
-        --sidebar-accent: 0 0% 0%;
+        --sidebar-accent: 180 25% 16.1%;
+        /* #1a2929 */
         --sidebar-accent-foreground: 240 4.8% 95.9%;
-        --sidebar-border: 0 0% 12%;
+        --sidebar-border: 180 15% 25%;
         --sidebar-ring: 217.2 91.2% 59.8%;
     }
 }
@@ -130,7 +141,8 @@
 
 .cm-editor,
 .cm-gutters {
-    @apply bg-background outline-none selection:bg-muted !important;
+    @apply outline-none selection:bg-muted !important;
+    background-color: #1b2929 !important;
 }
 
 .ͼo.cm-focused>.cm-scroller>.cm-selectionLayer .cm-selectionBackground,
@@ -195,10 +207,10 @@ pre.shiki {
 
 /* Dark mode specific overrides */
 .dark .shiki {
-    background-color: #000000 !important;
+    background-color: #1b2929 !important;
     color: #ffffff !important;
 }
 
 .dark .shiki .highlighted {
-    background-color: #1f2937 !important;
+    background-color: #273b3b !important;
 }

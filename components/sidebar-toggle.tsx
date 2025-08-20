@@ -22,7 +22,8 @@ export function SidebarToggle({
           data-testid="sidebar-toggle-button"
           onClick={toggleSidebar}
           variant="outline"
-          className="md:px-2 md:h-fit bg-black"
+          className="md:px-2 md:h-fit hover:bg-white/50"
+          style={{ backgroundColor: '#1a2929' }}
         >
           <SidebarLeftIcon size={16} />
         </Button>

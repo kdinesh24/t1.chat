@@ -22,7 +22,8 @@ const components: Partial<Components> = {
     // Default rendering for other <pre> elements
     return (
       <pre
-        className="not-prose text-sm w-full overflow-x-auto dark:bg-black p-4 border border-zinc-200 dark:border-black rounded-xl dark:text-zinc-50 text-zinc-900"
+        className="not-prose text-sm w-full overflow-x-auto p-4 border border-zinc-200 dark:border-black rounded-xl dark:text-zinc-50 text-zinc-900"
+        style={{ backgroundColor: '#273b3b' }}
         {...props}
       >
         {children}
@@ -106,34 +107,34 @@ const components: Partial<Components> = {
     );
   },
   table: ({ children, ...props }) => (
-    <div className="my-6 overflow-x-auto border border-zinc-700 rounded-lg">
+    <div className="my-6 overflow-x-auto rounded-lg" style={{ backgroundColor: '#1a2929' }}>
       <table className="min-w-full" {...props}>
         {children}
       </table>
     </div>
   ),
   thead: ({ children, ...props }) => (
-    <thead className="bg-zinc-800" {...props}>
+    <thead style={{ backgroundColor: '#273b3b' }} {...props}>
       {children}
     </thead>
   ),
   th: ({ children, ...props }) => (
-    <th className="px-6 py-3 text-left text-xs font-medium text-zinc-300 uppercase tracking-wider border-x border-zinc-700 first:border-l-0 last:border-r-0" {...props}>
+    <th className="px-6 py-3 text-left text-xs font-medium text-zinc-300 uppercase tracking-wider" style={{ backgroundColor: '#273b3b' }} {...props}>
       {children}
     </th>
   ),
   tbody: ({ children, ...props }) => (
-    <tbody className="bg-zinc-900 divide-y divide-zinc-700" {...props}>
+    <tbody className="divide-y" style={{ backgroundColor: '#1a2929', '--tw-divide-opacity': '1', '--tw-divide-color': '#273b3b' } as React.CSSProperties} {...props}>
       {children}
     </tbody>
   ),
   tr: ({ children, ...props }) => (
-    <tr className="hover:bg-zinc-800/50" {...props}>
+    <tr className="hover:bg-[#273b3b]" {...props}>
       {children}
     </tr>
   ),
   td: ({ children, ...props }) => (
-    <td className="px-6 py-4 whitespace-nowrap text-sm text-zinc-100 border-x border-zinc-700 first:border-l-0 last:border-r-0" {...props}>
+    <td className="px-6 py-4 whitespace-nowrap text-sm text-zinc-100" style={{ backgroundColor: '#1a2929' }} {...props}>
       {children}
     </td>
   ),

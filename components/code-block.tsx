@@ -100,7 +100,8 @@ export function CodeBlock({
       <code
         className={`${
           className || ''
-        } text-sm bg-zinc-100 dark:bg-zinc-800 py-0.5 px-1 rounded-md`}
+        } text-sm py-0.5 px-1 rounded-md`}
+        style={{ backgroundColor: '#273b3b' }}
         {...props}
       >
         {children}
@@ -129,7 +130,7 @@ export function CodeBlock({
           </div>
         )}
         <div
-          className={`not-prose rounded-lg overflow-x-auto bg-black ${noBorder ? '' : 'border border-border'}`}
+          className={`not-prose rounded-lg overflow-x-auto ${noBorder ? 'bg-[#1a2929]' : 'border border-border bg-[#1a2929]'}`}
           dangerouslySetInnerHTML={{ __html: html }}
         />
       </div>
@@ -155,7 +156,7 @@ export function CodeBlock({
           </Button>
         </div>
       )}
-      <pre className={`text-sm w-full overflow-x-auto p-4 bg-black rounded-lg ${noBorder ? '' : 'border border-border'}`}>
+      <pre className={`text-sm w-full overflow-x-auto p-4 rounded-lg ${noBorder ? 'bg-[#1a2929]' : 'border border-border bg-[#1a2929]'}`}>
         <code className={`whitespace-pre break-words font-mono text-white ${className || ''}`} {...props}>
           {children}
         </code>

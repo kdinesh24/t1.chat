@@ -39,7 +39,8 @@ function PureDocumentToolResult({
   return (
     <button
       type="button"
-      className="bg-black text-foreground hover:bg-muted cursor-pointer border border-border hover:border-border/80 py-3 px-4 rounded-xl w-fit flex flex-row gap-3 items-center transition-all duration-200 hover:shadow-sm"
+      className="text-foreground hover:bg-muted cursor-pointer border border-border hover:border-border/80 py-3 px-4 rounded-xl w-fit flex flex-row gap-3 items-center transition-all duration-200 hover:shadow-sm"
+      style={{ backgroundColor: '#1a2929' }}
       onClick={(event) => {
         if (isReadonly) {
           toast.error(
@@ -105,7 +106,8 @@ function PureDocumentToolCall({
   return (
     <button
       type="button"
-      className="cursor-pointer w-fit border border-border bg-black text-foreground hover:bg-muted hover:border-border/80 py-3 px-4 rounded-xl flex flex-row items-center justify-between gap-3 transition-all duration-200 hover:shadow-sm"
+      className="cursor-pointer w-fit border border-border text-foreground hover:bg-muted hover:border-border/80 py-3 px-4 rounded-xl flex flex-row items-center justify-between gap-3 transition-all duration-200 hover:shadow-sm"
+      style={{ backgroundColor: '#1a2929' }}
       onClick={(event) => {
         if (isReadonly) {
           toast.error(

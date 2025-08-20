@@ -36,12 +36,12 @@ export function SidebarUserNav({ user }: { user: User }) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             {status === 'loading' ? (
-              <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent bg-background data-[state=open]:text-sidebar-accent-foreground h-10 justify-between">
+              <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-10 justify-between hover:bg-white/50" style={{ backgroundColor: '#1a2929' }}>
                 <div className="flex flex-row gap-2">
-                                  <div className="size-6 bg-black rounded-full animate-pulse" />
-        <span className="bg-black text-transparent rounded-md animate-pulse">
-          Loading auth status
-        </span>
+                  <div className="size-6 rounded-full animate-pulse" style={{ backgroundColor: '#1a2929' }} />
+                  <span className="bg-[#1a2929] text-transparent rounded-md animate-pulse">
+                    Loading auth status
+                  </span>
                 </div>
                 <div className="animate-spin text-zinc-500">
                   <LoaderIcon />
@@ -50,7 +50,8 @@ export function SidebarUserNav({ user }: { user: User }) {
             ) : (
               <SidebarMenuButton
                 data-testid="user-nav-button"
-                className="data-[state=open]:bg-sidebar-accent bg-black data-[state=open]:text-sidebar-accent-foreground h-10"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-10 hover:bg-white/50"
+                style={{ backgroundColor: '#1a2929' }}
               >
                 <Image
                   src={`https://avatar.vercel.sh/${user.email}`}

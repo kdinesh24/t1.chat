@@ -16,6 +16,7 @@ import {
   LockIcon,
 } from './icons';
 import { useChatVisibility } from '@/hooks/use-chat-visibility';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 export type VisibilityType = 'private' | 'public';
 
@@ -61,23 +62,29 @@ export function VisibilitySelector({
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger
-        asChild
-        className={cn(
-          'w-fit data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
-          className,
-        )}
-      >
-        <Button
-          data-testid="visibility-selector"
-          variant="outline"
-          className="hidden md:flex md:px-2 md:h-[34px] bg-black"
-        >
-          {selectedVisibility?.icon}
-          {selectedVisibility?.label}
-          <ChevronDownIcon />
-        </Button>
-      </DropdownMenuTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DropdownMenuTrigger
+            asChild
+            className={cn(
+              'w-fit data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
+              className,
+            )}
+          >
+            <Button
+              data-testid="visibility-selector"
+              variant="outline"
+              className="hidden md:flex md:px-2 md:h-[34px] hover:bg-white/50"
+              style={{ backgroundColor: '#1a2929' }}
+            >
+              {selectedVisibility?.icon}
+              {selectedVisibility?.label}
+              <ChevronDownIcon />
+            </Button>
+          </DropdownMenuTrigger>
+        </TooltipTrigger>
+        <TooltipContent>Chat Visibility</TooltipContent>
+      </Tooltip>
 
       <DropdownMenuContent align="start" className="min-w-[300px]">
         {visibilities.map((visibility) => (

@@ -36,7 +36,8 @@ export const VersionFooter = ({
 
   return (
     <motion.div
-              className="absolute flex flex-col gap-4 lg:flex-row bottom-0 bg-black text-foreground p-4 w-full border-t border-border z-50 justify-between"
+      className="absolute flex flex-col gap-4 lg:flex-row bottom-0 text-foreground p-4 w-full border-t border-border z-50 justify-between"
+      style={{ backgroundColor: '#1a2929' }}
       initial={{ y: isMobile ? 200 : 77 }}
       animate={{ y: 0 }}
       exit={{ y: isMobile ? 200 : 77 }}
@@ -52,7 +53,8 @@ export const VersionFooter = ({
       <div className="flex flex-row gap-4">
         <Button
           disabled={isMutating}
-          className="bg-black"
+          className="hover:bg-white/50"
+          style={{ backgroundColor: '#1a2929' }}
           onClick={async () => {
             setIsMutating(true);
 

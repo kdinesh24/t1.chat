@@ -264,7 +264,8 @@ function PureArtifact({
         >
           {!isMobile && (
             <motion.div
-              className="fixed bg-background h-dvh"
+              className="fixed h-dvh"
+              style={{ backgroundColor: '#273b3b' }}
               initial={{
                 width: isSidebarOpen ? windowWidth - 256 : windowWidth,
                 right: 0,
@@ -282,9 +283,10 @@ function PureArtifact({
 
           {!isMobile && (
             <motion.div
-              className="relative bg-muted dark:bg-background h-dvh shrink-0"
+              className="relative h-dvh shrink-0"
               style={{
                 width: windowWidth ? windowWidth / 2 : '50vw',
+                backgroundColor: '#273b3b',
               }}
               initial={{ opacity: 0, x: 10, scale: 1 }}
               animate={{
@@ -342,7 +344,7 @@ function PureArtifact({
                     setAttachments={setAttachments}
                     messages={messages}
                     sendMessage={sendMessage}
-                    className="bg-background dark:bg-muted"
+                    className="dark:bg-[#1a2929] bg-[#1a2929]"
                     setMessages={setMessages}
                     selectedVisibilityType={selectedVisibilityType}
                   />
@@ -352,7 +354,8 @@ function PureArtifact({
           )}
 
           <motion.div
-            className="fixed dark:bg-muted bg-background h-dvh flex flex-col overflow-y-scroll md:border-l dark:border-zinc-700 border-zinc-200"
+            className="fixed h-dvh flex flex-col overflow-y-scroll md:border-l dark:border-zinc-700 border-zinc-200"
+            style={{ backgroundColor: '#1b2929' }}
             initial={
               isMobile
                 ? {
@@ -454,7 +457,7 @@ function PureArtifact({
               />
             </div>
 
-            <div className="dark:bg-muted bg-background h-full overflow-y-scroll !max-w-full items-center">
+            <div className="h-full overflow-y-scroll !max-w-full items-center" style={{ backgroundColor: '#1a2929' }}>
               <artifactDefinition.content
                 title={artifact.title}
                 content={

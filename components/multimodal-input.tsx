@@ -222,7 +222,8 @@ function PureMultimodalInput({
               data-testid="scroll-to-bottom-button"
               variant="outline"
               size="sm"
-              className="absolute bottom-4 right-4 h-8 w-8 rounded-full bg-black border border-border hover:bg-muted transition-colors"
+              className="absolute bottom-4 right-4 h-8 w-8 rounded-full border border-border hover:bg-muted transition-colors"
+              style={{ backgroundColor: '#1a2929' }}
               onClick={(event) => {
                 event.preventDefault();
                 scrollToBottom();
@@ -283,9 +284,10 @@ function PureMultimodalInput({
         value={input}
         onChange={handleInput}
         className={cx(
-          'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base bg-black pb-10 border border-border shadow-sm',
+          'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base pb-10 border border-border shadow-sm',
           className,
         )}
+        style={{ backgroundColor: '#1a2929' }}
         rows={2}
         autoFocus
         onKeyDown={(event) => {
@@ -347,7 +349,8 @@ function PureAttachmentsButton({
   return (
     <Button
       data-testid="attachments-button"
-                             className="rounded-md rounded-bl-lg p-[7px] h-fit border-border hover:bg-muted transition-colors bg-black"
+                             className="rounded-md rounded-bl-lg p-[7px] h-fit border-border hover:bg-muted transition-colors"
+                             style={{ backgroundColor: '#1a2929' }}
       onClick={(event) => {
         event.preventDefault();
         fileInputRef.current?.click();
@@ -372,7 +375,8 @@ function PureStopButton({
   return (
           <Button
         data-testid="stop-button"
-        className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors bg-black"
+        className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors"
+        style={{ backgroundColor: '#1a2929' }}
         onClick={(event) => {
           event.preventDefault();
           stop();
@@ -398,7 +402,8 @@ function PureSendButton({
   return (
           <Button
         data-testid="send-button"
-        className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors bg-black"
+        className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors"
+        style={{ backgroundColor: '#1a2929', color: '#ffffff' }}
         onClick={(event) => {
           event.preventDefault();
           submitForm();
