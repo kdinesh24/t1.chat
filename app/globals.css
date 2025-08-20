@@ -20,6 +20,123 @@
     .text-balance {
         text-wrap: balance;
     }
+
+    /* Custom scrollbar styles for code blocks */
+    .code-scrollbar,
+    .code-scrollbar pre,
+    .shiki,
+    .shiki pre {
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+        scrollbar-gutter: stable;
+        transition: scrollbar-color 0.2s ease;
+    }
+
+    /* Show scrollbar on hover */
+    .code-scrollbar:hover,
+    .code-scrollbar:hover pre,
+    .shiki:hover,
+    .shiki:hover pre,
+    .code-block-container:hover .code-scrollbar,
+    .code-block-container:hover .code-scrollbar pre,
+    .code-block-container:hover .shiki,
+    .code-block-container:hover .shiki pre {
+        scrollbar-color: #71717a #2d3748;
+    }
+
+    /* WebKit scrollbar styles (Chrome, Safari, Edge) */
+    .code-scrollbar::-webkit-scrollbar,
+    .code-scrollbar pre::-webkit-scrollbar,
+    .shiki::-webkit-scrollbar,
+    .shiki pre::-webkit-scrollbar {
+        height: 12px;
+        width: 12px;
+    }
+
+    .code-scrollbar::-webkit-scrollbar-track,
+    .code-scrollbar pre::-webkit-scrollbar-track,
+    .shiki::-webkit-scrollbar-track,
+    .shiki pre::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 6px;
+    }
+
+    .code-scrollbar::-webkit-scrollbar-thumb,
+    .code-scrollbar pre::-webkit-scrollbar-thumb,
+    .shiki::-webkit-scrollbar-thumb,
+    .shiki pre::-webkit-scrollbar-thumb {
+        background-color: transparent;
+        border-radius: 6px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+        transition: background-color 0.2s ease;
+    }
+
+    /* Show webkit scrollbar on hover */
+    .code-scrollbar:hover::-webkit-scrollbar-thumb,
+    .code-scrollbar:hover pre::-webkit-scrollbar-thumb,
+    .shiki:hover::-webkit-scrollbar-thumb,
+    .shiki:hover pre::-webkit-scrollbar-thumb,
+    .code-block-container:hover .code-scrollbar::-webkit-scrollbar-thumb,
+    .code-block-container:hover .code-scrollbar pre::-webkit-scrollbar-thumb,
+    .code-block-container:hover .shiki::-webkit-scrollbar-thumb,
+    .code-block-container:hover .shiki pre::-webkit-scrollbar-thumb {
+        background-color: #71717a;
+    }
+
+    .code-scrollbar:hover::-webkit-scrollbar-track,
+    .code-scrollbar:hover pre::-webkit-scrollbar-track,
+    .shiki:hover::-webkit-scrollbar-track,
+    .shiki:hover pre::-webkit-scrollbar-track,
+    .code-block-container:hover .code-scrollbar::-webkit-scrollbar-track,
+    .code-block-container:hover .code-scrollbar pre::-webkit-scrollbar-track,
+    .code-block-container:hover .shiki::-webkit-scrollbar-track,
+    .code-block-container:hover .shiki pre::-webkit-scrollbar-track {
+        background: #2d3748;
+    }
+
+    .code-scrollbar:hover::-webkit-scrollbar-thumb:hover,
+    .code-scrollbar:hover pre::-webkit-scrollbar-thumb:hover,
+    .shiki:hover::-webkit-scrollbar-thumb:hover,
+    .shiki:hover pre::-webkit-scrollbar-thumb:hover,
+    .code-block-container:hover .code-scrollbar::-webkit-scrollbar-thumb:hover,
+    .code-block-container:hover .code-scrollbar pre::-webkit-scrollbar-thumb:hover,
+    .code-block-container:hover .shiki::-webkit-scrollbar-thumb:hover,
+    .code-block-container:hover .shiki pre::-webkit-scrollbar-thumb:hover {
+        background-color: #9ca3af;
+    }
+
+    .code-scrollbar::-webkit-scrollbar-corner,
+    .code-scrollbar pre::-webkit-scrollbar-corner,
+    .shiki::-webkit-scrollbar-corner,
+    .shiki pre::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+
+    /* Force scrollbar visibility when content overflows */
+    .code-scrollbar,
+    .code-scrollbar pre,
+    .shiki,
+    .shiki pre {
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scroll-behavior: smooth;
+        min-width: 0;
+        width: 100%;
+    }
+
+    /* Prevent scrollbar flickering during content updates */
+    .code-block-container {
+        contain: layout style;
+        will-change: auto;
+    }
+
+    .code-scrollbar,
+    .shiki {
+        contain: layout;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+    }
 }
 
 @layer base {
@@ -181,7 +298,8 @@
     background-color: hsl(var(--background)) !important;
     color: hsl(var(--foreground)) !important;
     border-radius: 0.5rem;
-    overflow: hidden;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
 }
 
 .shiki .highlighted {
@@ -190,6 +308,7 @@
 
 .shiki .line {
     padding: 0 1rem;
+    white-space: nowrap;
 }
 
 .shiki .line-number {
@@ -203,6 +322,8 @@
 pre.shiki {
     margin: 1rem 0;
     padding: 1rem 0;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
 }
 
 /* Compact padding for single-line code blocks */

@@ -62,11 +62,17 @@ export function getStreamContext() {
 
 export async function POST(request: Request) {
   console.log('🔥 POST /api/chat - Request received');
+  console.log('🌍 Environment check:');
+  console.log('  - GROQ_API_KEY present:', !!process.env.GROQ_API_KEY);
+  console.log('  - GROQ_API_KEY length:', process.env.GROQ_API_KEY?.length || 0);
+  
   let requestBody: PostRequestBody;
 
   try {
     const json = await request.json();
+    console.log('📝 Raw request body:', JSON.stringify(json, null, 2));
     requestBody = postRequestBodySchema.parse(json);
+    console.log('✅ Request body parsed successfully');
   } catch (error) {
     console.error('❌ Request parsing failed:', error);
     return new ChatSDKError('bad_request:api').toResponse();
@@ -93,6 +99,11 @@ export async function POST(request: Request) {
     }
 
     console.log('✅ User authenticated:', session.user.id);
+    console.log('📋 Chat request details:');
+    console.log('  - Chat ID:', id);
+    console.log('  - Selected model:', selectedChatModel);
+    console.log('  - Selected visibility:', selectedVisibilityType);
+    console.log('  - Message content:', message.parts.map(p => p.type === 'text' ? p.text : `[${p.type}]`).join(' '));
 
     const userType: UserType = session.user.type;
 
@@ -167,10 +178,26 @@ export async function POST(request: Request) {
 
     const streamId = generateUUID();
     await createStreamId({ streamId, chatId: id });
+    console.log('🆔 Stream ID created:', streamId);
+
+    console.log('🤖 Initializing AI provider...');
+    console.log('  - Model ID:', selectedChatModel);
+    
+    try {
+      const modelInstance = myProvider.languageModel(selectedChatModel);
+      console.log('✅ Model instance created:', modelInstance.modelId);
+    } catch (modelError) {
+      console.error('❌ Model creation failed:', modelError);
+      throw modelError;
+    }
 
     const stream = createUIMessageStream({
       execute: async ({ writer: dataStream }) => {
         try {
+          console.log('🚀 Starting streamText execution...');
+          console.log('  - Messages count:', uiMessages.length);
+          console.log('  - System prompt length:', systemPrompt({ selectedChatModel, requestHints }).length);
+          
           const result = streamText({
             model: myProvider.languageModel(selectedChatModel),
             system: systemPrompt({ selectedChatModel, requestHints }),
@@ -201,6 +228,8 @@ export async function POST(request: Request) {
             },
           });
 
+          console.log('✅ streamText instance created');
+
           // Handle stream consumption with error handling
           try {
             console.log('🚀 Starting stream consumption...');
@@ -217,12 +246,18 @@ export async function POST(request: Request) {
           }
         } catch (error) {
           console.error('❌ Stream creation error:', error);
+          console.error('❌ Error details:', {
+            name: error instanceof Error ? error.name : 'Unknown',
+            message: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined
+          });
           // Re-throw to be handled by onError
           throw error;
         }
       },
       generateId: generateUUID,
       onFinish: async ({ messages }) => {
+        console.log('🏁 Stream finished, saving messages:', messages.length);
         await saveMessages({
           messages: messages.map((message) => ({
             id: message.id,
@@ -233,26 +268,43 @@ export async function POST(request: Request) {
             chatId: id,
           })),
         });
+        console.log('✅ Messages saved successfully');
       },
       onError: (error) => {
         console.error('❌ UI Message Stream error:', error);
         const errorMessage = error instanceof Error ? error.message : String(error);
+        
+        // Handle rate limit errors
+        if (errorMessage.includes('Rate limit reached') || errorMessage.includes('rate_limit_exceeded')) {
+          return 'I apologize, but I\'ve reached the rate limit for API requests. Please wait a moment and try again, or the request will automatically retry.';
+        }
+        
+        // Handle network connectivity errors
         if (errorMessage.includes('ENOTFOUND') || errorMessage.includes('generativelanguage.googleapis.com')) {
           return 'I apologize, but I\'m having trouble connecting to the AI service right now. This might be due to a network connectivity issue. Please check your internet connection and try again in a few moments.';
         }
+        
+        // Handle generic API errors
+        if (errorMessage.includes('Failed after 3 attempts')) {
+          return 'I encountered an issue while processing your request. Please try again in a moment.';
+        }
+        
         return 'Oops, an error occurred! Please try again.';
       },
     });
 
     const streamContext = getStreamContext();
+    console.log('🔄 Stream context available:', !!streamContext);
 
     if (streamContext) {
+      console.log('📡 Using resumable stream context');
       return new Response(
         await streamContext.resumableStream(streamId, () =>
           stream.pipeThrough(new JsonToSseTransformStream()),
         ),
       );
     } else {
+      console.log('📡 Using direct stream response');
       return new Response(stream.pipeThrough(new JsonToSseTransformStream()));
     }
   } catch (error) {

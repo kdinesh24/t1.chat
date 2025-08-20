@@ -82,7 +82,12 @@ export function CodeBlock({
         const code = codeText;
         const lang = language || 'plaintext';
         const result = highlighter.codeToHtml(code, { lang, theme });
-        if (isMounted) setHtml(result);
+        if (isMounted) {
+          // Use requestAnimationFrame to prevent flickering during updates
+          requestAnimationFrame(() => {
+            if (isMounted) setHtml(result);
+          });
+        }
       } catch {
         if (isMounted) setHtml(null);
       }
@@ -118,7 +123,7 @@ export function CodeBlock({
   // Block code (triple backticks) — let the <pre> wrapper come from the Markdown renderer
   if (html) {
     return (
-      <div className={`relative group mb-6 mt-4 ${isSingleLine ? 'code-block-compact' : ''}`}>
+      <div className={`relative group mb-6 mt-4 code-block-container ${isSingleLine ? 'code-block-compact' : ''}`}>
         {/* Header with language name */}
         <div 
           className={`flex items-center justify-between px-4 rounded-t-lg border-b ${isSingleLine ? 'py-1' : 'py-2'}`}
@@ -144,7 +149,13 @@ export function CodeBlock({
           )}
         </div>
         <div
-          className={`not-prose rounded-b-lg overflow-x-auto ${noBorder ? 'bg-[#1a2929]' : 'border-l border-r border-b border-border bg-[#1a2929]'}`}
+          className={`not-prose rounded-b-lg overflow-x-auto overflow-y-hidden code-scrollbar max-w-full ${noBorder ? 'bg-[#1a2929]' : 'border-l border-r border-b border-border bg-[#1a2929]'}`}
+          style={{ 
+            overflowX: 'auto',
+            overflowY: 'hidden',
+            maxWidth: '100%',
+            minHeight: html ? 'auto' : '2rem'
+          }}
           dangerouslySetInnerHTML={{ __html: html }}
         />
       </div>
@@ -153,7 +164,7 @@ export function CodeBlock({
 
   // Fallback SSR: unhighlighted block code
   return (
-    <div className="relative group mb-6 mt-4">
+    <div className="relative group mb-6 mt-4 code-block-container">
       {/* Header with language name */}
       <div 
         className={`flex items-center justify-between px-4 rounded-t-lg border-b ${isSingleLine ? 'py-1' : 'py-2'}`}
@@ -178,8 +189,16 @@ export function CodeBlock({
           </Button>
         )}
       </div>
-      <pre className={`text-sm w-full overflow-x-auto rounded-b-lg ${isSingleLine ? 'px-4 py-2' : 'p-4'} ${noBorder ? 'bg-[#1a2929]' : 'border-l border-r border-b border-border bg-[#1a2929]'}`}>
-        <code className={`whitespace-pre break-words font-mono text-white ${className || ''}`} {...props}>
+      <pre 
+        className={`text-sm w-full overflow-x-auto overflow-y-hidden code-scrollbar rounded-b-lg max-w-full ${isSingleLine ? 'px-4 py-2' : 'p-4'} ${noBorder ? 'bg-[#1a2929]' : 'border-l border-r border-b border-border bg-[#1a2929]'}`}
+        style={{ 
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          maxWidth: '100%',
+          minHeight: '2rem'
+        }}
+      >
+        <code className={`whitespace-pre font-mono text-white ${className || ''}`} {...props}>
           {children}
         </code>
       </pre>
