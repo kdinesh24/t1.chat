@@ -10,6 +10,8 @@ interface CodeBlockProps {
   inline?: boolean;
   className?: string;
   children: any;
+  noCopyButton?: boolean;
+  noBorder?: boolean;
 }
 
 export function CodeBlock({
@@ -17,6 +19,8 @@ export function CodeBlock({
   inline,
   className,
   children,
+  noCopyButton = false,
+  noBorder = false,
   ...props
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
@@ -107,7 +111,35 @@ export function CodeBlock({
   // Block code (triple backticks) — let the <pre> wrapper come from the Markdown renderer
   if (html) {
     return (
-      <div className="relative group">
+      <div className="relative group mb-6">
+        {!noCopyButton && (
+          <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCopy}
+              className="h-8 w-8 p-0 bg-black hover:bg-gray-800 text-white border border-gray-600"
+            >
+              {copied ? (
+                <Check className="h-4 w-4 text-green-400" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
+        )}
+        <div
+          className={`not-prose rounded-lg overflow-x-auto bg-black ${noBorder ? '' : 'border border-border'}`}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      </div>
+    );
+  }
+
+  // Fallback SSR: unhighlighted block code
+  return (
+    <div className="relative group mb-6">
+      {!noCopyButton && (
         <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
           <Button
             variant="ghost"
@@ -122,32 +154,8 @@ export function CodeBlock({
             )}
           </Button>
         </div>
-        <div
-          className="not-prose border border-border rounded-lg overflow-hidden bg-black"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
-      </div>
-    );
-  }
-
-  // Fallback SSR: unhighlighted block code
-  return (
-    <div className="relative group">
-      <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleCopy}
-          className="h-8 w-8 p-0 bg-black hover:bg-gray-800 text-white border border-gray-600"
-        >
-          {copied ? (
-            <Check className="h-4 w-4 text-green-400" />
-          ) : (
-            <Copy className="h-4 w-4" />
-          )}
-        </Button>
-      </div>
-      <pre className="text-sm w-full overflow-x-auto p-4 bg-black border border-border rounded-lg">
+      )}
+      <pre className={`text-sm w-full overflow-x-auto p-4 bg-black rounded-lg ${noBorder ? '' : 'border border-border'}`}>
         <code className={`whitespace-pre break-words font-mono text-white ${className || ''}`} {...props}>
           {children}
         </code>

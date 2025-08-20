@@ -1,11 +1,12 @@
 'use client';
 
 import { EditorView } from '@codemirror/view';
-import { EditorState, Transaction } from '@codemirror/state';
+import { EditorState, Transaction, StateEffect } from '@codemirror/state';
 import { python } from '@codemirror/lang-python';
+import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { basicSetup } from 'codemirror';
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useCallback, useEffect, useRef } from 'react';
 import { Suggestion } from '@/lib/db/schema';
 
 type EditorProps = {
@@ -17,15 +18,57 @@ type EditorProps = {
   suggestions: Array<Suggestion>;
 };
 
+// Move scrollTheme outside component to prevent recreation
+const scrollTheme = EditorView.theme({
+  ".cm-scroller": {
+    overflowX: "auto !important",
+    overflowY: "auto !important"
+  },
+  ".cm-content": {
+    minWidth: "max-content !important"
+  },
+  ".cm-editor": {
+    overflowX: "auto !important"
+  }
+});
+
+// Simple language detection based on content
+const getLanguageExtension = (code: string) => {
+  if (code.includes('import ') && (code.includes('def ') || code.includes('print('))) {
+    return python();
+  }
+  if (code.includes('function ') || code.includes('const ') || code.includes('let ') || code.includes('=>')) {
+    return javascript();
+  }
+  return python(); // Default to python
+};
+
 function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<EditorView | null>(null);
+  const updateListenerRef = useRef<any>(null);
 
   useEffect(() => {
     if (containerRef.current && !editorRef.current) {
+      const languageExtension = getLanguageExtension(content);
+      
+      // Create the update listener once
+      updateListenerRef.current = EditorView.updateListener.of((update) => {
+        if (update.docChanged) {
+          const transaction = update.transactions.find(
+            (tr) => !tr.annotation(Transaction.remote),
+          );
+
+          if (transaction) {
+            const newContent = update.state.doc.toString();
+            onSaveContent(newContent, true);
+          }
+        }
+      });
+      
       const startState = EditorState.create({
         doc: content,
-        extensions: [basicSetup, python(), oneDark],
+        extensions: [basicSetup, languageExtension, oneDark, scrollTheme, updateListenerRef.current],
       });
 
       editorRef.current = new EditorView({
@@ -44,33 +87,7 @@ function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
     // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    if (editorRef.current) {
-      const updateListener = EditorView.updateListener.of((update) => {
-        if (update.docChanged) {
-          const transaction = update.transactions.find(
-            (tr) => !tr.annotation(Transaction.remote),
-          );
-
-          if (transaction) {
-            const newContent = update.state.doc.toString();
-            onSaveContent(newContent, true);
-          }
-        }
-      });
-
-      const currentSelection = editorRef.current.state.selection;
-
-      const newState = EditorState.create({
-        doc: editorRef.current.state.doc,
-        extensions: [basicSetup, python(), oneDark, updateListener],
-        selection: currentSelection,
-      });
-
-      editorRef.current.setState(newState);
-    }
-  }, [onSaveContent]);
-
+  // Separate effect to handle content updates without recreating the entire state
   useEffect(() => {
     if (editorRef.current && content) {
       const currentContent = editorRef.current.state.doc.toString();
@@ -92,7 +109,7 @@ function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
 
   return (
     <div
-      className="relative not-prose w-full pb-[calc(80dvh)] text-sm"
+      className="relative not-prose w-full pb-[calc(80dvh)] text-sm overflow-x-auto mb-6"
       ref={containerRef}
     />
   );

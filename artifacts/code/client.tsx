@@ -1,5 +1,6 @@
 import { Artifact } from '@/components/create-artifact';
 import { CodeEditor } from '@/components/code-editor';
+import { CodeBlock } from '@/components/code-block';
 import {
   CopyIcon,
   LogsIcon,
@@ -90,11 +91,51 @@ export const codeArtifact = new Artifact<'code', Metadata>({
       }));
     }
   },
-  content: ({ metadata, setMetadata, ...props }) => {
+  content: ({ metadata, setMetadata, content, isInline, onSaveContent, status, isCurrentVersion, currentVersionIndex, suggestions }) => {
+    const lineCount = content.split('\n').length;
+    
+    // Use Shiki for smaller code snippets (less than 50 lines) both inline and when expanded
+    if (lineCount < 50) {
+      return (
+        <>
+          <div className={`overflow-x-auto ${isInline ? 'px-4 py-6' : 'px-6 py-8'}`}>
+            <CodeBlock
+              node={null}
+              inline={false}
+              className="language-python"
+              children={content}
+              noCopyButton={!isInline}
+              noBorder={!isInline}
+            />
+          </div>
+
+          {metadata?.outputs && (
+            <Console
+              consoleOutputs={metadata.outputs}
+              setConsoleOutputs={() => {
+                setMetadata({
+                  ...metadata,
+                  outputs: [],
+                });
+              }}
+            />
+          )}
+        </>
+      );
+    }
+
+    // Use CodeMirror for larger code files
     return (
       <>
         <div className="px-1">
-          <CodeEditor {...props} />
+          <CodeEditor 
+            content={content}
+            onSaveContent={onSaveContent}
+            status={status}
+            isCurrentVersion={isCurrentVersion}
+            currentVersionIndex={currentVersionIndex}
+            suggestions={suggestions}
+          />
         </div>
 
         {metadata?.outputs && (

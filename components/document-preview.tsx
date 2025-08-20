@@ -17,6 +17,7 @@ import useSWR from 'swr';
 import { Editor } from './text-editor';
 import { DocumentToolCall, DocumentToolResult } from './document';
 import { CodeEditor } from './code-editor';
+import { CodeBlock } from './code-block';
 import { useArtifact } from '@/hooks/use-artifact';
 import equal from 'fast-deep-equal';
 import { SpreadsheetEditor } from './sheet-editor';
@@ -253,6 +254,28 @@ const DocumentContent = ({ document }: { document: Document }) => {
     saveContent: () => {},
     suggestions: [],
   };
+
+  // For code documents, check if content is small enough to use Shiki highlighting
+  if (document.kind === 'code') {
+    const codeContent = document.content ?? '';
+    const lineCount = codeContent.split('\n').length;
+    
+    // Use Shiki for smaller code snippets (less than 50 lines)
+    if (lineCount < 50) {
+      return (
+        <div className={cn(containerClassName, 'p-4 overflow-x-auto')}>
+          <CodeBlock
+            node={null}
+            inline={false}
+            className="language-python"
+            children={codeContent}
+            noCopyButton={true}
+            noBorder={true}
+          />
+        </div>
+      );
+    }
+  }
 
   return (
     <div className={containerClassName}>
