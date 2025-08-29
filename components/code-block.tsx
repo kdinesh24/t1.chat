@@ -127,7 +127,7 @@ export function CodeBlock({
         {/* Header with language name */}
         <div 
           className={`flex items-center justify-between px-4 rounded-t-lg border-b ${isSingleLine ? 'py-1' : 'py-2'}`}
-          style={{ backgroundColor: '#273b3b', borderColor: '#374141' }}
+          style={{ backgroundColor: '#362d3d', borderColor: '#374141' }}
         >
           <span className="text-xs font-medium text-zinc-300 uppercase tracking-wider">
             {language || 'plaintext'}
@@ -149,7 +149,7 @@ export function CodeBlock({
           )}
         </div>
         <div
-          className={`not-prose rounded-b-lg overflow-x-auto overflow-y-hidden code-scrollbar max-w-full ${noBorder ? 'bg-[#1a2929]' : 'border-l border-r border-b border-border bg-[#1a2929]'}`}
+          className={`not-prose rounded-b-lg overflow-x-auto overflow-y-hidden code-scrollbar max-w-full ${noBorder ? 'bg-[#362d3d]' : 'border-l border-r border-b border-border bg-[#1a151f]'}`}
           style={{ 
             overflowX: 'auto',
             overflowY: 'hidden',
@@ -168,7 +168,7 @@ export function CodeBlock({
       {/* Header with language name */}
       <div 
         className={`flex items-center justify-between px-4 rounded-t-lg border-b ${isSingleLine ? 'py-1' : 'py-2'}`}
-        style={{ backgroundColor: '#273b3b', borderColor: '#374141' }}
+        style={{ backgroundColor: '#1a151f', borderColor: '#1a151f' }}
       >
         <span className="text-xs font-medium text-zinc-300 uppercase tracking-wider">
           {language || 'plaintext'}
@@ -190,7 +190,7 @@ export function CodeBlock({
         )}
       </div>
       <pre 
-        className={`text-sm w-full overflow-x-auto overflow-y-hidden code-scrollbar rounded-b-lg max-w-full ${isSingleLine ? 'px-4 py-2' : 'p-4'} ${noBorder ? 'bg-[#1a2929]' : 'border-l border-r border-b border-border bg-[#1a2929]'}`}
+        className={`text-sm w-full overflow-x-auto overflow-y-hidden code-scrollbar rounded-b-lg max-w-full ${isSingleLine ? 'px-4 py-2' : 'p-4'} ${noBorder ? 'bg-[#1a151f]' : 'border-l border-r border-b border-border bg-[#1a151f]'}`}
         style={{ 
           overflowX: 'auto',
           overflowY: 'hidden',

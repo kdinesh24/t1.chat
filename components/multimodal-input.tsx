@@ -21,6 +21,7 @@ import { PreviewAttachment } from './preview-attachment';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { SuggestedActions } from './suggested-actions';
+import { ModelSelector } from './model-selector';
 import equal from 'fast-deep-equal';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -28,6 +29,7 @@ import { ArrowDown } from 'lucide-react';
 import { useScrollToBottom } from '@/hooks/use-scroll-to-bottom';
 import type { VisibilityType } from './visibility-selector';
 import type { Attachment, ChatMessage } from '@/lib/types';
+import type { Session } from 'next-auth';
 
 function PureMultimodalInput({
   chatId,
@@ -42,6 +44,8 @@ function PureMultimodalInput({
   sendMessage,
   className,
   selectedVisibilityType,
+  selectedModelId,
+  session,
 }: {
   chatId: string;
   input: string;
@@ -55,6 +59,8 @@ function PureMultimodalInput({
   sendMessage: UseChatHelpers<ChatMessage>['sendMessage'];
   className?: string;
   selectedVisibilityType: VisibilityType;
+  selectedModelId: string;
+  session: Session;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
@@ -224,7 +230,7 @@ function PureMultimodalInput({
               variant="outline"
               size="sm"
               className="absolute bottom-4 right-4 h-8 w-8 rounded-full border border-border hover:bg-muted transition-colors"
-              style={{ backgroundColor: '#1a2929' }}
+              style={{ backgroundColor: '#2a232f' }}
               onClick={(event) => {
                 event.preventDefault();
                 scrollToBottom();
@@ -285,10 +291,10 @@ function PureMultimodalInput({
         value={input}
         onChange={handleInput}
         className={cx(
-          'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base pb-10 border border-border shadow-sm',
+          'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base pb-10 border border-border shadow-sm bg-[#2a232f]',
           className,
         )}
-        style={{ backgroundColor: '#1a2929' }}
+        style={{ backgroundColor: '#29232f' }}
         rows={2}
         autoFocus
         onKeyDown={(event) => {
@@ -310,7 +316,12 @@ function PureMultimodalInput({
         }}
       />
 
-      <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start">
+      <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start gap-1">
+        <ModelSelector
+          session={session}
+          selectedModelId={selectedModelId}
+          className="h-7 text-xs px-2"
+        />
         <AttachmentsButton fileInputRef={fileInputRef} status={status} />
       </div>
 
@@ -337,6 +348,7 @@ export const MultimodalInput = memo(
     if (!equal(prevProps.attachments, nextProps.attachments)) return false;
     if (prevProps.selectedVisibilityType !== nextProps.selectedVisibilityType)
       return false;
+    if (prevProps.selectedModelId !== nextProps.selectedModelId) return false;
 
     return true;
   },
@@ -352,8 +364,8 @@ function PureAttachmentsButton({
   return (
     <Button
       data-testid="attachments-button"
-                             className="rounded-md rounded-bl-lg p-[7px] h-fit border-border hover:bg-muted transition-colors"
-                             style={{ backgroundColor: '#1a2929' }}
+      className="rounded-lg p-[7px] h-fit border border-[#302a37] hover:bg-white/50 transition-colors"
+      style={{ backgroundColor: '#28222e' }}
       onClick={(event) => {
         event.preventDefault();
         fileInputRef.current?.click();
@@ -376,16 +388,16 @@ function PureStopButton({
   setMessages: UseChatHelpers<ChatMessage>['setMessages'];
 }) {
   return (
-          <Button
-        data-testid="stop-button"
-        className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors"
-        style={{ backgroundColor: '#1a2929' }}
-        onClick={(event) => {
-          event.preventDefault();
-          stop();
-          setMessages((messages) => messages);
-        }}
-      >
+    <Button
+      data-testid="stop-button"
+      className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors"
+      style={{ backgroundColor: '#28232e' }}
+      onClick={(event) => {
+        event.preventDefault();
+        stop();
+        setMessages((messages) => messages);
+      }}
+    >
       <StopIcon size={14} />
     </Button>
   );
@@ -403,17 +415,22 @@ function PureSendButton({
   uploadQueue: Array<string>;
 }) {
   return (
-          <Button
-        data-testid="send-button"
-        className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors"
-        style={{ backgroundColor: '#1a2929', color: '#ffffff' }}
-        onClick={(event) => {
-          event.preventDefault();
-          console.log('🔘 Send button clicked, input length:', input.length, 'uploadQueue length:', uploadQueue.length);
-          submitForm();
-        }}
-        disabled={input.length === 0 || uploadQueue.length > 0}
-      >
+    <Button
+      data-testid="send-button"
+      className="rounded-lg p-1.5 h-fit border border-border hover:bg-muted transition-colors"
+      style={{ backgroundColor: '#391f33', color: '#ffffff' }}
+      onClick={(event) => {
+        event.preventDefault();
+        console.log(
+          '🔘 Send button clicked, input length:',
+          input.length,
+          'uploadQueue length:',
+          uploadQueue.length,
+        );
+        submitForm();
+      }}
+      disabled={input.length === 0 || uploadQueue.length > 0}
+    >
       <ArrowUpIcon size={14} />
     </Button>
   );

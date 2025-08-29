@@ -16,7 +16,6 @@ import { cn } from '@/lib/utils';
 import { CheckCircleFillIcon, ChevronDownIcon } from './icons';
 import { entitlementsByUserType } from '@/lib/ai/entitlements';
 import type { Session } from 'next-auth';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 export function ModelSelector({
   session,
@@ -47,29 +46,27 @@ export function ModelSelector({
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <DropdownMenuTrigger
-            asChild
-            className={cn(
-              'w-fit data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
-              className,
-            )}
-          >
-            <Button
-              data-testid="model-selector"
-              variant="outline"
-              className="md:px-2 md:h-[34px] hover:bg-white/50"
-              style={{ backgroundColor: '#1a2929' }}
-            >
-              {selectedChatModel?.name}
-              <ChevronDownIcon />
-            </Button>
-          </DropdownMenuTrigger>
-        </TooltipTrigger>
-        <TooltipContent>Select Model</TooltipContent>
-      </Tooltip>
-      <DropdownMenuContent align="start" className="min-w-[300px]">
+      <DropdownMenuTrigger
+        asChild
+        className={cn(
+          'w-fit data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
+          className,
+        )}
+      >
+        <Button
+          data-testid="model-selector"
+          variant="ghost"
+          className="md:px-2 md:h-[34px] hover:bg-[#332c38] border-none"
+          style={{ backgroundColor: '#2a232f' }}
+        >
+          {selectedChatModel?.name}
+          <ChevronDownIcon />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="start"
+        className="min-w-[300px] bg-[#0e080d]/80 backdrop-blur-sm border-gray-800"
+      >
         {availableChatModels.map((chatModel) => {
           const { id } = chatModel;
 
@@ -92,11 +89,8 @@ export function ModelSelector({
                 type="button"
                 className="gap-4 group/item flex flex-row justify-between items-center w-full"
               >
-                <div className="flex flex-col gap-1 items-start">
-                  <div>{chatModel.name}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {chatModel.description}
-                  </div>
+                <div className="flex items-center gap-2">
+                  <span>{chatModel.name}</span>
                 </div>
 
                 <div className="text-foreground dark:text-foreground opacity-0 group-data-[active=true]/item:opacity-100">

@@ -177,49 +177,55 @@
     }
 
     .dark {
-        --background: 182 20% 21.6%;
-        /* #273b3b */
-        --foreground: 0 0% 98%;
-        --card: 180 25% 16.1%;
-        /* #1a2929 */
-        --card-foreground: 0 0% 98%;
-        --popover: 180 25% 16.1%;
-        /* #1a2929 */
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 180 25% 16.1%;
-        --secondary: 180 25% 16.1%;
-        /* #1a2929 */
-        --secondary-foreground: 0 0% 98%;
-        --muted: 180 25% 16.1%;
-        /* #1a2929 */
-        --muted-foreground: 240 5% 64.9%;
-        --accent: 180 25% 16.1%;
-        /* #1a2929 */
-        --accent-foreground: 0 0% 98%;
+        --background: 269 15% 13%;
+        /* #201b25 - Main chat background */
+        --foreground: 0 0% 95%;
+        /* #f2f2f2 - Light text */
+        --card: 262 25% 10%;
+        /* Darker cards */
+        --card-foreground: 0 0% 95%;
+        --popover: 262 25% 10%;
+        /* Dark popover */
+        --popover-foreground: 0 0% 95%;
+        --primary: 262 20% 13%;
+        /* Purple primary */
+        --primary-foreground: 0 0% 95%;
+        --secondary: 262 25% 8%;
+        /* Very dark purple */
+        --secondary-foreground: 0 0% 95%;
+        --muted: 262 25% 8%;
+        /* Muted very dark purple */
+        --muted-foreground: 0 0% 65%;
+        /* #a6a6a6 - Muted text */
+        --accent: 262 20% 15%;
+        /* Accent purple */
+        --accent-foreground: 0 0% 95%;
         --destructive: 0 62.8% 30.6%;
         --destructive-foreground: 0 0% 98%;
-        --border: 180 15% 25%;
-        --input: 180 20% 18%;
-        /* Slightly different for text area */
-        --ring: 240 4.9% 83.9%;
+        --border: 262 15% 20%;
+        /* Purple borders */
+        --input: 262 25% 8%;
+        /* Dark input background */
+        --ring: 0 0% 83.9%;
         --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
+        --chart-2: 0 0% 45%;
         --chart-3: 30 80% 55%;
         --chart-4: 280 65% 60%;
         --chart-5: 340 75% 55%;
-        --sidebar-background: 180 25% 16.1%;
-        /* #1a2929 */
-        --sidebar: 180 25% 16.1%;
-        /* #1a2929 */
-        --sidebar-foreground: 240 4.8% 95.9%;
-        --sidebar-primary: 224.3 76.3% 48%;
-        --sidebar-primary-foreground: 0 0% 100%;
-        --sidebar-accent: 180 25% 16.1%;
-        /* #1a2929 */
-        --sidebar-accent-foreground: 240 4.8% 95.9%;
-        --sidebar-border: 180 15% 25%;
-        --sidebar-ring: 217.2 91.2% 59.8%;
+        --sidebar-background: 300 13% 9%;
+        /* #1b1219 - Sidebar and header background */
+        --sidebar: 262 25% 8%;
+        /* #1b1219 - Sidebar background */
+        --sidebar-foreground: 0 0% 90%;
+        /* #e6e6e6 - Sidebar text */
+        --sidebar-primary: 0 0% 95%;
+        --sidebar-primary-foreground: 262 25% 8%;
+        --sidebar-accent: 262 20% 15%;
+        /* Sidebar accent */
+        --sidebar-accent-foreground: 0 0% 90%;
+        --sidebar-border: 262 15% 20%;
+        /* Sidebar borders */
+        --sidebar-ring: 0 0% 59.8%;
     }
 }
 
@@ -259,13 +265,15 @@
 .cm-editor,
 .cm-gutters {
     @apply outline-none selection:bg-muted !important;
-    background-color: #1b2929 !important;
+    background-color: #1a151f !important;
+    /* Code block background color */
 }
 
 .ͼo.cm-focused>.cm-scroller>.cm-selectionLayer .cm-selectionBackground,
 .ͼo.cm-selectionBackground,
 .ͼo.cm-content::selection {
-    @apply bg-gray-200 dark:bg-gray-900 !important;
+    @apply bg-purple-200 dark:bg-purple-900/50 !important;
+    /* Purple selection for dark theme */
 }
 
 .cm-activeLine,
@@ -290,12 +298,12 @@
 }
 
 .suggestion-highlight {
-    @apply bg-blue-200 hover:bg-blue-300 dark:hover:bg-blue-400/50 dark:text-blue-50 dark:bg-blue-500/40;
+    @apply bg-purple-200 hover:bg-purple-300 dark:hover:bg-purple-500/50 dark:text-purple-50 dark:bg-purple-600/40;
 }
 
 /* Shiki code highlighting styles */
 .shiki {
-    background-color: hsl(var(--background)) !important;
+    background-color: #1a151f !important;
     color: hsl(var(--foreground)) !important;
     border-radius: 0.5rem;
     overflow-x: auto !important;
@@ -336,12 +344,159 @@ pre.shiki {
     line-height: 1.3;
 }
 
-/* Dark mode specific overrides */
-.dark .shiki {
-    background-color: #1b2929 !important;
-    color: #ffffff !important;
-}
 
 .dark .shiki .highlighted {
-    background-color: #273b3b !important;
+    background-color: hsl(var(--background)) !important;
+    /* Slightly lighter purple for highlighted lines */
+}
+
+/* Table styling for dark purple theme */
+.dark table {
+    background-color: hsl(var(--card)) !important;
+    border-color: hsl(var(--border)) !important;
+}
+
+.dark table th {
+    background-color: hsl(var(--muted)) !important;
+    border-color: hsl(var(--border)) !important;
+    color: hsl(var(--foreground)) !important;
+}
+
+.dark table td {
+    border-color: hsl(var(--border)) !important;
+    color: hsl(var(--foreground)) !important;
+}
+
+.dark table tr:nth-child(even) {
+    background-color: hsl(var(--muted)) !important;
+}
+
+.dark table tr:hover {
+    background-color: hsl(var(--accent)) !important;
+}
+
+/* Additional purple theme elements */
+.dark .markdown table {
+    background-color: #0a0914;
+    border: 1px solid #25242e;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.dark .markdown table th {
+    background-color: #12111b;
+    color: #f2f2f2;
+    border-bottom: 1px solid #25242e;
+}
+
+.dark .markdown table td {
+    border-bottom: 1px solid #25242e;
+    color: #e6e6e6;
+}
+
+/* Input and textarea styling */
+
+
+/* Force dark purple theme on specific components */
+.dark [data-sidebar="sidebar"] {
+    background-color: hsl(var(--sidebar-background)) !important;
+}
+
+.dark .bg-sidebar {
+    background-color: hsl(var(--sidebar-background)) !important;
+}
+
+.dark .bg-background {
+    background-color: hsl(var(--background)) !important;
+}
+
+.dark main {
+    background-color: hsl(var(--background)) !important;
+}
+
+/* Ensure all sidebar elements use theme colors */
+.dark [data-sidebar] {
+    background-color: inherit !important;
+}
+
+.dark .bg-black {
+    background-color: hsl(var(--background)) !important;
+}
+
+/* Force main chat area background */
+.dark [data-sidebar="inset"],
+.dark main[class*="bg-"],
+.dark .relative.flex.min-h-svh {
+    background-color: hsl(var(--background)) !important;
+}
+
+/* Chat header should match sidebar */
+.bg-sidebar {
+    background-color: hsl(var(--sidebar-background)) !important;
+}
+
+/* Force all main content areas */
+.dark body {
+    background-color: hsl(var(--background)) !important;
+}
+
+.dark html {
+    background-color: hsl(var(--background)) !important;
+}
+
+/* Force code blocks to match sidebar */
+
+
+
+/* New Chat Button Styling */
+.new-chat-button {
+    background: #411329 !important;
+}
+
+.new-chat-button:hover {
+    background: #7d1f45 !important;
+}
+
+/* Sidebar Gradient Background */
+.sidebar-gradient {
+    background: linear-gradient(to top, #0d070c 0%, #1b1219 100%) !important;
+}
+
+/* Apply gradient to all sidebar elements */
+.dark [data-sidebar="sidebar"] {
+    background: linear-gradient(to top, #0d070c 0%, #1b1219 100%) !important;
+}
+
+.dark .bg-sidebar {
+    background: linear-gradient(to top, #0d070c 0%, #1b1219 100%) !important;
+}
+
+/* Make sidebar menu items transparent to show gradient */
+.dark [data-sidebar="menu-button"] {
+    background: transparent !important;
+}
+
+.dark [data-sidebar="menu-button"]:hover {
+    background: #261c25 !important;
+}
+
+.dark [data-sidebar="menu-button"][data-active="true"] {
+    background: #261c25 !important;
+}
+
+/* Make sidebar group content transparent */
+.dark [data-sidebar="group-content"] {
+    background: transparent !important;
+}
+
+/* Make sidebar menu transparent */
+.dark [data-sidebar="menu"] {
+    background: transparent !important;
+}
+
+/* Make sidebar header, content, footer transparent */
+.dark [data-sidebar="header"],
+.dark [data-sidebar="content"],
+.dark [data-sidebar="footer"] {
+    background: transparent !important;
 }

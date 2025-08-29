@@ -3,7 +3,6 @@
 import type { User } from 'next-auth';
 import { useRouter } from 'next/navigation';
 
-import { PlusIcon } from '@/components/icons';
 import { SidebarHistory } from '@/components/sidebar-history';
 import { SidebarUserNav } from '@/components/sidebar-user-nav';
 import { Button } from '@/components/ui/button';
@@ -16,7 +15,6 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 export function AppSidebar({ user }: { user: User | undefined }) {
   const router = useRouter();
@@ -26,7 +24,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
     <Sidebar className="group-data-[side=left]:border-r-0">
       <SidebarHeader>
         <SidebarMenu>
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row justify-center items-center mb-3 mt-4">
             <Link
               href="/"
               onClick={() => {
@@ -34,28 +32,32 @@ export function AppSidebar({ user }: { user: User | undefined }) {
               }}
               className="flex flex-row gap-3 items-center"
             >
-              <span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">
-                SuperChat
+              <span
+                className="text-lg font-bold px-2 hover:bg-muted rounded-md cursor-pointer"
+                style={{ color: '#e3bad1' }}
+              >
+                T2.chat
               </span>
             </Link>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  type="button"
-                  className="p-2 h-fit"
-                  onClick={() => {
-                    setOpenMobile(false);
-                    router.push('/');
-                    router.refresh();
-                  }}
-                >
-                  <PlusIcon />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent align="end">New Chat</TooltipContent>
-            </Tooltip>
           </div>
+
+          {/* New Chat Button - Full Width Purple */}
+          <Button
+            onClick={() => {
+              setOpenMobile(false);
+              router.push('/');
+              router.refresh();
+            }}
+            className="mx-2 h-10 text-white font-medium rounded-lg transition-all duration-200 border-0 relative overflow-hidden group new-chat-button"
+            style={{
+              backgroundColor: '#411329',
+              borderRadius: '12px',
+              fontSize: '14px',
+              fontWeight: '500',
+            }}
+          >
+            New Chat
+          </Button>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>

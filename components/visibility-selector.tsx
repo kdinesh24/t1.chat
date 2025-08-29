@@ -83,7 +83,7 @@ export function VisibilitySelector({
             </Button>
           </DropdownMenuTrigger>
         </TooltipTrigger>
-        <TooltipContent>Chat Visibility</TooltipContent>
+        <TooltipContent className='bg-[#090709]'>Chat Visibility</TooltipContent>
       </Tooltip>
 
       <DropdownMenuContent align="start" className="min-w-[300px]">

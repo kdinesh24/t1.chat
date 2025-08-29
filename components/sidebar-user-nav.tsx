@@ -39,7 +39,7 @@ export function SidebarUserNav({ user }: { user: User }) {
               <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-10 justify-between hover:bg-white/50" style={{ backgroundColor: '#1a2929' }}>
                 <div className="flex flex-row gap-2">
                   <div className="size-6 rounded-full animate-pulse" style={{ backgroundColor: '#1a2929' }} />
-                  <span className="bg-[#1a2929] text-transparent rounded-md animate-pulse">
+                  <span className="bg-background text-transparent rounded-md animate-pulse">
                     Loading auth status
                   </span>
                 </div>

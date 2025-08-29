@@ -145,7 +145,11 @@ export function Chat({
 
   // Handle votes error - if chat is deleted, redirect immediately
   useEffect(() => {
-    if (votesError && votesError.message && votesError.message.includes('not_found:chat')) {
+    if (
+      votesError &&
+      votesError.message &&
+      votesError.message.includes('not_found:chat')
+    ) {
       window.location.href = '/';
     }
   }, [votesError]);
@@ -162,10 +166,9 @@ export function Chat({
 
   return (
     <>
-      <div className="flex flex-col min-w-0 h-dvh text-foreground" style={{ backgroundColor: '#1f3333' }}>
+      <div className="flex flex-col min-w-0 h-dvh text-foreground">
         <ChatHeader
           chatId={id}
-          selectedModelId={initialChatModel}
           selectedVisibilityType={initialVisibilityType}
           isReadonly={isReadonly}
           session={session}
@@ -182,7 +185,7 @@ export function Chat({
           isArtifactVisible={isArtifactVisible}
         />
 
-        <form className="flex mx-auto px-4 pb-4 md:pb-6 gap-2 w-full md:max-w-3xl" style={{ backgroundColor: '#1f3333' }}>
+        <form className="flex mx-auto px-4 pb-4 md:pb-6 gap-2 w-full md:max-w-3xl bg-background">
           {!isReadonly && (
             <MultimodalInput
               chatId={id}
@@ -196,6 +199,8 @@ export function Chat({
               setMessages={setMessages}
               sendMessage={sendMessage}
               selectedVisibilityType={visibilityType}
+              selectedModelId={initialChatModel}
+              session={session}
             />
           )}
         </form>
@@ -216,6 +221,8 @@ export function Chat({
         votes={votes}
         isReadonly={isReadonly}
         selectedVisibilityType={visibilityType}
+        selectedModelId={initialChatModel}
+        session={session}
       />
     </>
   );

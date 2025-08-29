@@ -65,8 +65,7 @@ function PureSuggestedActions({
                 parts: [{ type: 'text', text: suggestedAction.action }],
               });
             }}
-            className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start"
-            style={{ backgroundColor: '#1a2929' }}
+            className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start bg-sidebar-accent hover:bg-sidebar-accent/80 border-sidebar-border"
           >
             <span className="font-medium">{suggestedAction.title}</span>
             <span className="text-muted-foreground">

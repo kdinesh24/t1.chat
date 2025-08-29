@@ -54,7 +54,7 @@ export function MessageEditor({
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      <div className="rounded-xl border border-zinc-700" style={{ backgroundColor: '#1b2929' }}>
+      <div className="rounded-xl border border-zinc-700" style={{ backgroundColor: '#191319' }}>
         <Textarea
           data-testid="message-editor"
           ref={textareaRef}

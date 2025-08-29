@@ -117,7 +117,7 @@ const PurePreviewMessage = ({
                         className={cn('flex flex-col gap-4 min-w-0 overflow-x-auto', {
                           'text-white px-3 py-2 rounded-xl': message.role === 'user',
                         })}
-                        style={message.role === 'user' ? { backgroundColor: '#1b2929' } : undefined}
+                        style={message.role === 'user' ? { backgroundColor: '#2b2431' } : undefined}
                       >
                         <Markdown>{sanitizeText(part.text)}</Markdown>
                       </div>

@@ -118,29 +118,38 @@ export function DocumentPreview({
 }
 
 const LoadingSkeleton = ({ artifactKind }: { artifactKind: ArtifactKind }) => (
-      <div className="w-full">
-      <div className="p-4 border border-border rounded-t-2xl flex flex-row gap-2 items-center justify-between h-[57px] border-b-0" style={{ backgroundColor: '#1b2929' }}>
-        <div className="flex flex-row items-center gap-3">
-          <div className="text-muted-foreground">
-            <div className="animate-pulse rounded-md size-4 bg-muted" />
-          </div>
-          <div className="animate-pulse rounded-lg h-4 bg-muted w-24" />
+  <div className="w-full">
+    <div
+      className="p-4 border border-border rounded-t-2xl flex flex-row gap-2 items-center justify-between h-[57px] border-b-0"
+      style={{ backgroundColor: '#1b2929' }}
+    >
+      <div className="flex flex-row items-center gap-3">
+        <div className="text-muted-foreground">
+          <div className="animate-pulse rounded-md size-4 bg-muted" />
         </div>
-        <div> 
-          <FullscreenIcon />
-        </div>
+        <div className="animate-pulse rounded-lg h-4 bg-muted w-24" />
       </div>
-      {artifactKind === 'image' ? (
-        <div className="overflow-y-scroll border border-border rounded-b-2xl border-t-0" style={{ backgroundColor: '#1b2929' }}>
-          <div className="animate-pulse h-[257px] bg-muted w-full" />
-        </div>
-      ) : (
-        <div className="overflow-y-scroll border border-border rounded-b-2xl p-8 pt-4 border-t-0" style={{ backgroundColor: '#1b2929' }}>
-          <InlineDocumentSkeleton />
-        </div>
-      )}
+      <div>
+        <FullscreenIcon />
+      </div>
     </div>
-  );
+    {artifactKind === 'image' ? (
+      <div
+        className="overflow-y-scroll border border-border rounded-b-2xl border-t-0"
+        style={{ backgroundColor: '#1b2929' }}
+      >
+        <div className="animate-pulse h-[257px] bg-muted w-full" />
+      </div>
+    ) : (
+      <div
+        className="overflow-y-scroll border border-border rounded-b-2xl p-8 pt-4 border-t-0"
+        style={{ backgroundColor: '#1b2929' }}
+      >
+        <InlineDocumentSkeleton />
+      </div>
+    )}
+  </div>
+);
 
 const PureHitboxLayer = ({
   hitboxRef,
@@ -209,7 +218,10 @@ const PureDocumentHeader = ({
   kind: ArtifactKind;
   isStreaming: boolean;
 }) => (
-          <div className="p-4 border rounded-t-2xl flex flex-row gap-2 items-start sm:items-center justify-between border-b-0 border-border text-foreground" style={{ backgroundColor: '#1b2929' }}>
+  <div
+    className="p-4 border rounded-t-2xl flex flex-row gap-2 items-start sm:items-center justify-between border-b-0 border-border text-foreground"
+    style={{ backgroundColor: '#1b2929' }}
+  >
     <div className="flex flex-row items-start sm:items-center gap-3">
       <div className="text-muted-foreground">
         {isStreaming ? (
@@ -239,7 +251,7 @@ const DocumentContent = ({ document }: { document: Document }) => {
   const { artifact } = useArtifact();
 
   const containerClassName = cn(
-            'h-[257px] overflow-y-scroll border rounded-b-2xl border-t-0 border-border text-foreground',
+    'h-[257px] overflow-y-scroll border rounded-b-2xl border-t-0 border-border text-foreground',
     {
       'p-4 sm:px-14 sm:py-16': document.kind === 'text',
       'p-0': document.kind === 'code',
@@ -261,19 +273,23 @@ const DocumentContent = ({ document }: { document: Document }) => {
   if (document.kind === 'code') {
     const codeContent = document.content ?? '';
     const lineCount = codeContent.split('\n').length;
-    
+
     // Use Shiki for smaller code snippets (less than 50 lines)
     if (lineCount < 50) {
       return (
-        <div className={cn(containerClassName, 'p-0 overflow-x-auto')} style={containerStyle}>
+        <div
+          className={cn(containerClassName, 'p-0 overflow-x-auto')}
+          style={containerStyle}
+        >
           <CodeBlock
             node={null}
             inline={false}
             className="language-python"
-            children={codeContent}
             noCopyButton={true}
             noBorder={true}
-          />
+          >
+            {codeContent}
+          </CodeBlock>
         </div>
       );
     }

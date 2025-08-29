@@ -63,8 +63,8 @@ export function getStreamContext() {
 export async function POST(request: Request) {
   console.log('🔥 POST /api/chat - Request received');
   console.log('🌍 Environment check:');
-  console.log('  - GROQ_API_KEY present:', !!process.env.GROQ_API_KEY);
-  console.log('  - GROQ_API_KEY length:', process.env.GROQ_API_KEY?.length || 0);
+  console.log('  - GOOGLE_GENERATIVE_AI_API_KEY present:', !!process.env.GOOGLE_GENERATIVE_AI_API_KEY);
+  console.log('  - GOOGLE_GENERATIVE_AI_API_KEY length:', process.env.GOOGLE_GENERATIVE_AI_API_KEY?.length || 0);
   
   let requestBody: PostRequestBody;
 
@@ -204,7 +204,7 @@ export async function POST(request: Request) {
             messages: convertToModelMessages(uiMessages),
             stopWhen: stepCountIs(5),
             experimental_activeTools:
-              selectedChatModel === 'chat-model-reasoning'
+              selectedChatModel === 'chat-model-reasoning' || selectedChatModel === 'gemini-2.0-flash-reasoning'
                 ? []
                 : [
                     'getWeather',

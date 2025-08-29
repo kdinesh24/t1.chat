@@ -52,7 +52,7 @@ function Toast(props: ToastProps) {
         <div
           data-type={type}
           className={cn(
-            'data-[type=error]:text-red-600 data-[type=success]:text-green-600',
+            'data-[type=error]:text-red-600 data-[type=success]:text-white',
             { 'pt-1': multiLine },
           )}
         >

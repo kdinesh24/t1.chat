@@ -1,10 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useWindowSize } from 'usehooks-ts';
-
-import { ModelSelector } from '@/components/model-selector';
 import { SidebarToggle } from '@/components/sidebar-toggle';
 import { Button } from '@/components/ui/button';
 import { PlusIcon, VercelIcon } from './icons';
@@ -16,13 +13,11 @@ import type { Session } from 'next-auth';
 
 function PureChatHeader({
   chatId,
-  selectedModelId,
   selectedVisibilityType,
   isReadonly,
   session,
 }: {
   chatId: string;
-  selectedModelId: string;
   selectedVisibilityType: VisibilityType;
   isReadonly: boolean;
   session: Session;
@@ -33,7 +28,7 @@ function PureChatHeader({
   const { width: windowWidth } = useWindowSize();
 
   return (
-    <header className="flex sticky top-0 py-1.5 items-center px-2 md:px-2 gap-2 bg-sidebar" style={{ backgroundColor: '#1a2929' }}>
+    <header className="flex sticky top-0 py-1.5 items-center px-2 md:px-2 gap-2 bg-[#1b1219]">
       <SidebarToggle />
 
       {(!open || windowWidth < 768) && (
@@ -41,8 +36,7 @@ function PureChatHeader({
           <TooltipTrigger asChild>
             <Button
               variant="outline"
-              className="order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0 hover:bg-white/50"
-              style={{ backgroundColor: '#1a2929' }}
+              className="order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0 hover:bg-sidebar-accent"
               onClick={() => {
                 router.push('/');
                 router.refresh();
@@ -57,18 +51,10 @@ function PureChatHeader({
       )}
 
       {!isReadonly && (
-        <ModelSelector
-          session={session}
-          selectedModelId={selectedModelId}
-          className="order-1 md:order-2"
-        />
-      )}
-
-      {!isReadonly && (
         <VisibilitySelector
           chatId={chatId}
           selectedVisibilityType={selectedVisibilityType}
-          className="order-1 md:order-3"
+          className="order-1 md:order-2"
         />
       )}
     </header>
@@ -76,5 +62,5 @@ function PureChatHeader({
 }
 
 export const ChatHeader = memo(PureChatHeader, (prevProps, nextProps) => {
-  return prevProps.selectedModelId === nextProps.selectedModelId;
+  return prevProps.selectedVisibilityType === nextProps.selectedVisibilityType;
 });

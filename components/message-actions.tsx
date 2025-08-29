@@ -40,7 +40,7 @@ export function PureMessageActions({
           <TooltipTrigger asChild>
             <Button
               className="py-1 px-2 h-fit text-muted-foreground hover:bg-white/50"
-              style={{ backgroundColor: '#1f3333' }}
+              style={{ backgroundColor: '#262626' }}
               variant="outline"
               onClick={async () => {
                 const textFromParts = message.parts
@@ -69,7 +69,7 @@ export function PureMessageActions({
             <Button
               data-testid="message-upvote"
               className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto hover:bg-white/50"
-              style={{ backgroundColor: '#1f3333' }}
+              style={{ backgroundColor: '#262626' }}
               disabled={vote?.isUpvoted}
               variant="outline"
               onClick={async () => {
@@ -123,8 +123,8 @@ export function PureMessageActions({
             <Button
               data-testid="message-downvote"
               className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto hover:bg-white/50"
-              style={{ backgroundColor: '#1f3333' }}
-              disabled={vote?.isDownvoted}
+              style={{ backgroundColor: '#262626' }}
+              disabled={vote?.isUpvoted === false}
               variant="outline"
               onClick={async () => {
                 const downvote = fetch('/api/vote', {
