@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { useMessages } from '@/hooks/use-messages';
 import type { ChatMessage } from '@/lib/types';
 import { useDataStream } from './data-stream-provider';
+import type { VisibilityType } from './visibility-selector';
 
 interface MessagesProps {
   chatId: string;
@@ -18,6 +19,8 @@ interface MessagesProps {
   regenerate: UseChatHelpers<ChatMessage>['regenerate'];
   isReadonly: boolean;
   isArtifactVisible: boolean;
+  sendMessage?: UseChatHelpers<ChatMessage>['sendMessage'];
+  selectedVisibilityType?: VisibilityType;
 }
 
 function PureMessages({
@@ -28,6 +31,8 @@ function PureMessages({
   setMessages,
   regenerate,
   isReadonly,
+  sendMessage,
+  selectedVisibilityType,
 }: MessagesProps) {
   const {
     containerRef: messagesContainerRef,
@@ -47,7 +52,13 @@ function PureMessages({
       ref={messagesContainerRef}
       className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-hidden pt-4 relative"
     >
-      {messages.length === 0 && <Greeting />}
+      {messages.length === 0 && (
+        <Greeting
+          chatId={chatId}
+          sendMessage={sendMessage}
+          selectedVisibilityType={selectedVisibilityType}
+        />
+      )}
 
       {messages.map((message, index) => (
         <PreviewMessage

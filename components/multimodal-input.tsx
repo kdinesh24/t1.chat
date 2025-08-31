@@ -15,12 +15,11 @@ import {
 } from 'react';
 import { toast } from 'sonner';
 import { useLocalStorage, useWindowSize } from 'usehooks-ts';
-
-import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons';
+import { PaperclipIcon } from 'lucide-react';
+import { ArrowUpIcon, StopIcon } from './icons';
 import { PreviewAttachment } from './preview-attachment';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
-import { SuggestedActions } from './suggested-actions';
 import { ModelSelector } from './model-selector';
 import equal from 'fast-deep-equal';
 import type { UseChatHelpers } from '@ai-sdk/react';
@@ -242,16 +241,6 @@ function PureMultimodalInput({
         )}
       </AnimatePresence>
 
-      {messages.length === 0 &&
-        attachments.length === 0 &&
-        uploadQueue.length === 0 && (
-          <SuggestedActions
-            sendMessage={sendMessage}
-            chatId={chatId}
-            selectedVisibilityType={selectedVisibilityType}
-          />
-        )}
-
       <input
         type="file"
         className="fixed -top-4 -left-4 size-0.5 opacity-0 pointer-events-none"
@@ -373,7 +362,7 @@ function PureAttachmentsButton({
       disabled={status !== 'ready'}
       variant="ghost"
     >
-      <PaperclipIcon size={14} />
+      <PaperclipIcon size={14} color='#e7d0dd' />
     </Button>
   );
 }
@@ -390,7 +379,7 @@ function PureStopButton({
   return (
     <Button
       data-testid="stop-button"
-      className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors"
+      className="rounded-lg p-1.5 h-fit border border-border hover:bg-muted transition-colors"
       style={{ backgroundColor: '#28232e' }}
       onClick={(event) => {
         event.preventDefault();
@@ -417,8 +406,8 @@ function PureSendButton({
   return (
     <Button
       data-testid="send-button"
-      className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors"
-      style={{ backgroundColor: '#391f33', color: '#ffffff' }}
+      className="border-reflect rounded-md p-1.5 h-fit border border-[#53283f] hover:bg-muted transition-colors mr-2"
+      style={{ backgroundColor: '#372132', color: '#8d808b' }}
       onClick={(event) => {
         event.preventDefault();
         console.log(

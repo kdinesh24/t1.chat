@@ -174,6 +174,8 @@ export function Chat({
           regenerate={regenerate}
           isReadonly={isReadonly}
           isArtifactVisible={isArtifactVisible}
+          sendMessage={sendMessage}
+          selectedVisibilityType={visibilityType}
         />
 
         <form className="flex mx-auto px-4 mt-26 gap-2 w-full md:max-w-3xl bg-background shrink-0">

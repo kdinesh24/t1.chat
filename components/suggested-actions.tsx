@@ -19,60 +19,49 @@ function PureSuggestedActions({
   selectedVisibilityType,
 }: SuggestedActionsProps) {
   const suggestedActions = [
-    {
-      title: 'What are the advantages',
-      label: 'of using Next.js?',
-      action: 'What are the advantages of using Next.js?',
-    },
-    {
-      title: 'Write code to',
-      label: `demonstrate djikstra's algorithm`,
-      action: `Write code to demonstrate djikstra's algorithm`,
-    },
-    {
-      title: 'Help me write an essay',
-      label: `about silicon valley`,
-      action: `Help me write an essay about silicon valley`,
-    },
-    {
-      title: 'What is the weather',
-      label: 'in San Francisco?',
-      action: 'What is the weather in San Francisco?',
-    },
+    'How does AI work?',
+    'Are black holes real?',
+    'How many Rs are in the word "strawberry"?',
+    'What is the meaning of life?',
   ];
 
   return (
     <div
       data-testid="suggested-actions"
-      className="grid sm:grid-cols-2 gap-2 w-full"
+      className="flex flex-col gap-3 w-full max-w-md mx-auto"
     >
-      {suggestedActions.map((suggestedAction, index) => (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ delay: 0.05 * index }}
-          key={`suggested-action-${suggestedAction.title}-${index}`}
-          className={index > 1 ? 'hidden sm:block' : 'block'}
-        >
-          <Button
-            variant="ghost"
+      {suggestedActions.map((suggestion, index) => (
+        <div key={`suggestion-container-${index}`} className="flex flex-col">
+          {index > 0 && (
+            <div className="h-px mb-1" style={{ backgroundColor: '#2a232f' }} />
+          )}
+          <motion.button
+            key={`suggestion-${index}`}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ delay: 0.1 * index }}
             onClick={async () => {
               window.history.replaceState({}, '', `/chat/${chatId}`);
-
               sendMessage({
                 role: 'user',
-                parts: [{ type: 'text', text: suggestedAction.action }],
+                parts: [{ type: 'text', text: suggestion }],
               });
             }}
-            className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start bg-sidebar-accent hover:bg-sidebar-accent/80 border-sidebar-border"
+            className="text-left text-gray-400 hover:text-gray-300 transition-colors duration-200 p-2 rounded-lg"
+            style={{
+              transition: 'background-color 0.2s ease-in-out',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#2c2532';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+            }}
           >
-            <span className="font-medium">{suggestedAction.title}</span>
-            <span className="text-muted-foreground">
-              {suggestedAction.label}
-            </span>
-          </Button>
-        </motion.div>
+            {suggestion}
+          </motion.button>
+        </div>
       ))}
     </div>
   );

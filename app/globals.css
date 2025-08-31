@@ -501,3 +501,34 @@ pre.shiki {
     background: transparent !important;
 }
 
+
+.gradient-border {
+  border-image: linear-gradient(180deg, hsl(289 23% 23% / 0.2), hsl(289 23% 23% / 1), hsl(289 23% 23% / 0.2)) 1, 
+                linear-gradient(15deg, hsl(289 23% 23% / 0.2) 50%, hsl(289 23% 23% / 1)) 1;
+  border-style: solid;
+  border-width: 2px; /* Add desired border width */
+}
+
+/* Base border-reflect class */
+.border-reflect {
+  --c: 320 100% 75%;
+  --min: hsl(var(--c) / 0.2);
+  --max: hsl(var(--c) / 1);
+  --gradientBorder-gradient: linear-gradient(180deg, var(--min), var(--max), var(--min)), 
+                             linear-gradient(15deg, var(--min) 50%, var(--max));
+  --opacity: 1;
+  --start: rgba(0,0,0,0.85);
+  border-image: var(--gradientBorder-gradient) 1;
+  border-image-slice: 1; /* Add this line */
+  border-style: solid;
+  border-width: 2px;
+}
+
+.dark .border-reflect, .boring-dark .border-reflect {
+  --gradientBorder-gradient: linear-gradient(180deg, rgba(147,51,91,0), rgba(147,51,91,0.74), rgba(147,51,91,0.09)), 
+                             linear-gradient(15deg, rgba(147,51,91,0.12) 50%, rgba(147,51,91,0.74));
+  --start: rgba(0,0,0,0.92);
+  border-image-slice: 1; /* Add this line */
+}
+
+

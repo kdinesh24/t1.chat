@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 
 import { AppSidebar } from '@/components/app-sidebar';
 import { FloatingSidebarToggle } from '@/components/floating-sidebar-toggle';
+import CornerDecoration from '@/components/corner-decoration';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { auth } from '../(auth)/auth';
 import Script from 'next/script';
@@ -28,6 +29,7 @@ export default async function Layout({
           <AppSidebar user={session?.user} />
           <SidebarInset>{children}</SidebarInset>
           <FloatingSidebarToggle />
+          <CornerDecoration />
         </SidebarProvider>
       </DataStreamProvider>
     </>
