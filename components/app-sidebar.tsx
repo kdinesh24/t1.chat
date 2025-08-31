@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { SidebarHistory } from '@/components/sidebar-history';
 import { SidebarUserNav } from '@/components/sidebar-user-nav';
+import { SidebarToggle } from '@/components/sidebar-toggle';
 import { Button } from '@/components/ui/button';
 import {
   Sidebar,
@@ -24,13 +25,14 @@ export function AppSidebar({ user }: { user: User | undefined }) {
     <Sidebar className="group-data-[side=left]:border-r-0">
       <SidebarHeader>
         <SidebarMenu>
-          <div className="flex flex-row justify-center items-center mb-3 mt-4">
+          <div className="flex flex-row items-center mb-3 mt-4">
+            <SidebarToggle />
             <Link
               href="/"
               onClick={() => {
                 setOpenMobile(false);
               }}
-              className="flex flex-row gap-3 items-center"
+              className="flex flex-row gap-3 items-center ml-12"
             >
               <span
                 className="text-lg font-bold px-2 hover:bg-muted rounded-md cursor-pointer"
@@ -42,22 +44,21 @@ export function AppSidebar({ user }: { user: User | undefined }) {
           </div>
 
           {/* New Chat Button - Full Width Purple */}
-          <Button
-            onClick={() => {
-              setOpenMobile(false);
-              router.push('/');
-              router.refresh();
-            }}
-            className="mx-2 h-10 text-white font-medium rounded-lg transition-all duration-200 border-0 relative overflow-hidden group new-chat-button"
-            style={{
-              backgroundColor: '#411329',
-              borderRadius: '12px',
-              fontSize: '14px',
-              fontWeight: '500',
-            }}
-          >
-            New Chat
-          </Button>
+          <div className="mx-4">
+            <div className="p-[1.1px] rounded-[10px] bg-gradient-to-b from-[#531933] via-[#8a2a52] to-[#531933] hover:bg-gradient-to-b hover:from-[#7a1941] hover:to-[#7a1941] transition-colors duration-200">
+              <button
+                type="button"
+                onClick={() => {
+                  setOpenMobile(false);
+                  router.push('/');
+                  router.refresh();
+                }}
+                className="bg-gradient-to-b from-[#3c1126] via-[#401329]/90 to-[#3c1126] hover:bg-gradient-to-b hover:from-[#7a1941] hover:via-[#7a1941] hover:to-[#7a1941] text-[#e7b7d0] text-base font-medium py-2 rounded-[10px] transition-colors duration-200 cursor-pointer w-full"
+              >
+                New Chat
+              </button>
+            </div>
+          </div>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>

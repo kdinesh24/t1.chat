@@ -5,6 +5,7 @@ import Image from 'next/image';
 import type { User } from 'next-auth';
 import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
+import { useRouter, useParams } from 'next/navigation';
 
 import {
   DropdownMenu,
@@ -18,17 +19,30 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { useRouter } from 'next/navigation';
 import { toast } from './toast';
-import { LoaderIcon } from './icons';
+import { LoaderIcon, GlobeIcon, LockIcon } from './icons';
 import { guestRegex } from '@/lib/constants';
+import { useChatVisibility } from '@/hooks/use-chat-visibility';
 
 export function SidebarUserNav({ user }: { user: User }) {
   const router = useRouter();
   const { data, status } = useSession();
   const { setTheme, resolvedTheme } = useTheme();
+  const params = useParams();
 
   const isGuest = guestRegex.test(data?.user?.email ?? '');
+
+  // Get chat ID from URL params
+  const chatId = typeof params?.id === 'string' ? params.id : null;
+
+  // Use chat visibility hook if we have a chat ID
+  const { visibilityType, setVisibilityType } = useChatVisibility({
+    chatId: chatId || '',
+    initialVisibilityType: 'private',
+  });
+
+  // Only show visibility controls if we're in a chat and not readonly
+  const showVisibilityControls = chatId && !isGuest;
 
   return (
     <SidebarMenu>
@@ -36,9 +50,15 @@ export function SidebarUserNav({ user }: { user: User }) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             {status === 'loading' ? (
-              <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-10 justify-between hover:bg-white/50" style={{ backgroundColor: '#1a2929' }}>
+              <SidebarMenuButton
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-10 justify-between hover:bg-white/50"
+                style={{ backgroundColor: '#1a2929' }}
+              >
                 <div className="flex flex-row gap-2">
-                  <div className="size-6 rounded-full animate-pulse" style={{ backgroundColor: '#1a2929' }} />
+                  <div
+                    className="size-6 rounded-full animate-pulse"
+                    style={{ backgroundColor: '#1a2929' }}
+                  />
                   <span className="bg-background text-transparent rounded-md animate-pulse">
                     Loading auth status
                   </span>
@@ -72,10 +92,47 @@ export function SidebarUserNav({ user }: { user: User }) {
             side="top"
             className="w-[--radix-popper-anchor-width]"
           >
+            {showVisibilityControls && (
+              <>
+                <DropdownMenuItem
+                  className="cursor-pointer gap-2"
+                  onSelect={() => setVisibilityType('private')}
+                >
+                  <LockIcon />
+                  <div className="flex flex-col">
+                    <span>Private</span>
+                    <span className="text-xs text-muted-foreground">
+                      Only you can access this chat
+                    </span>
+                  </div>
+                  {visibilityType === 'private' && (
+                    <span className="ml-auto">✓</span>
+                  )}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer gap-2"
+                  onSelect={() => setVisibilityType('public')}
+                >
+                  <GlobeIcon />
+                  <div className="flex flex-col">
+                    <span>Public</span>
+                    <span className="text-xs text-muted-foreground">
+                      Anyone with the link can access this chat
+                    </span>
+                  </div>
+                  {visibilityType === 'public' && (
+                    <span className="ml-auto">✓</span>
+                  )}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
             <DropdownMenuItem
               data-testid="user-nav-item-theme"
               className="cursor-pointer"
-              onSelect={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+              onSelect={() =>
+                setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+              }
             >
               {`Toggle ${resolvedTheme === 'light' ? 'dark' : 'light'} mode`}
             </DropdownMenuItem>

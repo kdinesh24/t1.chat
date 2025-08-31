@@ -81,7 +81,7 @@ function PureMultimodalInput({
   const resetHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = '98px';
+      textareaRef.current.style.height = '120px';
     }
   };
 
@@ -291,11 +291,11 @@ function PureMultimodalInput({
         value={input}
         onChange={handleInput}
         className={cx(
-          'min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base pb-10 border border-border shadow-sm bg-[#2a232f]',
+          'min-h-[70px] max-h-[calc(80dvh)] overflow-hidden resize-none rounded-t-2xl !text-base pt-4 px-4 border-t-8 border-l-8 border-r-8 border-[#261f2a] shadow-sm bg-[#2a232f] w-full placeholder:text-[#786e81]',
           className,
         )}
         style={{ backgroundColor: '#29232f' }}
-        rows={2}
+        rows={4}
         autoFocus
         onKeyDown={(event) => {
           if (
@@ -316,11 +316,11 @@ function PureMultimodalInput({
         }}
       />
 
-      <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start gap-1">
+      <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start gap-1 ml-3">
         <ModelSelector
           session={session}
           selectedModelId={selectedModelId}
-          className="h-7 text-xs px-2"
+          className="h-8 text-sm px-3"
         />
         <AttachmentsButton fileInputRef={fileInputRef} status={status} />
       </div>
@@ -417,7 +417,7 @@ function PureSendButton({
   return (
     <Button
       data-testid="send-button"
-      className="rounded-lg p-1.5 h-fit border border-border hover:bg-muted transition-colors"
+      className="rounded-full p-1.5 h-fit border border-border hover:bg-muted transition-colors"
       style={{ backgroundColor: '#391f33', color: '#ffffff' }}
       onClick={(event) => {
         event.preventDefault();

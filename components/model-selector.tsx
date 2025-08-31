@@ -56,7 +56,7 @@ export function ModelSelector({
         <Button
           data-testid="model-selector"
           variant="ghost"
-          className="md:px-2 md:h-[34px] hover:bg-[#332c38] border-none"
+          className="md:px-2 md:h-[34px] hover:bg-[#332c38] border-none text-[#e0cad7]"
           style={{ backgroundColor: '#2a232f' }}
         >
           {selectedChatModel?.name}
@@ -65,7 +65,7 @@ export function ModelSelector({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="min-w-[300px] bg-[#0e080d]/80 backdrop-blur-sm border-gray-800"
+        className="min-w-[300px] bg-[#0e080d]/80 backdrop-blur-sm border-[#1e1922] text-[#e0cad7]"
       >
         {availableChatModels.map((chatModel) => {
           const { id } = chatModel;

@@ -1,7 +1,5 @@
 'use client';
 
-import { ArtifactKind } from './artifact';
-
 export const DocumentSkeleton = () => (
   <div className="flex flex-col gap-4 w-full">
     <div className="animate-pulse rounded-lg bg-black size-96" />

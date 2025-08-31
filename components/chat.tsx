@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { ChatHeader } from '@/components/chat-header';
 import type { Vote } from '@/lib/db/schema';
-import { fetcher, fetchWithErrorHandlers, generateUUID } from '@/lib/utils';
+import { fetchWithErrorHandlers, generateUUID } from '@/lib/utils';
 import { Artifact } from './artifact';
 import { MultimodalInput } from './multimodal-input';
 import { Messages } from './messages';
@@ -146,9 +146,7 @@ export function Chat({
   // Handle votes error - if chat is deleted, redirect immediately
   useEffect(() => {
     if (
-      votesError &&
-      votesError.message &&
-      votesError.message.includes('not_found:chat')
+      votesError?.message?.includes('not_found:chat')
     ) {
       window.location.href = '/';
     }
@@ -167,12 +165,7 @@ export function Chat({
   return (
     <>
       <div className="flex flex-col min-w-0 h-dvh text-foreground">
-        <ChatHeader
-          chatId={id}
-          selectedVisibilityType={initialVisibilityType}
-          isReadonly={isReadonly}
-          session={session}
-        />
+        <ChatHeader chatId={id} isReadonly={isReadonly} session={session} />
 
         <Messages
           chatId={id}
@@ -185,7 +178,7 @@ export function Chat({
           isArtifactVisible={isArtifactVisible}
         />
 
-        <form className="flex mx-auto px-4 pb-4 md:pb-6 gap-2 w-full md:max-w-3xl bg-background">
+        <form className="flex mx-auto px-4 mt-26 gap-2 w-full md:max-w-3xl bg-background">
           {!isReadonly && (
             <MultimodalInput
               chatId={id}
