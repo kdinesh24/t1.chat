@@ -291,7 +291,7 @@ function PureMultimodalInput({
         value={input}
         onChange={handleInput}
         className={cx(
-          'min-h-[70px] max-h-[calc(80dvh)] overflow-hidden resize-none rounded-t-2xl !text-base pt-4 px-4 border-t-8 border-l-8 border-r-8 border-[#261f2a] shadow-sm bg-[#2a232f] w-full placeholder:text-[#786e81]',
+          'min-h-[70px] max-h-[calc(80dvh)] overflow-hidden resize-none rounded-t-2xl !text-base pt-4 px-4 border-t-8 border-l-8 border-r-8 border-[#261f2a] shadow-sm bg-[#2a232f] w-full placeholder:text-[#786e81] focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 selection:bg-[#3d334a] selection:text-white',
           className,
         )}
         style={{ backgroundColor: '#29232f' }}

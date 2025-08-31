@@ -145,9 +145,7 @@ export function Chat({
 
   // Handle votes error - if chat is deleted, redirect immediately
   useEffect(() => {
-    if (
-      votesError?.message?.includes('not_found:chat')
-    ) {
+    if (votesError?.message?.includes('not_found:chat')) {
       window.location.href = '/';
     }
   }, [votesError]);
@@ -164,9 +162,9 @@ export function Chat({
 
   return (
     <>
-      <div className="flex flex-col min-w-0 h-dvh text-foreground">
-        <ChatHeader chatId={id} isReadonly={isReadonly} session={session} />
+      <ChatHeader chatId={id} isReadonly={isReadonly} session={session} />
 
+      <div className="flex flex-col min-w-0 h-full max-h-screen overflow-hidden text-foreground border-t border-l border-[#322028] rounded-xl">
         <Messages
           chatId={id}
           status={status}
@@ -178,7 +176,7 @@ export function Chat({
           isArtifactVisible={isArtifactVisible}
         />
 
-        <form className="flex mx-auto px-4 mt-26 gap-2 w-full md:max-w-3xl bg-background">
+        <form className="flex mx-auto px-4 mt-26 gap-2 w-full md:max-w-3xl bg-background shrink-0">
           {!isReadonly && (
             <MultimodalInput
               chatId={id}
