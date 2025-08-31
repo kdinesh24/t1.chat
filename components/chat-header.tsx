@@ -2,11 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useWindowSize } from 'usehooks-ts';
-import { Button } from '@/components/ui/button';
-import { PlusIcon } from './icons';
 import { useSidebar } from './ui/sidebar';
 import { memo } from 'react';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import type { Session } from 'next-auth';
 
 function PureChatHeader({

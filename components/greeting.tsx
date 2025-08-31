@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { SuggestedActions } from './suggested-actions';
 import { CreateIcon, ExploreIcon, CodeIcon, LearnIcon } from './icons';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import type { VisibilityType } from './visibility-selector';

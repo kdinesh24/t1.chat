@@ -476,12 +476,35 @@ pre.shiki {
     background: transparent !important;
 }
 
-.dark [data-sidebar="menu-button"]:hover {
-    background: #261c25 !important;
-}
+
 
 .dark [data-sidebar="menu-button"][data-active="true"] {
-    background: #261c25 !important;
+    background: #251922 !important;
+}
+
+.dark [data-sidebar="menu-button"]:hover {
+    background: #251922 !important;
+}
+
+/* Override any conflicting sidebar accent colors */
+.dark [data-sidebar="menu-button"][data-active="true"]:hover {
+    background: #251922 !important;
+}
+
+/* Force consistent icon button backgrounds in sidebar history */
+.dark [data-sidebar="menu-item"] button:hover {
+    background: #251922 !important;
+}
+
+/* Specific override for dropdown trigger buttons */
+.dark [data-sidebar="menu-item"] [role="button"]:hover {
+    background: #251922 !important;
+}
+
+/* Force all interactive elements in sidebar history to use same color */
+.dark [data-sidebar="menu-item"] .group\/menu-item button:hover,
+.dark [data-sidebar="menu-item"] [data-radix-collection-item]:hover {
+    background: #251922 !important;
 }
 
 /* Make sidebar group content transparent */
@@ -502,33 +525,30 @@ pre.shiki {
 }
 
 
-.gradient-border {
-  border-image: linear-gradient(180deg, hsl(289 23% 23% / 0.2), hsl(289 23% 23% / 1), hsl(289 23% 23% / 0.2)) 1, 
-                linear-gradient(15deg, hsl(289 23% 23% / 0.2) 50%, hsl(289 23% 23% / 1)) 1;
-  border-style: solid;
-  border-width: 2px; /* Add desired border width */
-}
-
-/* Base border-reflect class */
 .border-reflect {
-  --c: 320 100% 75%;
+  --c: 289 23% 23%;
   --min: hsl(var(--c) / 0.2);
   --max: hsl(var(--c) / 1);
-  --gradientBorder-gradient: linear-gradient(180deg, var(--min), var(--max), var(--min)), 
-                             linear-gradient(15deg, var(--min) 50%, var(--max));
-  --opacity: 1;
-  --start: rgba(0,0,0,0.85);
-  border-image: var(--gradientBorder-gradient) 1;
-  border-image-slice: 1; /* Add this line */
-  border-style: solid;
-  border-width: 2px;
+  border: 2px solid transparent;
+  border-radius: 6px; /* matches rounded-md */
+  background: 
+    linear-gradient(var(--bg-color, #372132), var(--bg-color, #372132)) padding-box,
+    linear-gradient(180deg, var(--min), var(--max), var(--min)) border-box;
 }
 
 .dark .border-reflect, .boring-dark .border-reflect {
-  --gradientBorder-gradient: linear-gradient(180deg, rgba(147,51,91,0), rgba(147,51,91,0.74), rgba(147,51,91,0.09)), 
-                             linear-gradient(15deg, rgba(147,51,91,0.12) 50%, rgba(147,51,91,0.74));
-  --start: rgba(0,0,0,0.92);
-  border-image-slice: 1; /* Add this line */
+  background: 
+    linear-gradient(var(--bg-color, #372132), var(--bg-color, #372132)) padding-box,
+    linear-gradient(180deg, rgba(147,51,91,0), rgba(147,51,91,0.74), rgba(147,51,91,0.09)) border-box;
+}
+
+.custom-gradient {
+  background-image: linear-gradient(180deg, rgba(147,51,91,0), rgba(147,51,91,0.74), rgba(147,51,91,0.09)), 
+                    linear-gradient(15deg, rgba(147,51,91,0.12) 50%, rgba(147,51,91,0.74));
+}
+
+.custom-gradient:hover {
+  background-image: linear-gradient(180deg, rgba(122,25,65,1), rgba(122,25,65,1)); /* hover state */
 }
 
 

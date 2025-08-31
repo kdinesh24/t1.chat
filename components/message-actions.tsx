@@ -39,9 +39,14 @@ export function PureMessageActions({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              className="py-1 px-2 h-fit text-muted-foreground hover:bg-white/50"
-              style={{ backgroundColor: '#262626' }}
-              variant="outline"
+              className="py-1 px-2 h-fit text-muted-foreground border-none hover:text-white bg-transparent"
+              variant="ghost"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#2f2932';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
               onClick={async () => {
                 const textFromParts = message.parts
                   ?.filter((part) => part.type === 'text')
@@ -61,17 +66,30 @@ export function PureMessageActions({
               <CopyIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Copy</TooltipContent>
+          <TooltipContent
+            side="bottom"
+            className="border-none text-white"
+            style={{ backgroundColor: '#1b1217' }}
+          >
+            Copy
+          </TooltipContent>
         </Tooltip>
 
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               data-testid="message-upvote"
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto hover:bg-white/50"
-              style={{ backgroundColor: '#262626' }}
+              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto border-none hover:text-white bg-transparent"
               disabled={vote?.isUpvoted}
-              variant="outline"
+              variant="ghost"
+              onMouseEnter={(e) => {
+                if (!vote?.isUpvoted) {
+                  e.currentTarget.style.backgroundColor = '#2f2932';
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
               onClick={async () => {
                 const upvote = fetch('/api/vote', {
                   method: 'PATCH',
@@ -115,17 +133,30 @@ export function PureMessageActions({
               <ThumbUpIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Upvote Response</TooltipContent>
+          <TooltipContent
+            side="bottom"
+            className="border-none text-white"
+            style={{ backgroundColor: '#1b1217' }}
+          >
+            Upvote Response
+          </TooltipContent>
         </Tooltip>
 
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               data-testid="message-downvote"
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto hover:bg-white/50"
-              style={{ backgroundColor: '#262626' }}
+              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto border-none hover:text-white bg-transparent"
               disabled={vote?.isUpvoted === false}
-              variant="outline"
+              variant="ghost"
+              onMouseEnter={(e) => {
+                if (vote?.isUpvoted !== false) {
+                  e.currentTarget.style.backgroundColor = '#2f2932';
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
               onClick={async () => {
                 const downvote = fetch('/api/vote', {
                   method: 'PATCH',
@@ -169,7 +200,13 @@ export function PureMessageActions({
               <ThumbDownIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Downvote Response</TooltipContent>
+          <TooltipContent
+            side="bottom"
+            className="border-none text-white"
+            style={{ backgroundColor: '#1b1217' }}
+          >
+            Downvote Response
+          </TooltipContent>
         </Tooltip>
       </div>
     </TooltipProvider>

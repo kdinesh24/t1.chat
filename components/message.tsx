@@ -69,8 +69,6 @@ const PurePreviewMessage = ({
             },
           )}
         >
-
-
           <div
             className={cn('flex flex-col gap-4 w-full', {
               'min-h-96': message.role === 'assistant' && requiresScrollPadding,
@@ -111,17 +109,28 @@ const PurePreviewMessage = ({
               if (type === 'text') {
                 if (mode === 'view') {
                   return (
-                    <div key={key} className="flex flex-col gap-2 relative group/message">
+                    <div
+                      key={key}
+                      className="flex flex-col gap-2 relative group/message"
+                    >
                       <div
                         data-testid="message-content"
-                        className={cn('flex flex-col gap-4 min-w-0 overflow-x-auto', {
-                          'text-white px-3 py-2 rounded-xl': message.role === 'user',
-                        })}
-                        style={message.role === 'user' ? { backgroundColor: '#2b2431' } : undefined}
+                        className={cn(
+                          'flex flex-col gap-4 min-w-0 overflow-x-auto',
+                          {
+                            'text-white px-3 py-2 rounded-xl':
+                              message.role === 'user',
+                          },
+                        )}
+                        style={
+                          message.role === 'user'
+                            ? { backgroundColor: '#2b2431' }
+                            : undefined
+                        }
                       >
                         <Markdown>{sanitizeText(part.text)}</Markdown>
                       </div>
-                      
+
                       {message.role === 'user' && !isReadonly && (
                         <div className="absolute -bottom-8 right-0 opacity-0 group-hover/message:opacity-100 transition-opacity duration-200 flex gap-1">
                           <Tooltip>
@@ -138,9 +147,11 @@ const PurePreviewMessage = ({
                                 <PencilEditIcon size={12} />
                               </Button>
                             </TooltipTrigger>
-                            <TooltipContent side="bottom">Edit message</TooltipContent>
+                            <TooltipContent side="bottom">
+                              Edit message
+                            </TooltipContent>
                           </Tooltip>
-                          
+
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button
@@ -149,7 +160,9 @@ const PurePreviewMessage = ({
                                 className="h-6 w-6 p-0 text-zinc-400 hover:text-white hover:bg-white/20 rounded-md transition-colors"
                                 onClick={async () => {
                                   try {
-                                    await navigator.clipboard.writeText(sanitizeText(part.text));
+                                    await navigator.clipboard.writeText(
+                                      sanitizeText(part.text),
+                                    );
                                     toast.success('Copied to clipboard');
                                   } catch (err) {
                                     toast.error('Failed to copy to clipboard');
@@ -159,7 +172,9 @@ const PurePreviewMessage = ({
                                 <CopyIcon size={12} />
                               </Button>
                             </TooltipTrigger>
-                            <TooltipContent side="bottom">Copy message</TooltipContent>
+                            <TooltipContent side="bottom">
+                              Copy message
+                            </TooltipContent>
                           </Tooltip>
                         </div>
                       )}
@@ -367,20 +382,51 @@ export const ThinkingMessage = () => {
       animate={{ y: 0, opacity: 1, transition: { delay: 1 } }}
       data-role={role}
     >
-             <div
-         className={cx(
-           'flex gap-2 group-data-[role=user]/message:px-3 w-full group-data-[role=user]/message:w-fit group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:py-2 rounded-xl',
-           {
-             'group-data-[role=user]/message:bg-muted': true,
-           },
-         )}
-       >
-         <div className="flex flex-col gap-2 w-full">
-           <div className="flex flex-col gap-4 text-muted-foreground">
-             Hmm...
-           </div>
-         </div>
-       </div>
+      <div
+        className={cx(
+          'flex gap-2 group-data-[role=user]/message:px-3 w-full group-data-[role=user]/message:w-fit group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:py-2 rounded-xl',
+          {
+            'group-data-[role=user]/message:bg-muted': true,
+          },
+        )}
+      >
+        <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-4 text-muted-foreground">
+            <div className="flex items-center gap-1 py-2">
+              <motion.div
+                className="w-2 h-2 bg-current rounded-full"
+                animate={{ y: [0, -3, 0] }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  delay: 0,
+                  ease: 'easeInOut',
+                }}
+              />
+              <motion.div
+                className="w-2 h-2 bg-current rounded-full"
+                animate={{ y: [0, -3, 0] }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  delay: 0.15,
+                  ease: 'easeInOut',
+                }}
+              />
+              <motion.div
+                className="w-2 h-2 bg-current rounded-full"
+                animate={{ y: [0, -3, 0] }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  delay: 0.3,
+                  ease: 'easeInOut',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 };

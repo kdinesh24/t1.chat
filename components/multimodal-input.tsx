@@ -406,7 +406,7 @@ function PureSendButton({
   return (
     <Button
       data-testid="send-button"
-      className="border-reflect rounded-md p-1.5 h-fit border border-[#53283f] hover:bg-muted transition-colors mr-2"
+      className="border-reflect rounded-md p-1.5 h-fit hover:bg-muted transition-colors mr-2"
       style={{ backgroundColor: '#372132', color: '#8d808b' }}
       onClick={(event) => {
         event.preventDefault();

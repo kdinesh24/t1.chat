@@ -25,7 +25,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
     <Sidebar className="group-data-[side=left]:border-r-0">
       <SidebarHeader>
         <SidebarMenu>
-          <div className="flex flex-row items-center mb-3 mt-4">
+          <div className="flex flex-row items-center mb-3 mt-2">
             <SidebarToggle />
             <Link
               href="/"
@@ -44,8 +44,8 @@ export function AppSidebar({ user }: { user: User | undefined }) {
           </div>
 
           {/* New Chat Button - Full Width Purple */}
-          <div className="mx-4">
-            <div className="p-[1.1px] rounded-[10px] bg-gradient-to-b from-[#531933] via-[#8a2a52] to-[#531933] hover:bg-gradient-to-b hover:from-[#7a1941] hover:to-[#7a1941] transition-colors duration-200">
+          <div className="mx-2">
+            <div className="p-[1.1px] rounded-[10px] custom-gradient transition-colors duration-200 w-[225px]">
               <button
                 type="button"
                 onClick={() => {
@@ -53,7 +53,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                   router.push('/');
                   router.refresh();
                 }}
-                className="bg-gradient-to-b from-[#3c1126] via-[#401329]/90 to-[#3c1126] hover:bg-gradient-to-b hover:from-[#7a1941] hover:via-[#7a1941] hover:to-[#7a1941] text-[#e7b7d0] text-base font-medium py-2 rounded-[10px] transition-colors duration-200 cursor-pointer w-full"
+                className="bg-gradient-to-b from-[#3c1126] via-[#401329]/90 to-[#3c1126] hover:bg-gradient-to-b hover:from-[#7a1941] hover:via-[#7a1941] hover:to-[#7a1941] text-[#e7b7d0] text-base font-medium py-2 rounded-[10px] transition-colors duration-200 cursor-pointer w-full h-[36px]"
               >
                 New Chat
               </button>
