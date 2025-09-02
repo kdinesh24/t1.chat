@@ -1,5 +1,6 @@
-"use client";
+'use client';
 import React from 'react';
+import { useSidebar } from '@/components/ui/sidebar';
 
 interface CornerDecorationProps {
   // Color customization props
@@ -21,6 +22,9 @@ const CornerDecoration: React.FC<CornerDecorationProps> = ({
   className = '',
   hideOnMobile = true,
 }) => {
+  const { state } = useSidebar();
+  const isCollapsed = state === 'collapsed';
+
   // Generate CSS variables for the component
   return (
     <div
@@ -34,8 +38,8 @@ const CornerDecoration: React.FC<CornerDecorationProps> = ({
         height: `${height}px`,
         width: `${width}px`,
         clipPath: 'inset(0px 12px 0px 0px)',
-        // Responsive hiding
-        display: hideOnMobile ? undefined : 'block',
+        // Hide when sidebar is collapsed
+        display: isCollapsed ? 'none' : 'block',
       }}
     >
       {/* Media query styles for responsive behavior */}
@@ -46,7 +50,7 @@ const CornerDecoration: React.FC<CornerDecorationProps> = ({
           }
         }
       `}</style>
-     
+
       <div
         className="decoration-group"
         style={{

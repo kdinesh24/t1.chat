@@ -13,7 +13,8 @@ import { Button } from './ui/button';
 export function SidebarToggle({
   className,
 }: ComponentProps<typeof SidebarTrigger>) {
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, state } = useSidebar();
+  const isCollapsed = state === 'collapsed';
 
   return (
     <Tooltip>
@@ -22,13 +23,14 @@ export function SidebarToggle({
           data-testid="sidebar-toggle-button"
           onClick={toggleSidebar}
           variant="outline"
-          className="md:px-2 md:h-fit hover:bg-white/50"
-          style={{ backgroundColor: '#1a2929' }}
+          className={`md:px-2 md:h-fit hover:bg-white/50 ${isCollapsed ? 'bg-[#211c26]' : 'bg-transparent'}`}
         >
           <SidebarLeftIcon size={16} />
         </Button>
       </TooltipTrigger>
-      <TooltipContent className='bg-[#090709]' align="start">Toggle Sidebar</TooltipContent>
+      <TooltipContent className="bg-[#090709]" align="start">
+        Toggle Sidebar
+      </TooltipContent>
     </Tooltip>
   );
 }

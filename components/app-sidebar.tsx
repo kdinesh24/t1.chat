@@ -38,7 +38,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                 className="text-lg font-bold px-2 hover:bg-muted rounded-md cursor-pointer"
                 style={{ color: '#e3bad1' }}
               >
-                T2.chat
+                T1.chat
               </span>
             </Link>
           </div>

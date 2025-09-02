@@ -19,6 +19,25 @@ export const user = pgTable('User', {
 
 export type User = InferSelectModel<typeof user>;
 
+export const userProfile = pgTable('UserProfile', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  userId: uuid('userId')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' })
+    .unique(),
+  name: varchar('name', { length: 100 }),
+  occupation: varchar('occupation', { length: 200 }),
+  traits: json('traits').$type<string[]>().default([]),
+  additionalInfo: text('additionalInfo'),
+  disableExternalLinkWarning: boolean('disableExternalLinkWarning').default(
+    false,
+  ),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt').notNull().defaultNow(),
+});
+
+export type UserProfile = InferSelectModel<typeof userProfile>;
+
 export const chat = pgTable('Chat', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
   createdAt: timestamp('createdAt').notNull(),

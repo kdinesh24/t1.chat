@@ -24,6 +24,9 @@ import type { Attachment, ChatMessage } from '@/lib/types';
 import { useDataStream } from './data-stream-provider';
 import { useRouter } from 'next/navigation';
 import CornerDecoration from './corner-decoration';
+import { ThemeToggle } from './theme-toggle';
+import { SettingsButton } from './settings-button';
+import { useSidebar } from '@/components/ui/sidebar';
 
 export function Chat({
   id,
@@ -50,6 +53,8 @@ export function Chat({
   const router = useRouter();
   const { mutate } = useSWRConfig();
   const { setDataStream } = useDataStream();
+  const { state } = useSidebar();
+  const isCollapsed = state === 'collapsed';
 
   const [input, setInput] = useState<string>('');
 
@@ -164,7 +169,12 @@ export function Chat({
   return (
     <div className="flex flex-col h-full max-h-screen overflow-hidden">
       <ChatHeader chatId={id} isReadonly={isReadonly} session={session} />
-         <CornerDecoration />
+      <CornerDecoration />
+      <div
+        className="fixed top-3 right-3 flex gap-2 z-30">
+        <SettingsButton />
+        <ThemeToggle />
+      </div>
       <div className="flex flex-col min-w-0 flex-1 text-foreground border-t border-l border-[#322028] rounded-xl relative overflow-hidden">
         <Messages
           chatId={id}

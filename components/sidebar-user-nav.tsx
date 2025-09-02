@@ -4,7 +4,6 @@ import { ChevronUp } from 'lucide-react';
 import Image from 'next/image';
 import type { User } from 'next-auth';
 import { signOut, useSession } from 'next-auth/react';
-import { useTheme } from 'next-themes';
 import { useRouter, useParams } from 'next/navigation';
 
 import {
@@ -27,7 +26,6 @@ import { useChatVisibility } from '@/hooks/use-chat-visibility';
 export function SidebarUserNav({ user }: { user: User }) {
   const router = useRouter();
   const { data, status } = useSession();
-  const { setTheme, resolvedTheme } = useTheme();
   const params = useParams();
 
   const isGuest = guestRegex.test(data?.user?.email ?? '');
@@ -60,7 +58,7 @@ export function SidebarUserNav({ user }: { user: User }) {
   };
 
   return (
-    <div className='h-[60px]'>
+    <div className="h-[60px]">
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu>
@@ -156,15 +154,6 @@ export function SidebarUserNav({ user }: { user: User }) {
                   <DropdownMenuSeparator />
                 </>
               )}
-              <DropdownMenuItem
-                data-testid="user-nav-item-theme"
-                className="cursor-pointer"
-                onSelect={() =>
-                  setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-                }
-              >
-                {`Toggle ${resolvedTheme === 'light' ? 'dark' : 'light'} mode`}
-              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild data-testid="user-nav-item-auth">
                 <button
