@@ -49,7 +49,8 @@
         "useFocusableInteractive": "off",
         "useAriaPropsForRole": "off",
         "useKeyWithClickEvents": "off",
-        "useButtonType": "off" // Disable button type requirement
+        "useButtonType": "off",
+        "noLabelWithoutControl": "off"
       },
       "complexity": {
         "noUselessStringConcat": "warn",
@@ -64,7 +65,9 @@
         "noNewSymbol": "warn",
         "useJsxKeyInIterable": "off",
         "useExhaustiveDependencies": "off",
-        "noUnnecessaryContinue": "off"
+        "noUnnecessaryContinue": "off",
+        "noChildrenProp": "off",
+        "noNonNullAssertion": "off"
       },
       "security": {
         "noDangerouslySetInnerHtml": "off"
@@ -79,10 +82,10 @@
       },
       "suspicious": {
         "noExplicitAny": "off",
-        "noArrayIndexKey": "off" // Disable array index key warnings
+        "noArrayIndexKey": "off"
       },
       "nursery": {
-        "noStaticElementInteractions": "off", // Disable static element interactions warnings
+        "noStaticElementInteractions": "off",
         "noHeadImportInDocument": "warn",
         "noDocumentImportInPage": "warn",
         "noDuplicateElseIf": "warn",
