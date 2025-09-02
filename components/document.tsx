@@ -89,9 +89,9 @@ export const DocumentToolResult = memo(PureDocumentToolResult, () => true);
 interface DocumentToolCallProps {
   type: 'create' | 'update' | 'request-suggestions';
   args:
-    | { title: string; kind: ArtifactKind } // for create
-    | { id: string; description: string } // for update
-    | { documentId: string }; // for request-suggestions
+    | { title: string; kind: ArtifactKind } 
+    | { id: string; description: string } 
+    | { documentId: string }; 
   isReadonly: boolean;
 }
 

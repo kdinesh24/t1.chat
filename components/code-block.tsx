@@ -28,7 +28,7 @@ export function CodeBlock({
 
   const codeText = useMemo(() => String(children ?? ''), [children]);
 
-  // Check if the code is a single line (for compact styling)
+  
   const isSingleLine = useMemo(() => {
     const trimmedCode = codeText.trim();
     return !trimmedCode.includes('\n') && trimmedCode.length < 100; // Single line and not too long
