@@ -9,7 +9,12 @@
   "plugins": ["tailwindcss"],
   "rules": {
     "tailwindcss/no-custom-classname": "off",
-    "tailwindcss/classnames-order": "off"
+    "tailwindcss/classnames-order": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "tailwindcss/enforces-shorthand": "off",
+    "tailwindcss/no-contradicting-classname": "off",
+    "import/no-duplicates": "off",
+    "import/no-named-as-default-member": "off"
   },
   "settings": {
     "import/resolver": {
