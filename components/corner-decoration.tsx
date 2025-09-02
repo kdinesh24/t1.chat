@@ -91,8 +91,8 @@ const CornerDecoration: React.FC<CornerDecorationProps> = ({
         >
           {/* Curved path with different stroke and fill colors */}
           <path
-            stroke={borderColor} // Uses '#322028' for the border outline
-            fill="#1a1419" // Dark fill color for the interior
+            stroke={borderColor} 
+            fill="#1a1419" 
             shapeRendering="optimizeQuality"
             strokeWidth="1px"
             strokeLinecap="round"
