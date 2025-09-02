@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { memo, useState } from 'react';
 import type { Vote } from '@/lib/db/schema';
 import { DocumentToolCall, DocumentToolResult } from './document';
+import { SquarePen } from 'lucide-react';
 import { PencilEditIcon, CopyIcon } from './icons';
 import { Markdown } from './markdown';
 import { MessageActions } from './message-actions';
@@ -33,6 +34,8 @@ const PurePreviewMessage = ({
   regenerate,
   isReadonly,
   requiresScrollPadding,
+  session,
+  selectedModelId,
 }: {
   chatId: string;
   message: ChatMessage;
@@ -42,6 +45,8 @@ const PurePreviewMessage = ({
   regenerate: UseChatHelpers<ChatMessage>['regenerate'];
   isReadonly: boolean;
   requiresScrollPadding: boolean;
+  session?: any;
+  selectedModelId?: string;
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
 
@@ -118,7 +123,7 @@ const PurePreviewMessage = ({
                         className={cn(
                           'flex flex-col gap-4 min-w-0 overflow-x-auto',
                           {
-                            'text-white px-3 py-2 rounded-xl':
+                            'text-white px-3 py-4 rounded-xl':
                               message.role === 'user',
                           },
                         )}
@@ -144,7 +149,7 @@ const PurePreviewMessage = ({
                                   setMode('edit');
                                 }}
                               >
-                                <PencilEditIcon size={12} />
+                                <SquarePen size={12} color="#f9f8fb" />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent side="bottom">
@@ -157,7 +162,7 @@ const PurePreviewMessage = ({
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="h-6 w-6 p-0 text-zinc-400 hover:text-white hover:bg-white/20 rounded-md transition-colors"
+                                className="h-6 w-6 p-0 text-[#f9f8fb] hover:text-white hover:bg-white/20 rounded-md transition-colors"
                                 onClick={async () => {
                                   try {
                                     await navigator.clipboard.writeText(
@@ -191,6 +196,8 @@ const PurePreviewMessage = ({
                         setMode={setMode}
                         setMessages={setMessages}
                         regenerate={regenerate}
+                        session={session}
+                        selectedModelId={selectedModelId}
                       />
                     </div>
                   );
@@ -366,6 +373,9 @@ export const PreviewMessage = memo(
       return false;
     if (!equal(prevProps.message.parts, nextProps.message.parts)) return false;
     if (!equal(prevProps.vote, nextProps.vote)) return false;
+    if (prevProps.session?.user?.id !== nextProps.session?.user?.id)
+      return false;
+    if (prevProps.selectedModelId !== nextProps.selectedModelId) return false;
 
     return false;
   },

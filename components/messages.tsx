@@ -21,6 +21,8 @@ interface MessagesProps {
   isArtifactVisible: boolean;
   sendMessage?: UseChatHelpers<ChatMessage>['sendMessage'];
   selectedVisibilityType?: VisibilityType;
+  session?: any;
+  selectedModelId?: string;
 }
 
 function PureMessages({
@@ -33,6 +35,8 @@ function PureMessages({
   isReadonly,
   sendMessage,
   selectedVisibilityType,
+  session,
+  selectedModelId,
 }: MessagesProps) {
   const {
     containerRef: messagesContainerRef,
@@ -50,7 +54,7 @@ function PureMessages({
   return (
     <div
       ref={messagesContainerRef}
-      className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-hidden pt-4 relative"
+      className="flex flex-col min-w-0 gap-16 flex-1 overflow-y-auto pt-12"
     >
       {messages.length === 0 && (
         <Greeting
@@ -77,6 +81,8 @@ function PureMessages({
           requiresScrollPadding={
             hasSentMessage && index === messages.length - 1
           }
+          session={session}
+          selectedModelId={selectedModelId}
         />
       ))}
 

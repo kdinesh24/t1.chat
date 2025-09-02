@@ -175,7 +175,7 @@ export function CodeBlock({
         </span>
         {!noCopyButton && (
           <Button
-            variant="ghost"
+            variant="ghost" 
             size="sm"
             onClick={handleCopy}
             className="h-6 w-6 p-0 opacity-70 hover:opacity-100 transition-opacity"

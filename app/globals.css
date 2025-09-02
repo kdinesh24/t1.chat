@@ -444,10 +444,6 @@ pre.shiki {
     background-color: hsl(var(--background)) !important;
 }
 
-/* Force code blocks to match sidebar */
-
-
-
 /* New Chat Button Styling */
 .new-chat-button {
     background: #411329 !important;
@@ -550,5 +546,4 @@ pre.shiki {
 .custom-gradient:hover {
   background-image: linear-gradient(180deg, rgba(122,25,65,1), rgba(122,25,65,1)); /* hover state */
 }
-
 

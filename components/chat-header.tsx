@@ -24,7 +24,7 @@ function PureChatHeader({
   if (!open) return null;
 
   return (
-    <header className="flex sticky top-0 py-1.5 items-center px-2 md:px-2 gap-2 bg-[#1b1219]">
+    <header className="flex sticky top-0 py-1.5 items-center px-2 md:px-2 gap-2 bg-[#1a1419] z-50">
       {/* Header is now empty when sidebar is open since floating buttons handle everything when closed */}
     </header>
   );

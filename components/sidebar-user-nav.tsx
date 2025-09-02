@@ -44,129 +44,159 @@ export function SidebarUserNav({ user }: { user: User }) {
   // Only show visibility controls if we're in a chat and not readonly
   const showVisibilityControls = chatId && !isGuest;
 
+  // Extract name from email
+  const getUserName = (email: string | null | undefined): string => {
+    if (!email) return 'User';
+    if (isGuest) return 'Guest';
+
+    // Extract the part before @ and format it
+    const namePart = email.split('@')[0];
+    // Replace dots and underscores with spaces, then capitalize each word
+    return namePart
+      .replace(/[._]/g, ' ')
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+
   return (
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            {status === 'loading' ? (
-              <SidebarMenuButton
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-10 justify-between hover:bg-white/50"
-                style={{ backgroundColor: '#1a2929' }}
-              >
-                <div className="flex flex-row gap-2">
-                  <div
-                    className="size-6 rounded-full animate-pulse"
-                    style={{ backgroundColor: '#1a2929' }}
-                  />
-                  <span className="bg-background text-transparent rounded-md animate-pulse">
-                    Loading auth status
-                  </span>
-                </div>
-                <div className="animate-spin text-zinc-500">
-                  <LoaderIcon />
-                </div>
-              </SidebarMenuButton>
-            ) : (
-              <SidebarMenuButton
-                data-testid="user-nav-button"
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-10 hover:bg-white/50"
-                style={{ backgroundColor: '#1a2929' }}
-              >
-                <Image
-                  src={`https://avatar.vercel.sh/${user.email}`}
-                  alt={user.email ?? 'User Avatar'}
-                  width={24}
-                  height={24}
-                  className="rounded-full"
-                />
-                <span data-testid="user-email" className="truncate">
-                  {isGuest ? 'Guest' : user?.email}
-                </span>
-                <ChevronUp className="ml-auto" />
-              </SidebarMenuButton>
-            )}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            data-testid="user-nav-menu"
-            side="top"
-            className="w-[--radix-popper-anchor-width]"
-          >
-            {showVisibilityControls && (
-              <>
-                <DropdownMenuItem
-                  className="cursor-pointer gap-2"
-                  onSelect={() => setVisibilityType('private')}
+    <div className='h-[60px]'>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              {status === 'loading' ? (
+                <SidebarMenuButton
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-12 justify-between hover:bg-white/50 rounded-lg"
+                  style={{ backgroundColor: '#1a2929' }}
                 >
-                  <LockIcon />
-                  <div className="flex flex-col">
-                    <span>Private</span>
-                    <span className="text-xs text-muted-foreground">
-                      Only you can access this chat
-                    </span>
+                  <div className="flex flex-row gap-3 items-center">
+                    <div
+                      className="size-8 rounded-full animate-pulse"
+                      style={{ backgroundColor: '#1a2929' }}
+                    />
+                    <div className="flex flex-col">
+                      <span className="bg-background text-transparent rounded-md animate-pulse text-sm font-medium">
+                        Loading...
+                      </span>
+                      <span className="bg-background text-transparent rounded-md animate-pulse text-xs">
+                        Free
+                      </span>
+                    </div>
                   </div>
-                  {visibilityType === 'private' && (
-                    <span className="ml-auto">✓</span>
-                  )}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="cursor-pointer gap-2"
-                  onSelect={() => setVisibilityType('public')}
+                  <div className="animate-spin text-zinc-500">
+                    <LoaderIcon />
+                  </div>
+                </SidebarMenuButton>
+              ) : (
+                <SidebarMenuButton
+                  data-testid="user-nav-button"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-12 hover:bg-white/50 rounded-lg"
+                  style={{ backgroundColor: '#1a2929' }}
                 >
-                  <GlobeIcon />
-                  <div className="flex flex-col">
-                    <span>Public</span>
-                    <span className="text-xs text-muted-foreground">
-                      Anyone with the link can access this chat
-                    </span>
+                  <div className="flex flex-row gap-3 items-center">
+                    <Image
+                      src={`https://avatar.vercel.sh/${user.email}`}
+                      alt={user.email ?? 'User Avatar'}
+                      width={32}
+                      height={32}
+                      className="rounded-full"
+                    />
+                    <div className="flex flex-col text-left">
+                      <span
+                        data-testid="user-name"
+                        className="truncate text-sm font-medium text-white"
+                      >
+                        {getUserName(user?.email)}
+                      </span>
+                      <span className="text-xs text-zinc-400">Free</span>
+                    </div>
                   </div>
-                  {visibilityType === 'public' && (
-                    <span className="ml-auto">✓</span>
-                  )}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-              </>
-            )}
-            <DropdownMenuItem
-              data-testid="user-nav-item-theme"
-              className="cursor-pointer"
-              onSelect={() =>
-                setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-              }
+                  <ChevronUp className="ml-auto text-zinc-400" />
+                </SidebarMenuButton>
+              )}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              data-testid="user-nav-menu"
+              side="top"
+              className="w-[--radix-popper-anchor-width]"
             >
-              {`Toggle ${resolvedTheme === 'light' ? 'dark' : 'light'} mode`}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild data-testid="user-nav-item-auth">
-              <button
-                type="button"
-                className="w-full cursor-pointer"
-                onClick={() => {
-                  if (status === 'loading') {
-                    toast({
-                      type: 'error',
-                      description:
-                        'Checking authentication status, please try again!',
-                    });
-
-                    return;
-                  }
-
-                  if (isGuest) {
-                    router.push('/login');
-                  } else {
-                    signOut({
-                      redirectTo: '/',
-                    });
-                  }
-                }}
+              {showVisibilityControls && (
+                <>
+                  <DropdownMenuItem
+                    className="cursor-pointer gap-2"
+                    onSelect={() => setVisibilityType('private')}
+                  >
+                    <LockIcon />
+                    <div className="flex flex-col">
+                      <span>Private</span>
+                      <span className="text-xs text-muted-foreground">
+                        Only you can access this chat
+                      </span>
+                    </div>
+                    {visibilityType === 'private' && (
+                      <span className="ml-auto">✓</span>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="cursor-pointer gap-2"
+                    onSelect={() => setVisibilityType('public')}
+                  >
+                    <GlobeIcon />
+                    <div className="flex flex-col">
+                      <span>Public</span>
+                      <span className="text-xs text-muted-foreground">
+                        Anyone with the link can access this chat
+                      </span>
+                    </div>
+                    {visibilityType === 'public' && (
+                      <span className="ml-auto">✓</span>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+              <DropdownMenuItem
+                data-testid="user-nav-item-theme"
+                className="cursor-pointer"
+                onSelect={() =>
+                  setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+                }
               >
-                {isGuest ? 'Login to your account' : 'Sign out'}
-              </button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuItem>
-    </SidebarMenu>
+                {`Toggle ${resolvedTheme === 'light' ? 'dark' : 'light'} mode`}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild data-testid="user-nav-item-auth">
+                <button
+                  type="button"
+                  className="w-full cursor-pointer"
+                  onClick={() => {
+                    if (status === 'loading') {
+                      toast({
+                        type: 'error',
+                        description:
+                          'Checking authentication status, please try again!',
+                      });
+
+                      return;
+                    }
+
+                    if (isGuest) {
+                      router.push('/login');
+                    } else {
+                      signOut({
+                        redirectTo: '/',
+                      });
+                    }
+                  }}
+                >
+                  {isGuest ? 'Login to your account' : 'Sign out'}
+                </button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    </div>
   );
 }

@@ -52,7 +52,7 @@ const PureChatItem = ({
           asChild
           isActive={isActive}
           className={cn(
-            'transition-all duration-200 ease-out',
+            'transition-all duration-200 ease-out h-10',
             'group-hover/hover-container:!bg-[#251922] hover:!bg-[#251922]',
             (isActive || isDropdownOpen) && '!bg-[#251922]',
             '!text-white hover:!text-white',

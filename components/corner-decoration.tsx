@@ -51,7 +51,7 @@ const CornerDecoration: React.FC<CornerDecorationProps> = ({
         className="decoration-group"
         style={{
           position: 'absolute',
-          top: '14px',
+          top: '13px',
           zIndex: 10,
           marginBottom: '-32px',
           height: '128px',
@@ -94,7 +94,7 @@ const CornerDecoration: React.FC<CornerDecorationProps> = ({
             strokeLinecap="round"
             strokeMiterlimit="10"
             vectorEffect="non-scaling-stroke"
-            d="M0,0c5.9,0,10.7,4.8,10.7,10.7v10.7c0,5.9,4.8,10.7,10.7,10.7H128V0Z"
+            d="M0,0c5.9,0,10.7,4.8,10.7,10.7v10.7c0,5.9,4.8,10.7,10.7,10.7H128V0"
             style={{ transform: 'translateY(0.5px)' }}
           />
         </svg>
