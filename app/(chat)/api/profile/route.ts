@@ -6,7 +6,9 @@ import postgres from 'postgres';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Database connection
+// biome-ignore lint/style/noNonNullAssertion: POSTGRES_URL is required and guaranteed to exist in production  
 const client = postgres(process.env.POSTGRES_URL!, {
+  
   max: 1,
   idle_timeout: 20,
   connect_timeout: 10,

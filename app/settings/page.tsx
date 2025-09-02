@@ -1,10 +1,10 @@
 'use client';
 
-import { ArrowLeft, Check, Loader2 } from 'lucide-react';
+import { ArrowLeft, Check, Loader2, Sun, Moon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { useTheme } from 'next-themes';
 import { useUserSettings } from '@/hooks/use-user-settings';
 import {
   SettingsField,
@@ -159,6 +159,7 @@ const SettingsContent = memo(function SettingsContent() {
 export default function SettingsPage() {
   const router = useRouter();
   const { data: session } = useSession();
+  const { setTheme, resolvedTheme } = useTheme();
 
   // Extract name from email
   const getUserName = (email: string | null | undefined): string => {
@@ -170,6 +171,25 @@ export default function SettingsPage() {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
   };
+
+  const SimpleThemeToggle = () => (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+      className="h-6 w-6 p-0 hover:bg-white/10 transition-colors rounded-md"
+    >
+      <Sun
+        className="h-3 w-3 transition-all dark:rotate-0 dark:scale-100 rotate-90 scale-0"
+        style={{ color: '#e7d0dd' }}
+      />
+      <Moon
+        className="absolute h-3 w-3 transition-all dark:rotate-90 dark:scale-0 rotate-0 scale-100"
+        style={{ color: '#af1f6e' }}
+      />
+      <span className="sr-only">Toggle theme</span>
+    </Button>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1a1319] to-[#0f0a0d] text-foreground">
@@ -269,7 +289,7 @@ export default function SettingsPage() {
 
             {/* Theme Toggle */}
             <div className="pb-3">
-              <ThemeToggle />
+              <SimpleThemeToggle />
             </div>
           </div>
 
