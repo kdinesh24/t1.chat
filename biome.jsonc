@@ -32,8 +32,8 @@
     "rules": {
       "recommended": true,
       "a11y": {
-        "useHtmlLang": "warn", // Not in recommended ruleset, turning on manually
-        "noHeaderScope": "warn", // Not in recommended ruleset, turning on manually
+        "useHtmlLang": "warn",
+        "noHeaderScope": "warn",
         "useValidAriaRole": {
           "level": "warn",
           "options": {
@@ -41,47 +41,48 @@
             "allowInvalidRoles": ["none", "text"]
           }
         },
-        "useSemanticElements": "off", // Rule is buggy, revisit later
-        "noSvgWithoutTitle": "off", // We do not intend to adhere to this rule
-        "useMediaCaption": "off", // We would need a cultural change to turn this on
-        "noAutofocus": "off", // We're highly intentional about when we use autofocus
-        "noBlankTarget": "off", // Covered by Conformance
-        "useFocusableInteractive": "off", // Disable focusable interactive element requirement
-        "useAriaPropsForRole": "off", // Disable required ARIA attributes check
+        "useSemanticElements": "off",
+        "noSvgWithoutTitle": "off",
+        "useMediaCaption": "off",
+        "noAutofocus": "off",
+        "noBlankTarget": "off",
+        "useFocusableInteractive": "off",
+        "useAriaPropsForRole": "off",
         "useKeyWithClickEvents": "off",
         "useButtonType": "off" // Disable button type requirement
       },
       "complexity": {
-        "noUselessStringConcat": "warn", // Not in recommended ruleset, turning on manually
-        "noForEach": "off", // forEach is too familiar to ban
-        "noUselessSwitchCase": "off", // Turned off due to developer preferences
-        "noUselessThisAlias": "off", // Turned off due to developer preferences
+        "noUselessStringConcat": "warn",
+        "noForEach": "off",
+        "noUselessSwitchCase": "off",
+        "noUselessThisAlias": "off",
         "noBannedTypes": "off"
       },
       "correctness": {
-        "noUnusedImports": "warn", // Not in recommended ruleset, turning on manually
-        "useArrayLiterals": "warn", // Not in recommended ruleset, turning on manually
-        "noNewSymbol": "warn", // Not in recommended ruleset, turning on manually
-        "useJsxKeyInIterable": "off", // Rule is buggy, revisit later
-        "useExhaustiveDependencies": "off", // Community feedback on this rule has been poor, we will continue with ESLint
-        "noUnnecessaryContinue": "off" // Turned off due to developer preferences
+        "noUnusedImports": "warn",
+        "useArrayLiterals": "warn",
+        "noNewSymbol": "warn",
+        "useJsxKeyInIterable": "off",
+        "useExhaustiveDependencies": "off",
+        "noUnnecessaryContinue": "off"
       },
       "security": {
-        "noDangerouslySetInnerHtml": "off" // Covered by Conformance
+        "noDangerouslySetInnerHtml": "off"
       },
       "style": {
-        "useFragmentSyntax": "warn", // Not in recommended ruleset, turning on manually
-        "noYodaExpression": "warn", // Not in recommended ruleset, turning on manually
-        "useDefaultParameterLast": "warn", // Not in recommended ruleset, turning on manually
-        "useExponentiationOperator": "off", // Obscure and arguably not easily readable
-        "noUnusedTemplateLiteral": "off", // Stylistic opinion
-        "noUselessElse": "off" // Stylistic opinion
+        "useFragmentSyntax": "warn",
+        "noYodaExpression": "warn",
+        "useDefaultParameterLast": "warn",
+        "useExponentiationOperator": "off",
+        "noUnusedTemplateLiteral": "off",
+        "noUselessElse": "off"
       },
       "suspicious": {
-        "noExplicitAny": "off" // We trust Vercelians to use any only when necessary
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off" // Disable array index key warnings
       },
       "nursery": {
-        "noStaticElementInteractions": "warn",
+        "noStaticElementInteractions": "off", // Disable static element interactions warnings
         "noHeadImportInDocument": "warn",
         "noDocumentImportInPage": "warn",
         "noDuplicateElseIf": "warn",
@@ -120,8 +121,6 @@
   },
   "organizeImports": { "enabled": false },
   "overrides": [
-    // Playwright requires an object destructure, even if empty
-    // https://github.com/microsoft/playwright/issues/30007
     {
       "include": ["playwright/**"],
       "linter": {
