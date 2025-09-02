@@ -66,8 +66,7 @@
         "useJsxKeyInIterable": "off",
         "useExhaustiveDependencies": "off",
         "noUnnecessaryContinue": "off",
-        "noChildrenProp": "off",
-        "noNonNullAssertion": "off"
+        "noChildrenProp": "off"
       },
       "security": {
         "noDangerouslySetInnerHtml": "off"
