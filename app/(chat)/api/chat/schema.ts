@@ -23,14 +23,15 @@ export const postRequestBodySchema = z.object({
   }),
   selectedChatModel: z.enum([
     'gemini-2.0-flash-exp',
-    'gemini-2.5-pro', 
+    'gemini-2.5-pro',
     'gemini-1.5-flash',
     'gemini-2.0-flash-reasoning',
     // Backward compatibility
     'chat-model',
-    'chat-model-reasoning'
+    'chat-model-reasoning',
   ]),
   selectedVisibilityType: z.enum(['public', 'private']),
+  apiKey: z.string().optional(), // Add API key field
 });
 
 export type PostRequestBody = z.infer<typeof postRequestBodySchema>;

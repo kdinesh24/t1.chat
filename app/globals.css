@@ -237,6 +237,17 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    /* Custom text selection color */
+    ::selection {
+        background-color: #a5084f;
+        color: white;
+    }
+
+    ::-moz-selection {
+        background-color: #a5084f;
+        color: white;
+    }
 }
 
 .skeleton {

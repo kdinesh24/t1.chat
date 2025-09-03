@@ -24,7 +24,7 @@ import { updateDocument } from '@/lib/ai/tools/update-document';
 import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
 import { getWeather } from '@/lib/ai/tools/get-weather';
 import { isProductionEnvironment } from '@/lib/constants';
-import { myProvider } from '@/lib/ai/providers';
+import { createProviderWithApiKey } from '@/lib/ai/providers';
 import { entitlementsByUserType } from '@/lib/ai/entitlements';
 import { postRequestBodySchema, type PostRequestBody } from './schema';
 import { geolocation } from '@vercel/functions';
@@ -63,9 +63,15 @@ export function getStreamContext() {
 export async function POST(request: Request) {
   console.log('🔥 POST /api/chat - Request received');
   console.log('🌍 Environment check:');
-  console.log('  - GOOGLE_GENERATIVE_AI_API_KEY present:', !!process.env.GOOGLE_GENERATIVE_AI_API_KEY);
-  console.log('  - GOOGLE_GENERATIVE_AI_API_KEY length:', process.env.GOOGLE_GENERATIVE_AI_API_KEY?.length || 0);
-  
+  console.log(
+    '  - GOOGLE_GENERATIVE_AI_API_KEY present:',
+    !!process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+  );
+  console.log(
+    '  - GOOGLE_GENERATIVE_AI_API_KEY length:',
+    process.env.GOOGLE_GENERATIVE_AI_API_KEY?.length || 0,
+  );
+
   let requestBody: PostRequestBody;
 
   try {
@@ -84,11 +90,13 @@ export async function POST(request: Request) {
       message,
       selectedChatModel,
       selectedVisibilityType,
+      apiKey, // User's API key from the client
     }: {
       id: string;
       message: ChatMessage;
       selectedChatModel: ChatModel['id'];
       selectedVisibilityType: VisibilityType;
+      apiKey?: string;
     } = requestBody;
 
     const session = await auth();
@@ -98,12 +106,32 @@ export async function POST(request: Request) {
       return new ChatSDKError('unauthorized:chat').toResponse();
     }
 
+    // Check if user has provided an API key
+    if (!apiKey) {
+      console.error('❌ No API key provided');
+      return new Response(
+        JSON.stringify({
+          error:
+            'API key not configured. Please add your Google API key in settings.',
+        }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+    }
+
     console.log('✅ User authenticated:', session.user.id);
     console.log('📋 Chat request details:');
     console.log('  - Chat ID:', id);
     console.log('  - Selected model:', selectedChatModel);
     console.log('  - Selected visibility:', selectedVisibilityType);
-    console.log('  - Message content:', message.parts.map(p => p.type === 'text' ? p.text : `[${p.type}]`).join(' '));
+    console.log(
+      '  - Message content:',
+      message.parts
+        .map((p) => (p.type === 'text' ? p.text : `[${p.type}]`))
+        .join(' '),
+    );
 
     const userType: UserType = session.user.type;
 
@@ -132,11 +160,12 @@ export async function POST(request: Request) {
         });
       } catch (error) {
         // Fallback: create chat with a simple title
-        const fallbackTitle = message.parts
-          .filter((part) => part.type === 'text')
-          .map((part) => part.text)
-          .join(' ')
-          .slice(0, 80) || 'New Chat';
+        const fallbackTitle =
+          message.parts
+            .filter((part) => part.type === 'text')
+            .map((part) => part.text)
+            .join(' ')
+            .slice(0, 80) || 'New Chat';
 
         await saveChat({
           id,
@@ -180,11 +209,15 @@ export async function POST(request: Request) {
     await createStreamId({ streamId, chatId: id });
     console.log('🆔 Stream ID created:', streamId);
 
-    console.log('🤖 Initializing AI provider...');
+    console.log('🤖 Initializing AI provider with user API key...');
     console.log('  - Model ID:', selectedChatModel);
-    
+    console.log('  - API key provided:', !!apiKey);
+
+    // Create provider with user's API key
+    const userProvider = createProviderWithApiKey(apiKey);
+
     try {
-      const modelInstance = myProvider.languageModel(selectedChatModel);
+      const modelInstance = userProvider.languageModel(selectedChatModel);
       console.log('✅ Model instance created:', modelInstance.modelId);
     } catch (modelError) {
       console.error('❌ Model creation failed:', modelError);
@@ -196,15 +229,19 @@ export async function POST(request: Request) {
         try {
           console.log('🚀 Starting streamText execution...');
           console.log('  - Messages count:', uiMessages.length);
-          console.log('  - System prompt length:', systemPrompt({ selectedChatModel, requestHints }).length);
-          
+          console.log(
+            '  - System prompt length:',
+            systemPrompt({ selectedChatModel, requestHints }).length,
+          );
+
           const result = streamText({
-            model: myProvider.languageModel(selectedChatModel),
+            model: userProvider.languageModel(selectedChatModel),
             system: systemPrompt({ selectedChatModel, requestHints }),
             messages: convertToModelMessages(uiMessages),
             stopWhen: stepCountIs(5),
             experimental_activeTools:
-              selectedChatModel === 'chat-model-reasoning' || selectedChatModel === 'gemini-2.0-flash-reasoning'
+              selectedChatModel === 'chat-model-reasoning' ||
+              selectedChatModel === 'gemini-2.0-flash-reasoning'
                 ? []
                 : [
                     'getWeather',
@@ -249,7 +286,7 @@ export async function POST(request: Request) {
           console.error('❌ Error details:', {
             name: error instanceof Error ? error.name : 'Unknown',
             message: error instanceof Error ? error.message : String(error),
-            stack: error instanceof Error ? error.stack : undefined
+            stack: error instanceof Error ? error.stack : undefined,
           });
           // Re-throw to be handled by onError
           throw error;
@@ -272,23 +309,30 @@ export async function POST(request: Request) {
       },
       onError: (error) => {
         console.error('❌ UI Message Stream error:', error);
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+
         // Handle rate limit errors
-        if (errorMessage.includes('Rate limit reached') || errorMessage.includes('rate_limit_exceeded')) {
-          return 'I apologize, but I\'ve reached the rate limit for API requests. Please wait a moment and try again, or the request will automatically retry.';
+        if (
+          errorMessage.includes('Rate limit reached') ||
+          errorMessage.includes('rate_limit_exceeded')
+        ) {
+          return "I apologize, but I've reached the rate limit for API requests. Please wait a moment and try again, or the request will automatically retry.";
         }
-        
+
         // Handle network connectivity errors
-        if (errorMessage.includes('ENOTFOUND') || errorMessage.includes('generativelanguage.googleapis.com')) {
-          return 'I apologize, but I\'m having trouble connecting to the AI service right now. This might be due to a network connectivity issue. Please check your internet connection and try again in a few moments.';
+        if (
+          errorMessage.includes('ENOTFOUND') ||
+          errorMessage.includes('generativelanguage.googleapis.com')
+        ) {
+          return "I apologize, but I'm having trouble connecting to the AI service right now. This might be due to a network connectivity issue. Please check your internet connection and try again in a few moments.";
         }
-        
+
         // Handle generic API errors
         if (errorMessage.includes('Failed after 3 attempts')) {
           return 'I encountered an issue while processing your request. Please try again in a moment.';
         }
-        
+
         return 'Oops, an error occurred! Please try again.';
       },
     });
@@ -311,22 +355,27 @@ export async function POST(request: Request) {
     console.error('❌ Chat API Error:', error);
     // Check if it's a specific API connection error
     const errorMessage = error instanceof Error ? error.message : String(error);
-    if (errorMessage.includes('ENOTFOUND') || errorMessage.includes('generativelanguage.googleapis.com') || errorMessage.includes('Failed after 3 attempts')) {
+    if (
+      errorMessage.includes('ENOTFOUND') ||
+      errorMessage.includes('generativelanguage.googleapis.com') ||
+      errorMessage.includes('Failed after 3 attempts')
+    ) {
       return new Response(
-        JSON.stringify({ 
-          error: 'Network connectivity issue. Please check your internet connection and try again.' 
+        JSON.stringify({
+          error:
+            'Network connectivity issue. Please check your internet connection and try again.',
         }),
-        { 
+        {
           status: 503,
-          headers: { 'Content-Type': 'application/json' }
-        }
+          headers: { 'Content-Type': 'application/json' },
+        },
       );
     }
-    
+
     if (error instanceof ChatSDKError) {
       return error.toResponse();
     }
-    
+
     // Return a generic error for unexpected issues
     return new ChatSDKError('bad_request:api').toResponse();
   }
@@ -350,7 +399,10 @@ export async function DELETE(request: Request) {
 
   if (!chat) {
     // Return success even if chat doesn't exist to handle race conditions
-    return Response.json({ id, message: 'Chat already deleted' }, { status: 200 });
+    return Response.json(
+      { id, message: 'Chat already deleted' },
+      { status: 200 },
+    );
   }
 
   if (chat.userId !== session.user.id) {
@@ -359,12 +411,17 @@ export async function DELETE(request: Request) {
 
   // Return immediately for better UX, then delete in background
   // Fire-and-forget deletion
-  deleteChatById({ id }).then(() => {
-    // Background deletion completed
-  }).catch((error) => {
-    // Background deletion failed
-  });
+  deleteChatById({ id })
+    .then(() => {
+      // Background deletion completed
+    })
+    .catch((error) => {
+      // Background deletion failed
+    });
 
   // Return success immediately
-  return Response.json({ id, message: 'Chat deletion initiated' }, { status: 200 });
+  return Response.json(
+    { id, message: 'Chat deletion initiated' },
+    { status: 200 },
+  );
 }

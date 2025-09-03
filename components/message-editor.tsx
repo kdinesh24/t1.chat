@@ -99,34 +99,62 @@ export function MessageEditor({
               data-testid="message-editor-send-button"
               className="border-reflect rounded-md p-1.5 h-fit hover:bg-muted transition-colors mr-2"
               style={{
-                backgroundColor:'#372132',
+                backgroundColor: '#372132',
                 color: draftContent.trim().length > 0 ? '#b8a8b3' : '#8d808b',
               }}
               disabled={isSubmitting || draftContent.trim().length === 0}
               onClick={async () => {
                 setIsSubmitting(true);
 
-                await deleteTrailingMessages({
-                  id: message.id,
-                });
+                try {
+                  await deleteTrailingMessages({
+                    id: message.id,
+                  });
 
-                setMessages((messages) => {
-                  const index = messages.findIndex((m) => m.id === message.id);
+                  setMessages((messages) => {
+                    const index = messages.findIndex(
+                      (m) => m.id === message.id,
+                    );
 
-                  if (index !== -1) {
-                    const updatedMessage: ChatMessage = {
-                      ...message,
-                      parts: [{ type: 'text', text: draftContent }],
-                    };
+                    if (index !== -1) {
+                      const updatedMessage: ChatMessage = {
+                        ...message,
+                        parts: [{ type: 'text', text: draftContent }],
+                      };
 
-                    return [...messages.slice(0, index), updatedMessage];
-                  }
+                      return [...messages.slice(0, index), updatedMessage];
+                    }
 
-                  return messages;
-                });
+                    return messages;
+                  });
 
-                setMode('view');
-                regenerate();
+                  setMode('view');
+                  regenerate();
+                } catch (error) {
+                  console.error('Failed to delete trailing messages:', error);
+                  // Continue with the operation even if deletion fails
+                  setMessages((messages) => {
+                    const index = messages.findIndex(
+                      (m) => m.id === message.id,
+                    );
+
+                    if (index !== -1) {
+                      const updatedMessage: ChatMessage = {
+                        ...message,
+                        parts: [{ type: 'text', text: draftContent }],
+                      };
+
+                      return [...messages.slice(0, index), updatedMessage];
+                    }
+
+                    return messages;
+                  });
+
+                  setMode('view');
+                  regenerate();
+                } finally {
+                  setIsSubmitting(false);
+                }
               }}
             >
               <ArrowUpIcon size={14} />

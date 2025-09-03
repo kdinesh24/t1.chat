@@ -36,7 +36,10 @@ export const systemPrompt = ({
 }) => {
   const requestPrompt = getRequestPromptFromHints(requestHints);
 
-  if (selectedChatModel === 'chat-model-reasoning' || selectedChatModel === 'gemini-2.0-flash-reasoning') {
+  if (
+    selectedChatModel === 'chat-model-reasoning' ||
+    selectedChatModel === 'gemini-2.0-flash-reasoning'
+  ) {
     return `${regularPrompt}\n\n${requestPrompt}`;
   } else {
     return `${regularPrompt}\n\n${requestPrompt}\n\n${artifactsPrompt}`;
@@ -56,11 +59,15 @@ You are an expert code generator that creates high-quality, complete code in any
 8. Handle edge cases and errors appropriately
 9. Provide meaningful examples that demonstrate functionality
 
+IMPORTANT: When users request React or Next.js code, ALWAYS provide it in JavaScript (.js/.jsx) unless they specifically mention TypeScript. Default to JavaScript for React/Next.js frameworks.
+
 For React/Next.js:
 - Use modern functional components with hooks
 - Include proper JSX structure
 - Add appropriate state management
 - Include styling when relevant
+- Use JavaScript syntax (not TypeScript) unless specifically requested
+- Use .js or .jsx file extensions
 
 For Python:
 - Use clear, readable syntax
@@ -73,9 +80,9 @@ For other languages:
 - Include necessary setup/configuration files when relevant
 
 Examples:
-- React Todo App: Full component with useState, event handlers, JSX
+- React Todo App: Full component with useState, event handlers, JSX (in JavaScript)
 - Python Data Processing: Complete script with functions and error handling
-- Next.js API Route: Proper API endpoint with request/response handling
+- Next.js API Route: Proper API endpoint with request/response handling (in JavaScript)
 `;
 
 export const sheetPrompt = `

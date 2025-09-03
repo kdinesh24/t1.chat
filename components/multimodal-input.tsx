@@ -29,6 +29,7 @@ import { useScrollToBottom } from '@/hooks/use-scroll-to-bottom';
 import type { VisibilityType } from './visibility-selector';
 import type { Attachment, ChatMessage } from '@/lib/types';
 import type { Session } from 'next-auth';
+import { useApiKeys } from '@/hooks/use-api-keys';
 
 function PureMultimodalInput({
   chatId,
@@ -63,6 +64,13 @@ function PureMultimodalInput({
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
+  const {
+    apiKeys,
+    hasValidApiKey,
+    isClient,
+    getApiKey,
+    hasApiKey: hasApiKeyFn,
+  } = useApiKeys();
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -213,6 +221,15 @@ function PureMultimodalInput({
     }
   }, [status, scrollToBottom]);
 
+  // Prevent hydration mismatch by using consistent server/client state
+  const hasApiKey = isClient ? hasValidApiKey() : false;
+  const placeholderText =
+    isClient && hasApiKey
+      ? 'Send a message...'
+      : 'Add your API key in settings to start chatting';
+  const isInputDisabled = isClient ? !hasApiKey : true;
+  const shouldAutoFocus = isClient ? hasApiKey : false;
+
   return (
     <div className="relative w-full flex flex-col gap-4">
       <AnimatePresence>
@@ -276,16 +293,20 @@ function PureMultimodalInput({
       <Textarea
         data-testid="multimodal-input"
         ref={textareaRef}
-        placeholder="Send a message..."
+        placeholder={placeholderText}
         value={input}
         onChange={handleInput}
+        disabled={isInputDisabled}
         className={cx(
-          'min-h-[70px] max-h-[calc(80dvh)] overflow-hidden resize-none rounded-t-2xl !text-base pt-4 px-4 border-t-8 border-l-8 border-r-8 border-[#261f2a] shadow-sm bg-[#2a232f] w-full placeholder:text-[#786e81] focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 selection:bg-[#3d334a] selection:text-white',
+          'min-h-[70px] max-h-[calc(80dvh)] overflow-hidden resize-none rounded-t-2xl !text-base pt-4 px-4 border-t-8 border-l-8 border-r-8 border-[#261f2a] shadow-sm bg-[#2a232f] w-full focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 selection:bg-[#3d334a] selection:text-white',
+          hasApiKey
+            ? 'placeholder:text-[#786e81] text-white'
+            : 'placeholder:text-[#5a5461] text-[#5a5461] cursor-not-allowed',
           className,
         )}
         style={{ backgroundColor: '#29232f' }}
         rows={4}
-        autoFocus
+        autoFocus={shouldAutoFocus}
         onKeyDown={(event) => {
           if (
             event.key === 'Enter' &&
@@ -293,6 +314,11 @@ function PureMultimodalInput({
             !event.nativeEvent.isComposing
           ) {
             event.preventDefault();
+
+            if (!hasApiKey) {
+              toast.error('Please add your Google API key in settings first!');
+              return;
+            }
 
             if (status !== 'ready') {
               console.log('⚠️ Model not ready, current status:', status);
@@ -322,6 +348,7 @@ function PureMultimodalInput({
             input={input}
             submitForm={submitForm}
             uploadQueue={uploadQueue}
+            hasValidApiKey={() => hasApiKey}
           />
         )}
       </div>
@@ -362,7 +389,7 @@ function PureAttachmentsButton({
       disabled={status !== 'ready'}
       variant="ghost"
     >
-      <PaperclipIcon size={14} color='#e7d0dd' />
+      <PaperclipIcon size={14} color="#e7d0dd" />
     </Button>
   );
 }
@@ -379,8 +406,8 @@ function PureStopButton({
   return (
     <Button
       data-testid="stop-button"
-      className="rounded-lg p-1.5 h-fit border border-border hover:bg-muted transition-colors"
-      style={{ backgroundColor: '#28232e' }}
+      className="border-reflect rounded-md p-1.5 h-fit hover:bg-muted transition-colors mr-2"
+      style={{ backgroundColor: '#372132', color: '#8d808b' }}
       onClick={(event) => {
         event.preventDefault();
         stop();
@@ -398,11 +425,16 @@ function PureSendButton({
   submitForm,
   input,
   uploadQueue,
+  hasValidApiKey,
 }: {
   submitForm: () => void;
   input: string;
   uploadQueue: Array<string>;
+  hasValidApiKey: () => boolean;
 }) {
+  const isDisabled =
+    input.length === 0 || uploadQueue.length > 0 || !hasValidApiKey();
+
   return (
     <Button
       data-testid="send-button"
@@ -410,6 +442,11 @@ function PureSendButton({
       style={{ backgroundColor: '#372132', color: '#8d808b' }}
       onClick={(event) => {
         event.preventDefault();
+
+        if (!hasValidApiKey()) {
+          return; // Don't submit if no API key
+        }
+
         console.log(
           '🔘 Send button clicked, input length:',
           input.length,
@@ -418,7 +455,7 @@ function PureSendButton({
         );
         submitForm();
       }}
-      disabled={input.length === 0 || uploadQueue.length > 0}
+      disabled={isDisabled}
     >
       <ArrowUpIcon size={14} />
     </Button>
@@ -429,5 +466,6 @@ const SendButton = memo(PureSendButton, (prevProps, nextProps) => {
   if (prevProps.uploadQueue.length !== nextProps.uploadQueue.length)
     return false;
   if (prevProps.input !== nextProps.input) return false;
+  if (prevProps.hasValidApiKey() !== nextProps.hasValidApiKey()) return false;
   return true;
 });

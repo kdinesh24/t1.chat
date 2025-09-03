@@ -3,7 +3,7 @@ import { userProfile } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 // Database connection
 // biome-ignore lint/style/noNonNullAssertion: POSTGRES_URL is required and guaranteed to exist in production  

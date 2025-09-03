@@ -124,51 +124,56 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
   const handleDelete = async () => {
     const shouldRedirect = deleteId === id;
-    
+
     // IMMEDIATE FRONTEND UPDATES - happens first, synchronously
-    
+
     // 1. Remove from frontend immediately (optimistic update)
-    mutate((chatHistories) => {
-      if (chatHistories) {
-        return chatHistories.map((chatHistory) => ({
-          ...chatHistory,
-          chats: chatHistory.chats.filter((chat) => chat.id !== deleteId),
-        }));
-      }
-    }, { revalidate: false }); // Don't revalidate, we want immediate update
-    
+    mutate(
+      (chatHistories) => {
+        if (chatHistories) {
+          return chatHistories.map((chatHistory) => ({
+            ...chatHistory,
+            chats: chatHistory.chats.filter((chat) => chat.id !== deleteId),
+          }));
+        }
+      },
+      { revalidate: false },
+    ); // Don't revalidate, we want immediate update
+
     // 2. Clear SWR cache immediately
-    globalMutate(`/api/vote?chatId=${deleteId}`, undefined, { revalidate: false });
-    
+    globalMutate(`/api/vote?chatId=${deleteId}`, undefined, {
+      revalidate: false,
+    });
+
     // 3. Redirect immediately if deleting current chat
     if (shouldRedirect) {
       window.location.href = '/';
     }
-    
+
     // 4. Close dialog immediately
     setShowDeleteDialog(false);
-    
+
     // 5. Show immediate success toast
     toast.success('Chat deleted successfully');
-    
+
     // BACKGROUND DELETION - happens asynchronously, user doesn't wait
-    
+
     // Delete from database in the background
     fetch(`/api/chat?id=${deleteId}`, {
       method: 'DELETE',
     })
-    .then(response => {
-      if (!response.ok) {
-        // If backend deletion fails, show error but don't revert UI
-        // (chat is already removed from frontend)
-        toast.error('Warning: Chat may not be fully deleted from server');
-        return;
-      }
-    })
-    .catch(error => {
-      // If network error, show warning but don't revert UI
-      toast.error('Warning: Chat deletion may not be saved to server');
-    });
+      .then((response) => {
+        if (!response.ok) {
+          // If backend deletion fails, show error but don't revert UI
+          // (chat is already removed from frontend)
+          toast.error('Warning: Chat may not be fully deleted from server');
+          return;
+        }
+      })
+      .catch((error) => {
+        // If network error, show warning but don't revert UI
+        toast.error('Warning: Chat deletion may not be saved to server');
+      });
   };
 
   if (!user) {
@@ -365,16 +370,21 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>Delete Thread</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              chat and remove it from our servers.
+              Are you sure you want to delete &ldquo;JavaScript Todo App
+              Tutorial&rdquo;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>
-              Continue
+            <AlertDialogCancel className="border-0 bg-transparent text-white hover:bg-gray-700/50">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-[#9d174d] hover:bg-[#9d174d]/80 text-white border-0"
+            >
+              Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -5,7 +5,7 @@ import { memo, useState } from 'react';
 import type { Vote } from '@/lib/db/schema';
 import { DocumentToolCall, DocumentToolResult } from './document';
 import { SquarePen } from 'lucide-react';
-import { PencilEditIcon, CopyIcon } from './icons';
+import { CopyIcon } from './icons';
 import { Markdown } from './markdown';
 import { MessageActions } from './message-actions';
 import { PreviewAttachment } from './preview-attachment';
@@ -408,7 +408,7 @@ export const ThinkingMessage = () => {
                 animate={{ y: [0, -3, 0] }}
                 transition={{
                   duration: 1.2,
-                  repeat: Infinity,
+                  repeat: Number.POSITIVE_INFINITY,
                   delay: 0,
                   ease: 'easeInOut',
                 }}
@@ -418,7 +418,7 @@ export const ThinkingMessage = () => {
                 animate={{ y: [0, -3, 0] }}
                 transition={{
                   duration: 1.2,
-                  repeat: Infinity,
+                  repeat: Number.POSITIVE_INFINITY,
                   delay: 0.15,
                   ease: 'easeInOut',
                 }}
@@ -428,7 +428,7 @@ export const ThinkingMessage = () => {
                 animate={{ y: [0, -3, 0] }}
                 transition={{
                   duration: 1.2,
-                  repeat: Infinity,
+                  repeat: Number.POSITIVE_INFINITY,
                   delay: 0.3,
                   ease: 'easeInOut',
                 }}

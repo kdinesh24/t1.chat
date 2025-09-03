@@ -28,7 +28,6 @@ export function CodeBlock({
 
   const codeText = useMemo(() => String(children ?? ''), [children]);
 
-  
   const isSingleLine = useMemo(() => {
     const trimmedCode = codeText.trim();
     return !trimmedCode.includes('\n') && trimmedCode.length < 100; // Single line and not too long
@@ -39,9 +38,11 @@ export function CodeBlock({
       const map: Record<string, string> = {
         golang: 'go',
         go: 'go',
-        js: 'javascript',
+        js: 'jsx',
+        javascript: 'jsx',
         jsx: 'jsx',
-        ts: 'typescript',
+        ts: 'tsx',
+        typescript: 'tsx',
         tsx: 'tsx',
         sh: 'bash',
         shell: 'bash',
@@ -49,7 +50,7 @@ export function CodeBlock({
         yml: 'yaml',
         tf: 'hcl',
       };
-      return map[lang.toLowerCase()] ?? lang;
+      return map[lang.toLowerCase()] ?? lang.toLowerCase();
     };
 
     const match = /language-[\w-]+/.exec(className || '');
@@ -59,7 +60,11 @@ export function CodeBlock({
     }
     const text = codeText.trimStart();
     if (text.startsWith('#!')) return 'bash';
-    if (/\bpackage\s+main\b/.test(text) || /\bfunc\s+main\s*\(/.test(text) || /\bfmt\./.test(text))
+    if (
+      /\bpackage\s+main\b/.test(text) ||
+      /\bfunc\s+main\s*\(/.test(text) ||
+      /\bfmt\./.test(text)
+    )
       return 'go';
     return undefined;
   }, [className, codeText]);
@@ -109,10 +114,8 @@ export function CodeBlock({
     // Inline code (single backticks)
     return (
       <code
-        className={`${
-          className || ''
-        } text-sm py-0.5 px-1 rounded-md`}
-        style={{ backgroundColor: '#273b3b' }}
+        className={`${className || ''} text-sm py-0.5 px-1 rounded-md`}
+        style={{ backgroundColor: '#2b2431' }}
         {...props}
       >
         {children}
@@ -123,13 +126,15 @@ export function CodeBlock({
   // Block code (triple backticks) — let the <pre> wrapper come from the Markdown renderer
   if (html) {
     return (
-      <div className={`relative group mb-6 mt-4 code-block-container ${isSingleLine ? 'code-block-compact' : ''}`}>
+      <div
+        className={`relative group mb-6 mt-4 code-block-container ${isSingleLine ? 'code-block-compact' : ''}`}
+      >
         {/* Header with language name */}
-        <div 
+        <div
           className={`flex items-center justify-between px-4 rounded-t-lg border-b ${isSingleLine ? 'py-1' : 'py-2'}`}
           style={{ backgroundColor: '#362d3d', borderColor: '#374141' }}
         >
-          <span className="text-xs font-medium text-zinc-300 uppercase tracking-wider">
+          <span className="text-sm font-medium font-mono text-zinc-300 tracking-wider">
             {language || 'plaintext'}
           </span>
           {!noCopyButton && (
@@ -150,11 +155,11 @@ export function CodeBlock({
         </div>
         <div
           className={`not-prose rounded-b-lg overflow-x-auto overflow-y-hidden code-scrollbar max-w-full ${noBorder ? 'bg-[#362d3d]' : 'border-l border-r border-b border-border bg-[#1a151f]'}`}
-          style={{ 
+          style={{
             overflowX: 'auto',
             overflowY: 'hidden',
             maxWidth: '100%',
-            minHeight: html ? 'auto' : '2rem'
+            minHeight: html ? 'auto' : '2rem',
           }}
           dangerouslySetInnerHTML={{ __html: html }}
         />
@@ -166,16 +171,16 @@ export function CodeBlock({
   return (
     <div className="relative group mb-6 mt-4 code-block-container">
       {/* Header with language name */}
-      <div 
+      <div
         className={`flex items-center justify-between px-4 rounded-t-lg border-b ${isSingleLine ? 'py-1' : 'py-2'}`}
         style={{ backgroundColor: '#1a151f', borderColor: '#1a151f' }}
       >
-        <span className="text-xs font-medium text-zinc-300 uppercase tracking-wider">
+        <span className="text-sm font-medium font-mono text-zinc-300 tracking-wider">
           {language || 'plaintext'}
         </span>
         {!noCopyButton && (
           <Button
-            variant="ghost" 
+            variant="ghost"
             size="sm"
             onClick={handleCopy}
             className="h-6 w-6 p-0 opacity-70 hover:opacity-100 transition-opacity"
@@ -189,16 +194,19 @@ export function CodeBlock({
           </Button>
         )}
       </div>
-      <pre 
+      <pre
         className={`text-sm w-full overflow-x-auto overflow-y-hidden code-scrollbar rounded-b-lg max-w-full ${isSingleLine ? 'px-4 py-2' : 'p-4'} ${noBorder ? 'bg-[#1a151f]' : 'border-l border-r border-b border-border bg-[#1a151f]'}`}
-        style={{ 
+        style={{
           overflowX: 'auto',
           overflowY: 'hidden',
           maxWidth: '100%',
-          minHeight: '2rem'
+          minHeight: '2rem',
         }}
       >
-        <code className={`whitespace-pre font-mono text-white ${className || ''}`} {...props}>
+        <code
+          className={`whitespace-pre font-mono text-white ${className || ''}`}
+          {...props}
+        >
           {children}
         </code>
       </pre>

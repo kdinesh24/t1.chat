@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { SidebarHistory } from '@/components/sidebar-history';
 import { SidebarUserNav } from '@/components/sidebar-user-nav';
 import { SidebarToggle } from '@/components/sidebar-toggle';
-import { Button } from '@/components/ui/button';
 import {
   Sidebar,
   SidebarContent,
@@ -53,7 +52,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                   router.push('/');
                   router.refresh();
                 }}
-                className="bg-gradient-to-b from-[#3c1126] via-[#401329]/90 to-[#3c1126] hover:bg-gradient-to-b hover:from-[#7a1941] hover:via-[#7a1941] hover:to-[#7a1941] text-[#e7b7d0] text-base font-medium py-2 rounded-[10px] transition-colors duration-200 cursor-pointer w-full h-[36px]"
+                className="bg-gradient-to-b from-[#3c1126] via-[#401329]/90 to-[#3c1126] hover:bg-gradient-to-b hover:from-[#7a1941] hover:via-[#7a1941] hover:to-[#7a1941] text-[#e7b7d0] text-sm font-medium rounded-[10px] transition-colors duration-200 cursor-pointer w-full h-[32px] flex items-center justify-center"
               >
                 New Chat
               </button>

@@ -27,6 +27,7 @@ import CornerDecoration from './corner-decoration';
 import { ThemeToggle } from './theme-toggle';
 import { SettingsButton } from './settings-button';
 import { useSidebar } from '@/components/ui/sidebar';
+import { useApiKeys } from '@/hooks/use-api-keys';
 
 export function Chat({
   id,
@@ -55,6 +56,7 @@ export function Chat({
   const { setDataStream } = useDataStream();
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
+  const { apiKeys, hasValidApiKey, getApiKey, hasApiKey } = useApiKeys();
 
   const [input, setInput] = useState<string>('');
 
@@ -75,12 +77,30 @@ export function Chat({
       api: '/api/chat',
       fetch: fetchWithErrorHandlers,
       prepareSendMessagesRequest({ messages, id, body }) {
+        // Get the API key directly
+        const apiKey = getApiKey('google');
+
+        // Check if user has API key
+        if (!apiKey || apiKey.trim().length === 0) {
+          throw new Error(
+            'API key not configured. Please add your Google API key in settings.',
+          );
+        }
+
+        // Basic validation of API key format
+        if (!apiKey.startsWith('AI') || apiKey.length <= 20) {
+          throw new Error(
+            'Invalid API key format. Please check your Google API key in settings.',
+          );
+        }
+
         return {
           body: {
             id,
             message: messages.at(-1),
             selectedChatModel: initialChatModel,
             selectedVisibilityType: visibilityType,
+            apiKey: apiKey, // Include user's API key
             ...body,
           },
         };
@@ -93,11 +113,35 @@ export function Chat({
       mutate(unstable_serialize(getChatHistoryPaginationKey));
     },
     onError: (error) => {
+      console.error('Chat error:', error);
+
       if (error instanceof ChatSDKError) {
         toast({
           type: 'error',
           description: error.message,
         });
+      } else if (error instanceof Error) {
+        // Handle specific error messages
+        if (error.message.includes('API key not configured')) {
+          toast({
+            type: 'error',
+            description:
+              'Please add your Google API key in settings to continue.',
+          });
+        } else if (error.message.includes('Invalid API key format')) {
+          toast({
+            type: 'error',
+            description:
+              'Invalid API key format. Please check your Google API key in settings.',
+          });
+        } else {
+          toast({
+            type: 'error',
+            description:
+              error.message ||
+              'An unexpected error occurred. Please try again.',
+          });
+        }
       } else {
         toast({
           type: 'error',
@@ -170,8 +214,7 @@ export function Chat({
     <div className="flex flex-col h-full max-h-screen overflow-hidden">
       <ChatHeader chatId={id} isReadonly={isReadonly} session={session} />
       <CornerDecoration />
-      <div
-        className="fixed top-3 right-3 flex gap-2 z-30">
+      <div className="fixed top-3 right-3 flex gap-2 z-30">
         <SettingsButton />
         <ThemeToggle />
       </div>
