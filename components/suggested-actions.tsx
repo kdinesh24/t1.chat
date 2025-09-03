@@ -47,7 +47,7 @@ function PureSuggestedActions({
                 parts: [{ type: 'text', text: suggestion }],
               });
             }}
-            className="text-left text-gray-400 hover:text-gray-300 transition-colors duration-200 p-2 rounded-lg"
+            className="text-left text-xs text-gray-400 hover:text-gray-300 transition-colors duration-200 p-2 rounded-lg"
             style={{
               transition: 'background-color 0.2s ease-in-out',
             }}

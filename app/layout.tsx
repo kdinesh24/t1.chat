@@ -1,6 +1,6 @@
 import { Toaster } from 'sonner';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 
 import './globals.css';
@@ -33,7 +33,7 @@ export const viewport = {
   maximumScale: 1, // Disable auto-zoom on mobile Safari
 };
 
-const geist = Geist({
+const geist = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-geist',
@@ -41,7 +41,7 @@ const geist = Geist({
   adjustFontFallback: false,
 });
 
-const geistMono = Geist_Mono({
+const geistMono = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-geist-mono',

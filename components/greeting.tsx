@@ -169,7 +169,7 @@ export const Greeting = ({
               exit={{ opacity: 0, y: 10 }}
               transition={{ delay: 0.1 * index }}
               onClick={() => handleSuggestionClick(suggestion)}
-              className="text-left transition-colors duration-200 p-2 rounded-lg disabled:opacity-50"
+              className="text-left text-sm transition-colors duration-200 p-2 rounded-lg disabled:opacity-50"
               style={{
                 color: 'hsl(270, 30%, 83%)',
                 transition: 'background-color 0.2s ease-in-out',

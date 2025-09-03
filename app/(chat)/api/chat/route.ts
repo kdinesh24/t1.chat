@@ -32,7 +32,7 @@ import {
   createResumableStreamContext,
   type ResumableStreamContext,
 } from 'resumable-stream';
-import { after } from 'next/server';
+// import { after } from 'next/server'; // Not available in this Next.js version
 import { ChatSDKError } from '@/lib/errors';
 import type { ChatMessage } from '@/lib/types';
 import type { ChatModel } from '@/lib/ai/models';
@@ -45,9 +45,11 @@ let globalStreamContext: ResumableStreamContext | null = null;
 export function getStreamContext() {
   if (!globalStreamContext) {
     try {
-      globalStreamContext = createResumableStreamContext({
-        waitUntil: after,
-      });
+      // Temporarily disable resumable streams due to Next.js compatibility issues
+      // globalStreamContext = createResumableStreamContext({
+      //   waitUntil: after, // Not available in this Next.js version
+      // });
+      globalStreamContext = null;
     } catch (error: any) {
       if (error.message.includes('REDIS_URL')) {
         // Resumable streams disabled due to missing REDIS_URL
