@@ -10,9 +10,23 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://chat.vercel.ai'),
   title: 'T1 Chat',
   description: 'Next.js chatbot template using the AI SDK.',
-  icons: {
-    icon: '/images/icon.png'
-  },
+  icons: [
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '32x32',
+      url: '/images/icon.png',
+    },
+    {
+      rel: 'icon',
+      type: 'image/x-icon',
+      url: '/favicon.ico',
+    },
+    {
+      rel: 'apple-touch-icon',
+      url: '/images/icon.png',
+    },
+  ],
 };
 
 export const viewport = {
