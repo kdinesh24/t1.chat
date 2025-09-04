@@ -50,7 +50,7 @@ function formatProfessionally(code: string, language: string): string {
     const enhancedLine = enhanceLineFormatting(trimmedLine);
     formattedLines.push(indentation + enhancedLine);
 
-    // Handle opening brackets/braces
+    
     if (shouldIncreaseIndent(trimmedLine, language)) {
       indentLevel++;
     }
