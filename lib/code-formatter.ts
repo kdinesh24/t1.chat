@@ -38,15 +38,15 @@ function formatProfessionally(code: string, language: string): string {
       continue;
     }
 
-    // Handle closing brackets/braces
+    
     if (shouldDecreaseIndent(trimmedLine)) {
       indentLevel = Math.max(0, indentLevel - 1);
     }
 
-    // Add proper indentation
+    
     const indentation = ' '.repeat(indentLevel * indentSize);
 
-    // Add professional spacing around operators and keywords
+   
     const enhancedLine = enhanceLineFormatting(trimmedLine);
     formattedLines.push(indentation + enhancedLine);
 
