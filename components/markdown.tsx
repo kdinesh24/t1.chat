@@ -10,7 +10,8 @@ const components: Partial<Components> = {
   pre: ({ children, ...props }) => {
     // Find the code block component among the children
     const codeBlock = React.Children.toArray(children).find(
-      (child: any) => child.type?.name === 'CodeBlock',
+      (child: any) =>
+        child.type === CodeBlock || child.type?.name === 'CodeBlock',
     );
 
     if (codeBlock) {
@@ -107,7 +108,10 @@ const components: Partial<Components> = {
     );
   },
   table: ({ children, ...props }) => (
-    <div className="my-6 overflow-x-auto rounded-lg" style={{ backgroundColor: '#1a2929' }}>
+    <div
+      className="my-6 overflow-x-auto rounded-lg"
+      style={{ backgroundColor: '#1a2929' }}
+    >
       <table className="min-w-full" {...props}>
         {children}
       </table>
@@ -119,12 +123,26 @@ const components: Partial<Components> = {
     </thead>
   ),
   th: ({ children, ...props }) => (
-    <th className="px-6 py-3 text-left text-xs font-medium text-zinc-300 uppercase tracking-wider" style={{ backgroundColor: '#273b3b' }} {...props}>
+    <th
+      className="px-6 py-3 text-left text-xs font-medium text-zinc-300 uppercase tracking-wider"
+      style={{ backgroundColor: '#273b3b' }}
+      {...props}
+    >
       {children}
     </th>
   ),
   tbody: ({ children, ...props }) => (
-    <tbody className="divide-y" style={{ backgroundColor: '#1a2929', '--tw-divide-opacity': '1', '--tw-divide-color': '#273b3b' } as React.CSSProperties} {...props}>
+    <tbody
+      className="divide-y"
+      style={
+        {
+          backgroundColor: '#1a2929',
+          '--tw-divide-opacity': '1',
+          '--tw-divide-color': '#273b3b',
+        } as React.CSSProperties
+      }
+      {...props}
+    >
       {children}
     </tbody>
   ),
@@ -134,7 +152,11 @@ const components: Partial<Components> = {
     </tr>
   ),
   td: ({ children, ...props }) => (
-    <td className="px-6 py-4 whitespace-nowrap text-sm text-zinc-100" style={{ backgroundColor: '#1a2929' }} {...props}>
+    <td
+      className="px-6 py-4 whitespace-nowrap text-sm text-zinc-100"
+      style={{ backgroundColor: '#1a2929' }}
+      {...props}
+    >
       {children}
     </td>
   ),

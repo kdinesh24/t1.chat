@@ -28,9 +28,8 @@ import { createProviderWithApiKey } from '@/lib/ai/providers';
 import { entitlementsByUserType } from '@/lib/ai/entitlements';
 import { postRequestBodySchema, type PostRequestBody } from './schema';
 import { geolocation } from '@vercel/functions';
-import {
-  createResumableStreamContext,
-  type ResumableStreamContext,
+import type {
+  ResumableStreamContext,
 } from 'resumable-stream';
 // import { after } from 'next/server'; // Not available in this Next.js version
 import { ChatSDKError } from '@/lib/errors';

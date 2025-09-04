@@ -3,18 +3,40 @@ import { CreateIcon, ExploreIcon, CodeIcon, LearnIcon } from './icons';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import type { VisibilityType } from './visibility-selector';
 import type { ChatMessage } from '@/lib/types';
+import type { Session } from 'next-auth';
 
 interface GreetingProps {
   chatId?: string;
   sendMessage?: UseChatHelpers<ChatMessage>['sendMessage'];
   selectedVisibilityType?: VisibilityType;
+  session?: Session;
 }
 
 export const Greeting = ({
   chatId,
   sendMessage,
   selectedVisibilityType,
+  session,
 }: GreetingProps) => {
+  const getUserDisplayName = () => {
+    if (!session?.user) return 'there';
+
+    // Check if it's a guest user
+    if (session.user.type === 'guest') {
+      return 'there';
+    }
+
+    // For regular users, try to extract name from email
+    if (session.user.email) {
+      const emailPart = session.user.email.split('@')[0];
+      // Capitalize first letter and handle common email patterns
+      const name = emailPart.charAt(0).toUpperCase() + emailPart.slice(1);
+      return name;
+    }
+
+    return 'there';
+  };
+
   const handleSuggestionClick = async (suggestion: string) => {
     if (!chatId || !sendMessage) {
       console.warn('Missing required props for suggestion click');
@@ -51,7 +73,7 @@ export const Greeting = ({
         transition={{ delay: 0.5 }}
         className="text-3xl font-semibold text-left mb-8 ml-8"
       >
-        How can I help you, Dinesh?
+        How can I help you, {getUserDisplayName()}?
       </motion.div>
 
       {/* Icon buttons */}

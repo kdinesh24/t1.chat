@@ -61,6 +61,7 @@ function PureMessages({
           chatId={chatId}
           sendMessage={sendMessage}
           selectedVisibilityType={selectedVisibilityType}
+          session={session}
         />
       )}
 

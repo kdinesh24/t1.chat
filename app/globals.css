@@ -327,7 +327,7 @@
 
 .shiki .line {
     padding: 0 1rem;
-    white-space: nowrap;
+    white-space: pre;
 }
 
 .shiki .line-number {
@@ -337,12 +337,14 @@
     margin-right: 0.75rem;
 }
 
-/* Ensure code blocks have proper spacing */
+/* Ensure code blocks have proper spacing and indentation */
 pre.shiki {
     margin: 1rem 0;
     padding: 1rem 0;
     overflow-x: auto !important;
     overflow-y: hidden !important;
+    white-space: pre !important;
+    tab-size: 2 !important;
 }
 
 /* Compact padding for single-line code blocks */
@@ -353,6 +355,12 @@ pre.shiki {
 .code-block-compact .shiki .line {
     padding: 0 1rem;
     line-height: 1.3;
+}
+
+/* Ensure all pre and code elements preserve whitespace and indentation */
+pre code {
+    white-space: pre !important;
+    tab-size: 2 !important;
 }
 
 

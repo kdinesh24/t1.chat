@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { getShikiHighlighter, resolvePreferredShikiTheme } from '@/lib/shiki';
+import { useTheme } from 'next-themes';
+import { highlightAndFormatCode, getShikiHighlighter } from '@/lib/shiki';
 import { Copy, Check } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -25,6 +26,8 @@ export function CodeBlock({
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const [html, setHtml] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
+  const { theme } = useTheme();
 
   const codeText = useMemo(() => String(children ?? ''), [children]);
 
@@ -32,6 +35,22 @@ export function CodeBlock({
     const trimmedCode = codeText.trim();
     return !trimmedCode.includes('\n') && trimmedCode.length < 100; // Single line and not too long
   }, [codeText]);
+
+  // Handle client-side mounting
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Resolve theme for Shiki with proper SSR handling
+  const shikiTheme = useMemo(() => {
+    // For SSR consistency, always start with dark theme
+    if (typeof window === 'undefined') return 'superchat-dark';
+
+    // On client, respect user theme preference
+    if (!isClient) return 'superchat-dark';
+
+    return theme === 'light' ? 'github-light' : 'superchat-dark';
+  }, [theme, isClient]);
 
   const language = useMemo(() => {
     const alias = (lang: string) => {
@@ -77,31 +96,35 @@ export function CodeBlock({
     return !hasLanguage && isSingleLine;
   }, [inline, codeText, language]);
 
+  // Apply Shiki highlighting - optimized for SSR
   useEffect(() => {
     let isMounted = true;
+
     async function highlight() {
       if (treatAsInline) return;
+
       try {
-        const highlighter = await getShikiHighlighter();
-        const theme = resolvePreferredShikiTheme();
-        const code = codeText;
-        const lang = language || 'plaintext';
-        const result = highlighter.codeToHtml(code, { lang, theme });
+        // Start highlighting immediately, even on server
+        const result = await highlightAndFormatCode(
+          codeText,
+          language || 'text',
+          shikiTheme,
+        );
+
         if (isMounted) {
-          // Use requestAnimationFrame to prevent flickering during updates
-          requestAnimationFrame(() => {
-            if (isMounted) setHtml(result);
-          });
+          setHtml(result);
         }
-      } catch {
+      } catch (error) {
+        console.warn('Shiki highlighting with formatting failed:', error);
         if (isMounted) setHtml(null);
       }
     }
+
     highlight();
     return () => {
       isMounted = false;
     };
-  }, [codeText, treatAsInline, language]);
+  }, [codeText, treatAsInline, language, shikiTheme]);
 
   const handleCopy = async () => {
     const text = String(children ?? '');
@@ -123,7 +146,7 @@ export function CodeBlock({
     );
   }
 
-  // Block code (triple backticks) — let the <pre> wrapper come from the Markdown renderer
+  // Block code (triple backticks) with Shiki highlighting
   if (html) {
     return (
       <div
@@ -167,13 +190,13 @@ export function CodeBlock({
     );
   }
 
-  // Fallback SSR: unhighlighted block code
+  // Fallback: loading state while Shiki processes
   return (
     <div className="relative group mb-6 mt-4 code-block-container">
       {/* Header with language name */}
       <div
         className={`flex items-center justify-between px-4 rounded-t-lg border-b ${isSingleLine ? 'py-1' : 'py-2'}`}
-        style={{ backgroundColor: '#1a151f', borderColor: '#1a151f' }}
+        style={{ backgroundColor: '#362d3d', borderColor: '#374141' }}
       >
         <span className="text-sm font-medium font-mono text-zinc-300 tracking-wider">
           {language || 'plaintext'}
