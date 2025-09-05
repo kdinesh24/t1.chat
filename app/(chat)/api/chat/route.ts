@@ -28,9 +28,7 @@ import { createProviderWithApiKey } from '@/lib/ai/providers';
 import { entitlementsByUserType } from '@/lib/ai/entitlements';
 import { postRequestBodySchema, type PostRequestBody } from './schema';
 import { geolocation } from '@vercel/functions';
-import type {
-  ResumableStreamContext,
-} from 'resumable-stream';
+import type { ResumableStreamContext } from 'resumable-stream';
 // import { after } from 'next/server'; // Not available in this Next.js version
 import { ChatSDKError } from '@/lib/errors';
 import type { ChatMessage } from '@/lib/types';
@@ -410,19 +408,16 @@ export async function DELETE(request: Request) {
     return new ChatSDKError('forbidden:chat').toResponse();
   }
 
-  // Return immediately for better UX, then delete in background
-  // Fire-and-forget deletion
-  deleteChatById({ id })
-    .then(() => {
-      // Background deletion completed
-    })
-    .catch((error) => {
-      // Background deletion failed
-    });
+  try {
+    // Perform synchronous deletion to ensure it completes before returning
+    await deleteChatById({ id });
 
-  // Return success immediately
-  return Response.json(
-    { id, message: 'Chat deletion initiated' },
-    { status: 200 },
-  );
+    return Response.json(
+      { id, message: 'Chat deleted successfully' },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error('Failed to delete chat:', error);
+    return Response.json({ error: 'Failed to delete chat' }, { status: 500 });
+  }
 }

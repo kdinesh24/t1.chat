@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'next-themes';
-import { highlightAndFormatCode, getShikiHighlighter } from '@/lib/shiki';
+import { highlightAndFormatCode, } from '@/lib/shiki';
 import { Copy, Check } from 'lucide-react';
 import { Button } from './ui/button';
 

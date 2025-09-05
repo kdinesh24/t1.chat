@@ -125,55 +125,48 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
   const handleDelete = async () => {
     const shouldRedirect = deleteId === id;
 
-    // IMMEDIATE FRONTEND UPDATES - happens first, synchronously
-
-    // 1. Remove from frontend immediately (optimistic update)
-    mutate(
-      (chatHistories) => {
-        if (chatHistories) {
-          return chatHistories.map((chatHistory) => ({
-            ...chatHistory,
-            chats: chatHistory.chats.filter((chat) => chat.id !== deleteId),
-          }));
-        }
-      },
-      { revalidate: false },
-    ); // Don't revalidate, we want immediate update
-
-    // 2. Clear SWR cache immediately
-    globalMutate(`/api/vote?chatId=${deleteId}`, undefined, {
-      revalidate: false,
-    });
-
-    // 3. Redirect immediately if deleting current chat
-    if (shouldRedirect) {
-      window.location.href = '/';
-    }
-
-    // 4. Close dialog immediately
+    // Show immediate feedback
+    toast.success('Deleting chat...');
     setShowDeleteDialog(false);
 
-    // 5. Show immediate success toast
-    toast.success('Chat deleted successfully');
-
-    // BACKGROUND DELETION - happens asynchronously, user doesn't wait
-
-    // Delete from database in the background
-    fetch(`/api/chat?id=${deleteId}`, {
-      method: 'DELETE',
-    })
-      .then((response) => {
-        if (!response.ok) {
-          // If backend deletion fails, show error but don't revert UI
-          // (chat is already removed from frontend)
-          toast.error('Warning: Chat may not be fully deleted from server');
-          return;
-        }
-      })
-      .catch((error) => {
-        // If network error, show warning but don't revert UI
-        toast.error('Warning: Chat deletion may not be saved to server');
+    try {
+      // Perform actual deletion first
+      const response = await fetch(`/api/chat?id=${deleteId}`, {
+        method: 'DELETE',
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete chat');
+      }
+
+      // Only update frontend after successful backend deletion
+      mutate(
+        (chatHistories) => {
+          if (chatHistories) {
+            return chatHistories.map((chatHistory) => ({
+              ...chatHistory,
+              chats: chatHistory.chats.filter((chat) => chat.id !== deleteId),
+            }));
+          }
+        },
+        { revalidate: false },
+      );
+
+      // Clear SWR cache
+      globalMutate(`/api/vote?chatId=${deleteId}`, undefined, {
+        revalidate: false,
+      });
+
+      // Redirect if deleting current chat
+      if (shouldRedirect) {
+        window.location.href = '/';
+      }
+
+      toast.success('Chat deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete chat:', error);
+      toast.error('Failed to delete chat. Please try again.');
+    }
   };
 
   if (!user) {
