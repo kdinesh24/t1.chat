@@ -252,26 +252,27 @@ export async function POST(request: Request) {
             }),
             messages: convertToModelMessages(uiMessages),
             stopWhen: stepCountIs(5),
-            experimental_activeTools:
+            experimental_activeTools: [],
+            experimental_transform: smoothStream({ chunking: 'word' }),
+            tools:
               selectedChatModel === 'chat-model-reasoning' ||
               selectedChatModel === 'gemini-2.0-flash-reasoning'
-                ? []
-                : [
-                    'getWeather',
-                    'createDocument',
-                    'updateDocument',
-                    'requestSuggestions',
-                  ],
-            experimental_transform: smoothStream({ chunking: 'word' }),
-            tools: {
-              getWeather,
-              createDocument: createDocument({ session, dataStream }),
-              updateDocument: updateDocument({ session, dataStream }),
-              requestSuggestions: requestSuggestions({
-                session,
-                dataStream,
-              }),
-            },
+                ? {
+                    getWeather,
+                    requestSuggestions: requestSuggestions({
+                      session,
+                      dataStream,
+                    }),
+                  }
+                : {
+                    getWeather,
+                    createDocument: createDocument({ session, dataStream }),
+                    updateDocument: updateDocument({ session, dataStream }),
+                    requestSuggestions: requestSuggestions({
+                      session,
+                      dataStream,
+                    }),
+                  },
             experimental_telemetry: {
               isEnabled: isProductionEnvironment,
               functionId: 'stream-text',
