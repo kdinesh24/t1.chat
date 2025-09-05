@@ -64,15 +64,9 @@ export function SidebarUserNav({ user }: { user: User }) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               {status === 'loading' ? (
-                <SidebarMenuButton
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-12 justify-between hover:bg-white/50 rounded-lg"
-                  style={{ backgroundColor: '#1a2929' }}
-                >
+                <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-12 justify-between hover:bg-white/50 rounded-lg bg-[#ecd4ee] dark:bg-[#1a2929]">
                   <div className="flex flex-row gap-3 items-center">
-                    <div
-                      className="size-8 rounded-full animate-pulse"
-                      style={{ backgroundColor: '#1a2929' }}
-                    />
+                    <div className="size-8 rounded-full animate-pulse bg-[#ecd4ee] dark:bg-[#1a2929]" />
                     <div className="flex flex-col">
                       <span className="bg-background text-transparent rounded-md animate-pulse text-sm font-medium">
                         Loading...
@@ -89,8 +83,7 @@ export function SidebarUserNav({ user }: { user: User }) {
               ) : (
                 <SidebarMenuButton
                   data-testid="user-nav-button"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-12 hover:bg-white/50 rounded-lg"
-                  style={{ backgroundColor: '#1a2929' }}
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-12 hover:bg-white/50 rounded-lg bg-[#ecd4ee] dark:bg-[#1a2929]"
                 >
                   <div className="flex flex-row gap-3 items-center">
                     <Image
@@ -103,7 +96,7 @@ export function SidebarUserNav({ user }: { user: User }) {
                     <div className="flex flex-col text-left">
                       <span
                         data-testid="user-name"
-                        className="truncate text-sm font-medium text-white"
+                        className="truncate text-sm font-semibold text-[#602b62] dark:text-white"
                       >
                         {getUserName(user?.email)}
                       </span>

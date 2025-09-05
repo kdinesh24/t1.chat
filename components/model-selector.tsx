@@ -72,10 +72,11 @@ export function ModelSelector({
           data-testid="model-selector"
           variant="ghost"
           className={cn(
-            'md:px-2 md:h-[34px] hover:bg-[#332c38] border-none',
-            hasApiKey ? 'text-[#e0cad7]' : 'text-[#786e81]',
+            'md:px-2 md:h-[34px] bg-[#faf5fa] dark:bg-[#2a232f] hover:bg-[#f5edf6] dark:hover:bg-[#332c38] border-none',
+            hasApiKey
+              ? 'text-[#ac1668] dark:text-[#e0cad7]'
+              : 'text-[#ac1668]/60 dark:text-[#786e81]',
           )}
-          style={{ backgroundColor: '#2a232f' }}
           disabled={isButtonDisabled}
         >
           {buttonText}
@@ -84,7 +85,7 @@ export function ModelSelector({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="min-w-[300px] bg-[#0e080d]/80 backdrop-blur-sm border-[#1e1922] text-[#e0cad7]"
+        className="min-w-[300px] model-selector-content backdrop-blur-sm"
       >
         {hasApiKey ? (
           availableChatModels.map((chatModel) => {
@@ -103,6 +104,7 @@ export function ModelSelector({
                   });
                 }}
                 data-active={id === optimisticModelId}
+                className="model-selector-item"
                 asChild
               >
                 <button
@@ -113,7 +115,7 @@ export function ModelSelector({
                     <span>{chatModel.name}</span>
                   </div>
 
-                  <div className="text-foreground dark:text-foreground opacity-0 group-data-[active=true]/item:opacity-100">
+                  <div className="model-selector-tick opacity-0 group-data-[active=true]/item:opacity-100">
                     <CheckCircleFillIcon />
                   </div>
                 </button>
@@ -121,8 +123,8 @@ export function ModelSelector({
             );
           })
         ) : (
-          <DropdownMenuItem disabled>
-            <div className="text-zinc-400 p-2 text-center w-full">
+          <DropdownMenuItem disabled className="model-selector-item">
+            <div className="model-selector-item p-2 text-center w-full opacity-60">
               Please add your Google API key in settings to use the models
             </div>
           </DropdownMenuItem>

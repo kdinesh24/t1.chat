@@ -239,7 +239,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                   <div className="flex flex-col gap-6">
                     {groupedChats.today.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-xs text-[#c46da0]">
+                        <div className="px-2 py-1 text-xs text-[#652440] dark:text-[#c46da0] font-semibold">
                           Today
                         </div>
                         {groupedChats.today.map((chat) => (
@@ -259,7 +259,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
                     {groupedChats.yesterday.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-xs text-[#c46da0]">
+                        <div className="px-2 py-1 text-xs text-[#652440] dark:text-[#c46da0] font-semibold">
                           Yesterday
                         </div>
                         {groupedChats.yesterday.map((chat) => (
@@ -279,7 +279,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
                     {groupedChats.lastWeek.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-xs text-[#c46da0]">
+                        <div className="px-2 py-1 text-xs text-[#652440] dark:text-[#c46da0] font-semibold">
                           Last 7 days
                         </div>
                         {groupedChats.lastWeek.map((chat) => (
@@ -299,7 +299,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
                     {groupedChats.lastMonth.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-xs text-[#c46da0]">
+                        <div className="px-2 py-1 text-xs text-[#652440] dark:text-[#c46da0] font-semibold">
                           Last 30 days
                         </div>
                         {groupedChats.lastMonth.map((chat) => (

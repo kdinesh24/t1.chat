@@ -123,15 +123,10 @@ const PurePreviewMessage = ({
                         className={cn(
                           'flex flex-col gap-4 min-w-0 overflow-x-auto',
                           {
-                            'text-white px-3 py-4 rounded-xl':
+                            'text-white px-3 py-4 rounded-xl user-message-bg':
                               message.role === 'user',
                           },
                         )}
-                        style={
-                          message.role === 'user'
-                            ? { backgroundColor: '#2b2431' }
-                            : undefined
-                        }
                       >
                         <Markdown>{sanitizeText(part.text)}</Markdown>
                       </div>
@@ -402,9 +397,9 @@ export const ThinkingMessage = () => {
       >
         <div className="flex flex-col gap-2 w-full">
           <div className="flex flex-col gap-4 text-muted-foreground">
-            <div className="flex items-center gap-1 py-2">
+            <div className="flex items-center gap-2 py-2">
               <motion.div
-                className="w-2 h-2 bg-current rounded-full"
+                className="w-2 h-2 thinking-dot rounded-full"
                 animate={{ y: [0, -3, 0] }}
                 transition={{
                   duration: 1.2,
@@ -414,7 +409,7 @@ export const ThinkingMessage = () => {
                 }}
               />
               <motion.div
-                className="w-2 h-2 bg-current rounded-full"
+                className="w-2 h-2 thinking-dot rounded-full"
                 animate={{ y: [0, -3, 0] }}
                 transition={{
                   duration: 1.2,
@@ -424,7 +419,7 @@ export const ThinkingMessage = () => {
                 }}
               />
               <motion.div
-                className="w-2 h-2 bg-current rounded-full"
+                className="w-2 h-2 thinking-dot rounded-full"
                 animate={{ y: [0, -3, 0] }}
                 transition={{
                   duration: 1.2,

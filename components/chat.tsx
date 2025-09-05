@@ -214,11 +214,23 @@ export function Chat({
     <div className="flex flex-col h-full max-h-screen overflow-hidden">
       <ChatHeader chatId={id} isReadonly={isReadonly} session={session} />
       <CornerDecoration />
-      <div className="fixed top-3 right-3 flex gap-2 z-30">
-        <SettingsButton />
-        <ThemeToggle />
-      </div>
-      <div className="flex flex-col min-w-0 flex-1 text-foreground border-t border-l border-[#322028] rounded-xl relative overflow-hidden">
+      {isCollapsed ? (
+        <div
+          className="fixed top-3 right-3 z-30 flex gap-1 rounded-md p-1"
+          style={{
+            backgroundColor: 'var(--floating-container-bg)',
+          }}
+        >
+          <SettingsButton />
+          <ThemeToggle />
+        </div>
+      ) : (
+        <div className="fixed top-3 right-3 flex gap-2 z-30">
+          <SettingsButton />
+          <ThemeToggle />
+        </div>
+      )}
+      <div className="flex flex-col min-w-0 flex-1 text-foreground border-t border-l border-[#efbdeb] dark:border-[#322028] relative overflow-hidden">
         <Messages
           chatId={id}
           status={status}
@@ -234,7 +246,7 @@ export function Chat({
           selectedModelId={initialChatModel}
         />
 
-        <div className="flex mx-auto px-4 gap-2 w-full md:max-w-3xl bg-background shrink-0 border-t border-[#322028]/20">
+        <div className="flex mx-auto px-4 gap-2 w-full md:max-w-3xl bg-background shrink-0 border-t border-[#efbdeb]/20 dark:border-[#322028]/20">
           {!isReadonly && (
             <MultimodalInput
               chatId={id}

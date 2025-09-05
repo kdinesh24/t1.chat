@@ -57,10 +57,10 @@ export function ApiKeys() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">API Keys</h1>
+        <h1 className="text-2xl font-bold settings-text-primary">API Keys</h1>
       </div>
 
-      <p className="text-zinc-400 text-sm">
+      <p className="settings-text-secondary text-sm">
         Use your own API keys to bypass premium credit limits. Keys are stored
         locally in your browser and are never synced.
       </p>
@@ -69,25 +69,27 @@ export function ApiKeys() {
         {/* Google API Key Section */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-white rounded-full" />
-            <h3 className="text-white font-medium">Google API Key</h3>
+            <div className="w-2 h-2 api-key-bullet rounded-full" />
+            <h3 className="settings-text-primary font-medium">
+              Google API Key
+            </h3>
           </div>
 
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm settings-text-secondary">
             Used for the following models:
           </p>
 
           <div className="flex flex-wrap gap-2 mb-4">
-            <span className="px-3 py-1 bg-[#322028] rounded-full text-xs text-zinc-300">
+            <span className="px-3 py-1 api-key-badge rounded-full text-xs">
               Gemini 2.0 Flash
             </span>
-            <span className="px-3 py-1 bg-[#322028] rounded-full text-xs text-zinc-300">
+            <span className="px-3 py-1 api-key-badge rounded-full text-xs">
               Gemini 2.5 Pro
             </span>
-            <span className="px-3 py-1 bg-[#322028] rounded-full text-xs text-zinc-300">
+            <span className="px-3 py-1 api-key-badge rounded-full text-xs">
               Gemini 1.5 Flash
             </span>
-            <span className="px-3 py-1 bg-[#322028] rounded-full text-xs text-zinc-300">
+            <span className="px-3 py-1 api-key-badge rounded-full text-xs">
               Gemini 2.0 Flash (Reasoning)
             </span>
           </div>
@@ -98,17 +100,17 @@ export function ApiKeys() {
               placeholder="AIza..."
               value={localKeys.google}
               onChange={(e) => handleInputChange('google', e.target.value)}
-              className="bg-[#322028] border-[#4a404d] text-white placeholder:text-zinc-500 focus:border-[#6b5b73]"
+              className="api-key-input"
             />
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-sm text-zinc-400">
+              <div className="flex items-center gap-2 text-sm settings-text-secondary">
                 <span>Get your API key from</span>
                 <a
                   href="https://aistudio.google.com/app/apikey"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                  className="api-key-link flex items-center gap-1"
                 >
                   Google AI Studio
                   <ExternalLink size={12} />
@@ -117,10 +119,7 @@ export function ApiKeys() {
 
               <div className="flex items-center gap-3">
                 {showSuccessMessage && (
-                  <div
-                    className="flex items-center gap-2 text-sm"
-                    style={{ color: '#a4044c' }}
-                  >
+                  <div className="flex items-center gap-2 text-sm api-key-success">
                     <CheckCircle size={16} />
                     <span>API key configured successfully</span>
                   </div>
@@ -130,7 +129,7 @@ export function ApiKeys() {
                   <Button
                     onClick={() => handleSave('google')}
                     disabled={saving === 'google'}
-                    className="bg-[#af1f6e] hover:bg-[#8f1a5a] text-white px-6"
+                    className="api-key-save-button px-6"
                   >
                     {saving === 'google' ? 'Saving...' : 'Save'}
                   </Button>

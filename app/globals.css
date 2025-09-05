@@ -137,24 +137,120 @@
         backface-visibility: hidden;
         transform: translateZ(0);
     }
+
+    /* Light mode scrollbar styling for code blocks - only apply when NOT in dark mode */
+    :not(.dark) .code-block-content .code-scrollbar:hover::-webkit-scrollbar-track,
+    :not(.dark) .code-block-content .code-scrollbar:hover pre::-webkit-scrollbar-track,
+    :not(.dark) .code-block-content .shiki:hover::-webkit-scrollbar-track,
+    :not(.dark) .code-block-content .shiki:hover pre::-webkit-scrollbar-track,
+    :not(.dark) .code-block-container:hover .code-block-content .code-scrollbar::-webkit-scrollbar-track,
+    :not(.dark) .code-block-container:hover .code-block-content .code-scrollbar pre::-webkit-scrollbar-track,
+    :not(.dark) .code-block-container:hover .code-block-content .shiki::-webkit-scrollbar-track,
+    :not(.dark) .code-block-container:hover .code-block-content .shiki pre::-webkit-scrollbar-track {
+        background: #f5ecf9 !important;
+    }
+
+    /* Light mode scrollbar thumb styling */
+    :not(.dark) .code-block-content .code-scrollbar:hover::-webkit-scrollbar-thumb,
+    :not(.dark) .code-block-content .code-scrollbar:hover pre::-webkit-scrollbar-thumb,
+    :not(.dark) .code-block-content .shiki:hover::-webkit-scrollbar-thumb,
+    :not(.dark) .code-block-content .shiki:hover pre::-webkit-scrollbar-thumb,
+    :not(.dark) .code-block-container:hover .code-block-content .code-scrollbar::-webkit-scrollbar-thumb,
+    :not(.dark) .code-block-container:hover .code-block-content .code-scrollbar pre::-webkit-scrollbar-thumb,
+    :not(.dark) .code-block-container:hover .code-block-content .shiki::-webkit-scrollbar-thumb,
+    :not(.dark) .code-block-container:hover .code-block-content .shiki pre::-webkit-scrollbar-thumb {
+        background-color: #e8c7e8 !important;
+    }
+
+    /* Light mode scrollbar thumb hover */
+    :not(.dark) .code-block-content .code-scrollbar:hover::-webkit-scrollbar-thumb:hover,
+    :not(.dark) .code-block-content .code-scrollbar:hover pre::-webkit-scrollbar-thumb:hover,
+    :not(.dark) .code-block-content .shiki:hover::-webkit-scrollbar-thumb:hover,
+    :not(.dark) .code-block-content .shiki:hover pre::-webkit-scrollbar-thumb:hover,
+    :not(.dark) .code-block-container:hover .code-block-content .code-scrollbar::-webkit-scrollbar-thumb:hover,
+    :not(.dark) .code-block-container:hover .code-block-content .code-scrollbar pre::-webkit-scrollbar-thumb:hover,
+    :not(.dark) .code-block-container:hover .code-block-content .shiki::-webkit-scrollbar-thumb:hover,
+    :not(.dark) .code-block-container:hover .code-block-content .shiki pre::-webkit-scrollbar-thumb:hover {
+        background-color: #d4a5d4 !important;
+    }
+
+    /* Firefox scrollbar for light mode */
+    :not(.dark) .code-block-content .code-scrollbar:hover,
+    :not(.dark) .code-block-content .code-scrollbar:hover pre,
+    :not(.dark) .code-block-content .shiki:hover,
+    :not(.dark) .code-block-content .shiki:hover pre,
+    :not(.dark) .code-block-container:hover .code-block-content .code-scrollbar,
+    :not(.dark) .code-block-container:hover .code-block-content .code-scrollbar pre,
+    :not(.dark) .code-block-container:hover .code-block-content .shiki,
+    :not(.dark) .code-block-container:hover .code-block-content .shiki pre {
+        scrollbar-color: #e8c7e8 #f5ecf9 !important;
+    }
+
+    /* Dark mode scrollbar styling - explicit overrides */
+    .dark .code-block-content .code-scrollbar:hover::-webkit-scrollbar-track,
+    .dark .code-block-content .code-scrollbar:hover pre::-webkit-scrollbar-track,
+    .dark .code-block-content .shiki:hover::-webkit-scrollbar-track,
+    .dark .code-block-content .shiki:hover pre::-webkit-scrollbar-track,
+    .dark .code-block-container:hover .code-block-content .code-scrollbar::-webkit-scrollbar-track,
+    .dark .code-block-container:hover .code-block-content .code-scrollbar pre::-webkit-scrollbar-track,
+    .dark .code-block-container:hover .code-block-content .shiki::-webkit-scrollbar-track,
+    .dark .code-block-container:hover .code-block-content .shiki pre::-webkit-scrollbar-track {
+        background: #2d3748 !important;
+    }
+
+    /* Dark mode scrollbar thumb styling */
+    .dark .code-block-content .code-scrollbar:hover::-webkit-scrollbar-thumb,
+    .dark .code-block-content .code-scrollbar:hover pre::-webkit-scrollbar-thumb,
+    .dark .code-block-content .shiki:hover::-webkit-scrollbar-thumb,
+    .dark .code-block-content .shiki:hover pre::-webkit-scrollbar-thumb,
+    .dark .code-block-container:hover .code-block-content .code-scrollbar::-webkit-scrollbar-thumb,
+    .dark .code-block-container:hover .code-block-content .code-scrollbar pre::-webkit-scrollbar-thumb,
+    .dark .code-block-container:hover .code-block-content .shiki::-webkit-scrollbar-thumb,
+    .dark .code-block-container:hover .code-block-content .shiki pre::-webkit-scrollbar-thumb {
+        background-color: #71717a !important;
+    }
+
+    /* Dark mode scrollbar thumb hover */
+    .dark .code-block-content .code-scrollbar:hover::-webkit-scrollbar-thumb:hover,
+    .dark .code-block-content .code-scrollbar:hover pre::-webkit-scrollbar-thumb:hover,
+    .dark .code-block-content .shiki:hover::-webkit-scrollbar-thumb:hover,
+    .dark .code-block-content .shiki:hover pre::-webkit-scrollbar-thumb:hover,
+    .dark .code-block-container:hover .code-block-content .code-scrollbar::-webkit-scrollbar-thumb:hover,
+    .dark .code-block-container:hover .code-block-content .code-scrollbar pre::-webkit-scrollbar-thumb:hover,
+    .dark .code-block-container:hover .code-block-content .shiki::-webkit-scrollbar-thumb:hover,
+    .dark .code-block-container:hover .code-block-content .shiki pre::-webkit-scrollbar-thumb:hover {
+        background-color: #9ca3af !important;
+    }
+
+    /* Firefox scrollbar for dark mode */
+    .dark .code-block-content .code-scrollbar:hover,
+    .dark .code-block-content .code-scrollbar:hover pre,
+    .dark .code-block-content .shiki:hover,
+    .dark .code-block-content .shiki:hover pre,
+    .dark .code-block-container:hover .code-block-content .code-scrollbar,
+    .dark .code-block-container:hover .code-block-content .code-scrollbar pre,
+    .dark .code-block-container:hover .code-block-content .shiki,
+    .dark .code-block-container:hover .code-block-content .shiki pre {
+        scrollbar-color: #71717a #2d3748 !important;
+    }
 }
 
 @layer base {
     :root {
         --background: 0 0% 100%;
-        --foreground: 240 10% 3.9%;
+        --foreground: 277 37% 29%;
         --card: 0 0% 98%;
-        --card-foreground: 240 10% 3.9%;
+        --card-foreground: 277 37% 29%;
         --popover: 0 0% 98%;
-        --popover-foreground: 240 10% 3.9%;
+        --popover-foreground: 277 37% 29%;
         --primary: 240 5.9% 10%;
         --primary-foreground: 0 0% 98%;
         --secondary: 240 4.8% 95.9%;
-        --secondary-foreground: 240 5.9% 10%;
+        --secondary-foreground: 277 37% 29%;
         --muted: 240 4.8% 95.9%;
         --muted-foreground: 240 3.8% 46.1%;
         --accent: 240 4.8% 95.9%;
-        --accent-foreground: 240 5.9% 10%;
+        --accent-foreground: 277 37% 29%;
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 0 0% 98%;
         --border: 240 5.9% 90%;
@@ -166,7 +262,7 @@
         --chart-4: 43 74% 66%;
         --chart-5: 27 87% 67%;
         --radius: 0.5rem;
-        --sidebar-background: 0 0% 98%;
+        --sidebar-background: 316 36% 94%;
         --sidebar-foreground: 240 5.3% 26.1%;
         --sidebar-primary: 240 5.9% 10%;
         --sidebar-primary-foreground: 0 0% 98%;
@@ -174,6 +270,8 @@
         --sidebar-accent-foreground: 240 5.9% 10%;
         --sidebar-border: 240 5.9% 90%;
         --sidebar-ring: 217.2 91.2% 59.8%;
+        --corner-fill-color: #f1e4f3;
+        --corner-border-color: #efbdeb;
     }
 
     .dark {
@@ -226,6 +324,8 @@
         --sidebar-border: 262 15% 20%;
         /* Sidebar borders */
         --sidebar-ring: 0 0% 59.8%;
+        --corner-fill-color: #1a1419;
+        --corner-border-color: #322028;
     }
 }
 
@@ -472,12 +572,25 @@ pre code {
     background: #7d1f45 !important;
 }
 
-/* Sidebar Gradient Background */
+/* Sidebar Background - Light Mode */
 .sidebar-gradient {
+    background: linear-gradient(to bottom, #f1e4f3 0%, #ecd4ee 100%) !important;
+}
+
+[data-sidebar="sidebar"] {
+    background: linear-gradient(to bottom, #f1e4f3 0%, #ecd4ee 100%) !important;
+}
+
+.bg-sidebar {
+    background: linear-gradient(to bottom, #f1e4f3 0%, #ecd4ee 100%) !important;
+}
+
+/* Sidebar Gradient Background - Dark Mode */
+.dark .sidebar-gradient {
     background: linear-gradient(to top, #0d070c 0%, #1b1219 100%) !important;
 }
 
-/* Apply gradient to all sidebar elements */
+/* Apply gradient to all sidebar elements in dark mode */
 .dark [data-sidebar="sidebar"] {
     background: linear-gradient(to top, #0d070c 0%, #1b1219 100%) !important;
 }
@@ -564,5 +677,578 @@ pre code {
 
 .custom-gradient:hover {
   background-image: linear-gradient(180deg, rgba(122,25,65,1), rgba(122,25,65,1)); /* hover state */
+}
+
+/* Suggested Actions Styling */
+:root {
+  --separator-color: #f4dcf4;
+}
+
+.dark {
+  --separator-color: #2a232f;
+}
+
+/* Show separators in both light and dark mode */
+.suggestion-separator {
+  display: block !important;
+  height: 1px !important;
+  background-color: var(--separator-color) !important;
+}
+
+/* Scroll to bottom button */
+.scroll-to-bottom-btn {
+  background-color: #f6e2f5 !important;
+  border-color: #f4d6f0 !important;
+  color: #501854 !important;
+  padding-top: 0.375rem !important; /* py-1.5 */
+  padding-bottom: 0.375rem !important; /* py-1.5 */
+}
+
+.scroll-to-bottom-btn:hover {
+  background-color: #f1c4e6 !important;
+  border-color: #f4d6f0 !important;
+  color: #501854 !important;
+}
+
+.dark .scroll-to-bottom-btn {
+  background-color: #2a232f !important;
+  border-color: #3d334a !important;
+  color: #c8b5bf !important;
+}
+
+.dark .scroll-to-bottom-btn:hover {
+  background-color: #3d334a !important;
+  border-color: #3d334a !important;
+  color: #e7d0dd !important;
+}
+
+/* Settings page styling */
+.settings-page-bg {
+  background: linear-gradient(to bottom, #f5e9f6, #eed9f1) !important;
+}
+
+.dark .settings-page-bg {
+  background: linear-gradient(to bottom, #211b21, #0f0a0d) !important;
+}
+
+.settings-sidebar-bg {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.dark .settings-sidebar-bg {
+  background-color: transparent !important;
+}
+
+.settings-text-primary {
+  color: #4a1a4f !important;
+}
+
+.dark .settings-text-primary {
+  color: white !important;
+}
+
+.settings-text-secondary {
+  color: #8b6b8f !important;
+}
+
+.dark .settings-text-secondary {
+  color: #a1a1aa !important;
+}
+
+.settings-profile-badge {
+  background-color: #e8c7e8 !important;
+  color: #4a1a4f !important;
+}
+
+.dark .settings-profile-badge {
+  background-color: #322028 !important;
+  color: #d4d4d8 !important;
+}
+
+.settings-tabs-container {
+  background-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.dark .settings-tabs-container {
+  background-color: #1a1319 !important;
+}
+
+.settings-tab-active {
+  background-color: #e8c7e8 !important;
+  color: #4a1a4f !important;
+}
+
+.dark .settings-tab-active {
+  background-color: #322028 !important;
+  color: white !important;
+}
+
+.settings-tab-inactive {
+  color: #8b6b8f !important;
+  background-color: transparent !important;
+}
+
+.dark .settings-tab-inactive {
+  color: #a1a1aa !important;
+}
+
+.settings-tab-inactive:hover {
+  color: #4a1a4f !important;
+  background-color: rgba(232, 199, 232, 0.3) !important;
+}
+
+.dark .settings-tab-inactive:hover {
+  color: white !important;
+  background-color: #2a1d26 !important;
+}
+
+.settings-button-ghost {
+  color: #4a1a4f !important;
+}
+
+.dark .settings-button-ghost {
+  color: white !important;
+}
+
+.settings-button-ghost:hover {
+  background-color: rgba(232, 199, 232, 0.3) !important;
+}
+
+.dark .settings-button-ghost:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.settings-usage-bar {
+  background-color: rgba(232, 199, 232, 0.5) !important;
+}
+
+.dark .settings-usage-bar {
+  background-color: #322028 !important;
+}
+
+/* API Keys component styling */
+.api-key-bullet {
+  background-color: #4a1a4f !important;
+}
+
+.dark .api-key-bullet {
+  background-color: white !important;
+}
+
+.api-key-badge {
+  background-color: #e8c7e8 !important;
+  color: #4a1a4f !important;
+}
+
+.dark .api-key-badge {
+  background-color: #322028 !important;
+  color: #d4d4d8 !important;
+}
+
+.api-key-input {
+  background-color: rgba(232, 199, 232, 0.3) !important;
+  border-color: #d4a5d4 !important;
+  color: #4a1a4f !important;
+}
+
+.api-key-input::placeholder {
+  color: #8b6b8f !important;
+}
+
+.api-key-input:focus {
+  border-color: #b884b8 !important;
+}
+
+.dark .api-key-input {
+  background-color: #322028 !important;
+  border-color: #4a404d !important;
+  color: white !important;
+}
+
+.dark .api-key-input::placeholder {
+  color: #71717a !important;
+}
+
+.dark .api-key-input:focus {
+  border-color: #6b5b73 !important;
+}
+
+.api-key-link {
+  color: #9333ea !important;
+}
+
+.api-key-link:hover {
+  color: #7c3aed !important;
+}
+
+.dark .api-key-link {
+  color: #60a5fa !important;
+}
+
+.dark .api-key-link:hover {
+  color: #93c5fd !important;
+}
+
+.api-key-success {
+  color: #b91c7c !important;
+}
+
+.dark .api-key-success {
+  color: #a4044c !important;
+}
+
+.api-key-save-button {
+  background-color: #b91c7c !important;
+  color: white !important;
+}
+
+.api-key-save-button:hover {
+  background-color: #9d174d !important;
+}
+
+.dark .api-key-save-button {
+  background-color: #af1f6e !important;
+}
+
+.dark .api-key-save-button:hover {
+  background-color: #8f1a5a !important;
+}
+
+/* Model selector dropdown styling */
+.model-selector-content {
+  background-color: white !important;
+  border-color: #e5e7eb !important;
+  color: #af1f6e !important;
+}
+
+.model-selector-item {
+  color: #af1f6e !important;
+}
+
+.model-selector-item:hover {
+  background-color: #ffecf4 !important;
+  color: #af1f6e !important;
+}
+
+.model-selector-item[data-active="true"] {
+  background-color: #ffecf4 !important;
+  color: #af1f6e !important;
+}
+
+.model-selector-tick {
+  color: #af1f6e !important;
+}
+
+.dark .model-selector-content {
+  background-color: rgba(14, 8, 13, 0.8) !important;
+  border-color: #1e1922 !important;
+  color: #e0cad7 !important;
+}
+
+.dark .model-selector-item {
+  color: #e0cad7 !important;
+}
+
+.dark .model-selector-item:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #e0cad7 !important;
+}
+
+.dark .model-selector-item[data-active="true"] {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #e0cad7 !important;
+}
+
+.dark .model-selector-tick {
+  color: #e0cad7 !important;
+}
+
+/* Sidebar toggle button styling */
+.sidebar-toggle-button {
+  background-color: transparent !important;
+  color: #501854 !important;
+  border: none !important;
+}
+
+.sidebar-toggle-button:hover {
+  background-color: #f0cde4 !important;
+  color: #501854 !important;
+}
+
+.dark .sidebar-toggle-button {
+  background-color: transparent !important;
+  color: currentColor !important;
+}
+
+.dark .sidebar-toggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  color: currentColor !important;
+}
+
+/* Floating sidebar toggle styling */
+:root {
+  --floating-container-bg: #f1e1f4;
+}
+
+.dark {
+  --floating-container-bg: #1b181d;
+}
+
+.floating-sidebar-button {
+  background-color: #f1e1f4 !important;
+  color: #ab1567 !important;
+  box-shadow: none !important;
+}
+
+.floating-sidebar-button:hover {
+  background-color: #e8c7e8 !important;
+  color: #ab1567 !important;
+  box-shadow: none !important;
+}
+
+.dark .floating-sidebar-button {
+  background-color: #1b181d !important;
+  color: currentColor !important;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+}
+
+.dark .floating-sidebar-button:hover {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  color: currentColor !important;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+}
+
+.dark .fixed.floating-sidebar-container {
+  background-color: #1b181d !important;
+  padding: 2px !important;
+}
+
+.floating-sidebar-button {
+  background-color: #f1e1f4 !important;
+  color: #ab1567 !important;
+}
+
+.floating-sidebar-button:hover {
+  background-color: #e8c7e8 !important;
+  color: #ab1567 !important;
+}
+
+.dark .floating-sidebar-button {
+  background-color: #1b181d !important;
+  color: currentColor !important;
+}
+
+.dark .floating-sidebar-button:hover {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  color: currentColor !important;
+}
+
+/* Tooltip styling */
+:not(.dark) .tooltip-light {
+  background-color: #f6def5 !important;
+  border-color: #f6def5 !important;
+  color: #af206e !important;
+}
+
+.dark .tooltip-light {
+  /* Keep original dark mode styling - override the light mode changes */
+  background-color: #1b1217 !important;
+  border-color: inherit !important;
+  color: white !important;
+}
+
+/* Settings and Theme Toggle button styling */
+.settings-theme-button {
+  /* Default styling handled by existing classes */
+}
+
+.settings-theme-button:hover {
+  background-color: #f3d5e6 !important;
+}
+
+.settings-theme-button.sidebar-collapsed {
+  background-color: transparent !important;
+}
+
+.settings-theme-button.sidebar-collapsed:hover {
+  background-color: #f3d5e6 !important;
+}
+
+.dark .settings-theme-button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .settings-theme-button.sidebar-collapsed {
+  background-color: #211c26 !important;
+}
+
+.dark .settings-theme-button.sidebar-collapsed:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Message actions button styling */
+.message-action-button {
+  color: #501854 !important;
+}
+
+.message-action-button:hover {
+  background-color: #f3d5e6 !important;
+  color: #501854 !important;
+}
+
+.dark .message-action-button {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+.dark .message-action-button:hover {
+  background-color: #2f2932 !important;
+  color: white !important;
+}
+
+/* Inline code styling */
+.inline-code {
+  background-color: #f6dcf0 !important;
+  color: #53336a !important;
+}
+
+.dark .inline-code {
+  background-color: #2b2431 !important;
+  color: inherit !important;
+}
+
+/* Thinking dots styling */
+.thinking-dot {
+  background-color: #c5a6c7 !important;
+}
+
+.dark .thinking-dot {
+  background-color: currentColor !important;
+}
+
+/* T1.chat text styling */
+.t1-chat-text {
+  color: #cd127d !important;
+}
+
+.dark .t1-chat-text {
+  color: #e3bad1 !important;
+}
+
+/* Code block styling */
+.code-block-header {
+  background-color: #f1c4e6 !important;
+  border-color: #e8c7e8 !important;
+  color: #501854 !important;
+}
+
+.code-block-content {
+  background-color: #f5ecf9 !important;
+  color: #2d1b69 !important;
+}
+
+/* Override Shiki generated styles for light mode */
+.code-block-content pre {
+  background-color: #f5ecf9 !important;
+}
+
+.code-block-content pre code {
+  background-color: #f5ecf9 !important;
+}
+
+.code-block-content [data-theme="github-light"] {
+  background-color: #f5ecf9 !important;
+}
+
+.code-block-content .shiki {
+  background-color: #f5ecf9 !important;
+}
+
+.dark .code-block-header {
+  background-color: #362d3d !important;
+  border-color: #374141 !important;
+  color: #e7d0dd !important;
+}
+
+.dark .code-block-content {
+  background-color: #1a151f !important;
+  color: white !important;
+}
+
+.dark .code-block-content pre {
+  background-color: #1a151f !important;
+}
+
+.dark .code-block-content pre code {
+  background-color: #1a151f !important;
+}
+
+.dark .code-block-content [data-theme="superchat-dark"] {
+  background-color: #1a151f !important;
+}
+
+.dark .code-block-content .shiki {
+  background-color: #1a151f !important;
+}
+
+/* User message background */
+.user-message-bg {
+  background-color: #f4dbef !important;
+  color: #501854 !important;
+}
+
+.dark .user-message-bg {
+  background-color: #2b2431 !important;
+  color: white !important;
+}
+
+/* Greeting title text color */
+.greeting-title {
+  color: #501854 !important;
+}
+
+.dark .greeting-title {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Greeting buttons (Create, Explore, Code, Learn) */
+.greeting-button {
+  background-color: #f7e5f3 !important;
+  border-color: #f7e5f3 !important;
+  color: #915391 !important;
+}
+
+.greeting-button:hover {
+  background-color: #f1c4e6 !important;
+  border-color: #f1c4e6 !important;
+  color: #915391 !important;
+}
+
+.dark .greeting-button {
+  background-color: #28222d !important;
+  border-color: #2f2836 !important;
+  color: hsl(270, 30%, 83%) !important;
+}
+
+.dark .greeting-button:hover {
+  background-color: #362d3d !important;
+  border-color: #362d3d !important;
+  color: white !important;
+}
+
+/* Suggestion text colors */
+.suggestion-text {
+  color: #75367d !important;
+}
+
+.suggestion-text:hover {
+  color: rgba(117, 54, 125, 0.8) !important;
+}
+
+.dark .suggestion-text {
+  color: rgb(156, 163, 175) !important; /* gray-400 */
+}
+
+.dark .suggestion-text:hover {
+  color: rgb(209, 213, 219) !important; /* gray-300 */
 }
 

@@ -31,8 +31,12 @@ function PureSuggestedActions({
     >
       {suggestedActions.map((suggestion, index) => (
         <div key={`suggestion-container-${index}`} className="flex flex-col">
+          {/* Use global CSS class for separator */}
           {index > 0 && (
-            <div className="h-px mb-1" style={{ backgroundColor: '#2a232f' }} />
+            <div
+              className="h-px mb-1 suggestion-separator"
+              style={{ backgroundColor: 'var(--separator-color)' }}
+            />
           )}
           <motion.button
             key={`suggestion-${index}`}
@@ -47,16 +51,7 @@ function PureSuggestedActions({
                 parts: [{ type: 'text', text: suggestion }],
               });
             }}
-            className="text-left text-xs text-gray-400 hover:text-gray-300 transition-colors duration-200 p-2 rounded-lg"
-            style={{
-              transition: 'background-color 0.2s ease-in-out',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#2c2532';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }}
+            className="text-left text-xs transition-colors duration-200 p-2 rounded-lg suggestion-text hover:bg-[#faf4fa] dark:hover:bg-[#2c2532]"
           >
             {suggestion}
           </motion.button>

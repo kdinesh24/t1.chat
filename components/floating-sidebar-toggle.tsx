@@ -18,7 +18,12 @@ export function FloatingSidebarToggle() {
   if (open) return null;
 
   return (
-    <div className="fixed top-4 left-4 z-50 flex gap-1 bg-[#1b181d] rounded-md">
+    <div
+      className="fixed top-4 left-4 z-50 flex gap-1 rounded-md p-1"
+      style={{
+        backgroundColor: 'var(--floating-container-bg)',
+      }}
+    >
       {/* Sidebar Toggle Button */}
       <Tooltip>
         <TooltipTrigger asChild>
@@ -27,12 +32,12 @@ export function FloatingSidebarToggle() {
             onClick={toggleSidebar}
             variant="outline"
             size="sm"
-            className="size-8 p-0 hover:bg-white/50 shadow-lg border-0 bg-[#1b181d]"
+            className="size-8 p-0 floating-sidebar-button border-0"
           >
             <SidebarLeftIcon size={16} />
           </Button>
         </TooltipTrigger>
-        <TooltipContent className="bg-[#090709]" side="bottom">
+        <TooltipContent className="tooltip-light" side="bottom">
           Open Sidebar
         </TooltipContent>
       </Tooltip>
@@ -48,12 +53,12 @@ export function FloatingSidebarToggle() {
             }}
             variant="outline"
             size="sm"
-            className="size-8 p-0 hover:bg-white/50 shadow-lg border-0 bg-[#1b181d]"
+            className="size-8 p-0 floating-sidebar-button border-0"
           >
             <PlusIcon size={16} />
           </Button>
         </TooltipTrigger>
-        <TooltipContent className="bg-[#090709]" side="bottom">
+        <TooltipContent className="tooltip-light" side="bottom">
           New Chat
         </TooltipContent>
       </Tooltip>

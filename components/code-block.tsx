@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'next-themes';
-import { highlightAndFormatCode, } from '@/lib/shiki';
+import { highlightAndFormatCode } from '@/lib/shiki';
 import { Copy, Check } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -137,8 +137,7 @@ export function CodeBlock({
     // Inline code (single backticks)
     return (
       <code
-        className={`${className || ''} text-sm py-0.5 px-1 rounded-md`}
-        style={{ backgroundColor: '#2b2431' }}
+        className={`${className || ''} text-sm py-0.5 px-1 rounded-md inline-code`}
         {...props}
       >
         {children}
@@ -154,10 +153,9 @@ export function CodeBlock({
       >
         {/* Header with language name */}
         <div
-          className={`flex items-center justify-between px-4 rounded-t-lg border-b ${isSingleLine ? 'py-1' : 'py-2'}`}
-          style={{ backgroundColor: '#362d3d', borderColor: '#374141' }}
+          className={`flex items-center justify-between px-4 rounded-t-lg border-b code-block-header ${isSingleLine ? 'py-1' : 'py-2'}`}
         >
-          <span className="text-sm font-medium font-mono text-zinc-300 tracking-wider">
+          <span className="text-sm font-medium font-mono tracking-wider">
             {language || 'plaintext'}
           </span>
           {!noCopyButton && (
@@ -177,7 +175,7 @@ export function CodeBlock({
           )}
         </div>
         <div
-          className={`not-prose rounded-b-lg overflow-x-auto overflow-y-hidden code-scrollbar max-w-full ${noBorder ? 'bg-[#362d3d]' : 'border-l border-r border-b border-border bg-[#1a151f]'}`}
+          className={`not-prose rounded-b-lg overflow-x-auto overflow-y-hidden code-scrollbar max-w-full code-block-content ${noBorder ? '' : 'border-l border-r border-b border-border'}`}
           style={{
             overflowX: 'auto',
             overflowY: 'hidden',
@@ -195,10 +193,9 @@ export function CodeBlock({
     <div className="relative group mb-6 mt-4 code-block-container">
       {/* Header with language name */}
       <div
-        className={`flex items-center justify-between px-4 rounded-t-lg border-b ${isSingleLine ? 'py-1' : 'py-2'}`}
-        style={{ backgroundColor: '#362d3d', borderColor: '#374141' }}
+        className={`flex items-center justify-between px-4 rounded-t-lg border-b code-block-header ${isSingleLine ? 'py-1' : 'py-2'}`}
       >
-        <span className="text-sm font-medium font-mono text-zinc-300 tracking-wider">
+        <span className="text-sm font-medium font-mono tracking-wider">
           {language || 'plaintext'}
         </span>
         {!noCopyButton && (
@@ -218,7 +215,7 @@ export function CodeBlock({
         )}
       </div>
       <pre
-        className={`text-sm w-full overflow-x-auto overflow-y-hidden code-scrollbar rounded-b-lg max-w-full ${isSingleLine ? 'px-4 py-2' : 'p-4'} ${noBorder ? 'bg-[#1a151f]' : 'border-l border-r border-b border-border bg-[#1a151f]'}`}
+        className={`text-sm w-full overflow-x-auto overflow-y-hidden code-scrollbar rounded-b-lg max-w-full code-block-content ${isSingleLine ? 'px-4 py-2' : 'p-4'} ${noBorder ? '' : 'border-l border-r border-b border-border'}`}
         style={{
           overflowX: 'auto',
           overflowY: 'hidden',
@@ -227,7 +224,7 @@ export function CodeBlock({
         }}
       >
         <code
-          className={`whitespace-pre font-mono text-white ${className || ''}`}
+          className={`whitespace-pre font-mono ${className || ''}`}
           {...props}
         >
           {children}

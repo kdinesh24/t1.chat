@@ -39,14 +39,8 @@ export function PureMessageActions({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              className="py-1 px-2 h-fit text-muted-foreground border-none hover:text-white bg-transparent"
+              className="py-1 px-2 h-fit message-action-button border-none bg-transparent"
               variant="ghost"
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#2f2932';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
               onClick={async () => {
                 const textFromParts = message.parts
                   ?.filter((part) => part.type === 'text')
@@ -68,7 +62,7 @@ export function PureMessageActions({
           </TooltipTrigger>
           <TooltipContent
             side="bottom"
-            className="border-none text-white"
+            className="border-none tooltip-light"
             style={{ backgroundColor: '#1b1217' }}
           >
             Copy
@@ -79,17 +73,9 @@ export function PureMessageActions({
           <TooltipTrigger asChild>
             <Button
               data-testid="message-upvote"
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto border-none hover:text-white bg-transparent"
+              className="py-1 px-2 h-fit message-action-button !pointer-events-auto border-none bg-transparent"
               disabled={vote?.isUpvoted}
               variant="ghost"
-              onMouseEnter={(e) => {
-                if (!vote?.isUpvoted) {
-                  e.currentTarget.style.backgroundColor = '#2f2932';
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
               onClick={async () => {
                 const upvote = fetch('/api/vote', {
                   method: 'PATCH',
@@ -135,7 +121,7 @@ export function PureMessageActions({
           </TooltipTrigger>
           <TooltipContent
             side="bottom"
-            className="border-none text-white"
+            className="border-none tooltip-light"
             style={{ backgroundColor: '#1b1217' }}
           >
             Upvote Response
@@ -146,17 +132,9 @@ export function PureMessageActions({
           <TooltipTrigger asChild>
             <Button
               data-testid="message-downvote"
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto border-none hover:text-white bg-transparent"
+              className="py-1 px-2 h-fit message-action-button !pointer-events-auto border-none bg-transparent"
               disabled={vote?.isUpvoted === false}
               variant="ghost"
-              onMouseEnter={(e) => {
-                if (vote?.isUpvoted !== false) {
-                  e.currentTarget.style.backgroundColor = '#2f2932';
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
               onClick={async () => {
                 const downvote = fetch('/api/vote', {
                   method: 'PATCH',
@@ -202,7 +180,7 @@ export function PureMessageActions({
           </TooltipTrigger>
           <TooltipContent
             side="bottom"
-            className="border-none text-white"
+            className="border-none tooltip-light"
             style={{ backgroundColor: '#1b1217' }}
           >
             Downvote Response

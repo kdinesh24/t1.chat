@@ -53,9 +53,10 @@ const PureChatItem = ({
           isActive={isActive}
           className={cn(
             'transition-all duration-200 ease-out h-8',
-            'group-hover/hover-container:!bg-[#251922] hover:!bg-[#251922]',
-            (isActive || isDropdownOpen) && '!bg-[#251922]',
-            '!text-[#c8b5bf] hover:!text-[#c8b5bf]',
+            'group-hover/hover-container:!bg-white hover:!bg-white dark:group-hover/hover-container:!bg-[#251922] dark:hover:!bg-[#251922]',
+            (isActive || isDropdownOpen) && '!bg-white dark:!bg-[#251922]',
+            '!text-[#ac1668] hover:!text-[#ac1668] dark:!text-[#c8b5bf] dark:hover:!text-[#c8b5bf]',
+            'font-medium',
           )}
         >
           <Link href={`/chat/${chat.id}`} onClick={() => setOpenMobile(false)}>
@@ -69,18 +70,37 @@ const PureChatItem = ({
             'absolute right-0 top-0 h-full w-16 rounded-r-md pointer-events-none',
             'transition-all duration-200 ease-out',
             'opacity-0 group-hover/hover-container:opacity-100',
-            'bg-[#251922]',
+            'bg-white dark:bg-[#251922]',
             isDropdownOpen && 'opacity-100',
           )}
         />
 
         {/* Left curved shadow fade effect - subtle C shape like reference */}
+        {/* Light mode gradient */}
         <div
           className={cn(
             'absolute right-16 top-0 h-full w-20 pointer-events-none',
             'transition-all duration-200 ease-out',
             'opacity-0 group-hover/hover-container:opacity-100',
             isDropdownOpen && 'opacity-100',
+            'dark:hidden',
+          )}
+          style={{
+            background: `radial-gradient(ellipse 80px 120px at 100% 50%, 
+              rgba(255, 255, 255, 0.80) 0%, 
+              rgba(255, 255, 255, 0.60) 45%, 
+              rgba(255, 255, 255, 0.30) 75%, 
+              transparent 100%)`,
+          }}
+        />
+        {/* Dark mode gradient */}
+        <div
+          className={cn(
+            'absolute right-16 top-0 h-full w-20 pointer-events-none',
+            'transition-all duration-200 ease-out',
+            'opacity-0 group-hover/hover-container:opacity-100',
+            isDropdownOpen && 'opacity-100',
+            'hidden dark:block',
           )}
           style={{
             background: `radial-gradient(ellipse 80px 120px at 100% 50%, 
@@ -107,8 +127,8 @@ const PureChatItem = ({
               <button
                 className={cn(
                   'flex items-center justify-center w-6 h-6 rounded',
-                  'text-[#dfc9d6] hover:text-[#dfc9d6]/80',
-                  'hover:!bg-[#251922] transition-all duration-150',
+                  'text-[#ac1668] hover:text-[#ac1668] dark:text-[#dfc9d6] dark:hover:text-[#dfc9d6]/80',
+                  'hover:!bg-white dark:hover:!bg-[#251922] transition-all duration-150',
                   'focus:outline-none focus:ring-1 focus:ring-[#dfc9d6]/30',
                 )}
                 onClick={(e) => e.stopPropagation()}
@@ -167,8 +187,8 @@ const PureChatItem = ({
           <button
             className={cn(
               'flex items-center justify-center w-6 h-6 rounded',
-              'text-[#dfc9d6] hover:text-[#dfc9d6]/80',
-              'hover:!bg-[#251922] transition-all duration-150',
+              'text-[#ac1668] hover:text-[#ac1668] dark:text-[#dfc9d6] dark:hover:text-[#dfc9d6]/80',
+              'hover:!bg-white dark:hover:!bg-[#251922] transition-all duration-150',
               'focus:outline-none focus:ring-1 focus:ring-[#dfc9d6]/30',
             )}
             onClick={handleDeleteClick}

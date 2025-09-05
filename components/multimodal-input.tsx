@@ -15,7 +15,7 @@ import {
 } from 'react';
 import { toast } from 'sonner';
 import { useLocalStorage, useWindowSize } from 'usehooks-ts';
-import { PaperclipIcon } from 'lucide-react';
+import { PaperclipIcon, ChevronDown } from 'lucide-react';
 import { ArrowUpIcon, StopIcon } from './icons';
 import { PreviewAttachment } from './preview-attachment';
 import { Button } from './ui/button';
@@ -239,20 +239,20 @@ function PureMultimodalInput({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="absolute left-1/2 bottom-28 -translate-x-1/2 z-50"
+            className="absolute left-[40%] bottom-32 -translate-x-1/2 z-50"
           >
             <Button
               data-testid="scroll-to-bottom-button"
               variant="outline"
               size="sm"
-              className="absolute bottom-4 right-4 h-8 w-8 rounded-full border border-border hover:bg-muted transition-colors"
-              style={{ backgroundColor: '#2a232f' }}
+              className="scroll-to-bottom-btn flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors"
               onClick={(event) => {
                 event.preventDefault();
                 scrollToBottom();
               }}
             >
-              <ArrowDown />
+              <span>Scroll to bottom</span>
+              <ChevronDown size={12} />
             </Button>
           </motion.div>
         )}
@@ -298,13 +298,12 @@ function PureMultimodalInput({
         onChange={handleInput}
         disabled={isInputDisabled}
         className={cx(
-          'min-h-[70px] max-h-[calc(80dvh)] overflow-hidden resize-none rounded-t-2xl !text-base pt-4 px-4 border-t-8 border-l-8 border-r-8 border-[#261f2a] shadow-sm bg-[#2a232f] w-full focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 selection:bg-[#3d334a] selection:text-white',
+          'min-h-[70px] max-h-[calc(80dvh)] overflow-hidden resize-none rounded-t-2xl !text-base pt-4 px-4 border-t-8 border-l-8 border-r-8 border-[#fae0fc] dark:border-[#261f2a] shadow-sm bg-[#faf5fa] dark:bg-[#2a232f] w-full focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 selection:bg-[#efbdeb] dark:selection:bg-[#3d334a] selection:text-black dark:selection:text-white',
           hasApiKey
-            ? 'placeholder:text-[#786e81] text-white'
-            : 'placeholder:text-[#5a5461] text-[#5a5461] cursor-not-allowed',
+            ? 'placeholder:text-[#8b5a8f] dark:placeholder:text-[#786e81] text-black dark:text-white'
+            : 'placeholder:text-[#a59ba8] dark:placeholder:text-[#5a5461] text-[#a59ba8] dark:text-[#5a5461] cursor-not-allowed',
           className,
         )}
-        style={{ backgroundColor: '#29232f' }}
         rows={4}
         autoFocus={shouldAutoFocus}
         onKeyDown={(event) => {
@@ -380,8 +379,7 @@ function PureAttachmentsButton({
   return (
     <Button
       data-testid="attachments-button"
-      className="rounded-lg p-[7px] h-fit border border-[#302a37] hover:bg-white/50 transition-colors"
-      style={{ backgroundColor: '#28222e' }}
+      className="rounded-lg p-[7px] h-fit border border-[#fae0fc] dark:border-[#302a37] bg-[#faf5fa] dark:bg-[#28222e] hover:bg-[#f5edf6] dark:hover:bg-white/50 transition-colors"
       onClick={(event) => {
         event.preventDefault();
         fileInputRef.current?.click();
@@ -389,7 +387,7 @@ function PureAttachmentsButton({
       disabled={status !== 'ready'}
       variant="ghost"
     >
-      <PaperclipIcon size={14} color="#e7d0dd" />
+      <PaperclipIcon size={14} className="text-[#ac1668] dark:text-[#e7d0dd]" />
     </Button>
   );
 }
@@ -406,8 +404,7 @@ function PureStopButton({
   return (
     <Button
       data-testid="stop-button"
-      className="border-reflect rounded-md p-1.5 h-fit hover:bg-muted transition-colors mr-2"
-      style={{ backgroundColor: '#372132', color: '#8d808b' }}
+      className="border-reflect rounded-md p-1.5 h-fit hover:bg-muted transition-colors mr-2 bg-[#ce98b1] dark:bg-[#372132] text-white dark:text-[#8d808b]"
       onClick={(event) => {
         event.preventDefault();
         stop();
@@ -438,8 +435,7 @@ function PureSendButton({
   return (
     <Button
       data-testid="send-button"
-      className="border-reflect rounded-md p-1.5 h-fit hover:bg-muted transition-colors mr-2"
-      style={{ backgroundColor: '#372132', color: '#8d808b' }}
+      className="border-reflect rounded-md p-1.5 h-fit hover:bg-muted transition-colors mr-2 bg-[#ce98b1] dark:bg-[#372132] text-white dark:text-[#8d808b]"
       onClick={(event) => {
         event.preventDefault();
 

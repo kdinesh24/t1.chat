@@ -33,10 +33,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
               }}
               className="flex flex-row gap-3 items-center ml-12"
             >
-              <span
-                className="text-lg font-bold px-2 hover:bg-muted rounded-md cursor-pointer"
-                style={{ color: '#e3bad1' }}
-              >
+              <span className="text-lg font-bold px-2 rounded-md cursor-pointer t1-chat-text">
                 T1.chat
               </span>
             </Link>
@@ -52,7 +49,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                   router.push('/');
                   router.refresh();
                 }}
-                className="bg-gradient-to-b from-[#3c1126] via-[#401329]/90 to-[#3c1126] hover:bg-gradient-to-b hover:from-[#7a1941] hover:via-[#7a1941] hover:to-[#7a1941] text-[#e7b7d0] text-sm font-medium rounded-[10px] transition-colors duration-200 cursor-pointer w-full h-[32px] flex items-center justify-center"
+                className="bg-[#a4406c] hover:bg-[#d76a9d] dark:bg-gradient-to-b dark:from-[#3c1126] dark:via-[#401329]/90 dark:to-[#3c1126] dark:hover:bg-gradient-to-b dark:hover:from-[#7a1941] dark:hover:via-[#7a1941] dark:hover:to-[#7a1941] text-white dark:text-[#e7b7d0] text-sm font-medium rounded-[10px] transition-colors duration-200 cursor-pointer w-full h-[32px] flex items-center justify-center"
               >
                 New Chat
               </button>
