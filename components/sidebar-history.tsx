@@ -370,12 +370,12 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="border-0 bg-transparent text-white hover:bg-gray-700/50">
+            <AlertDialogCancel className="border-0 bg-transparent text-[#501854] hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700/50">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
-              className="bg-[#9d174d] hover:bg-[#9d174d]/80 text-white border-0"
+              className="bg-[#f7086c] hover:bg-[#f7086c]/80 text-white border-0 dark:bg-[#9d174d] dark:hover:bg-[#9d174d]/80"
             >
               Delete
             </AlertDialogAction>

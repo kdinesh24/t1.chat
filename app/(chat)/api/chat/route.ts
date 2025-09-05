@@ -228,14 +228,28 @@ export async function POST(request: Request) {
         try {
           console.log('🚀 Starting streamText execution...');
           console.log('  - Messages count:', uiMessages.length);
+
+          const userMessageText = message.parts
+            .filter((part) => part.type === 'text')
+            .map((part) => part.text)
+            .join(' ');
+
           console.log(
             '  - System prompt length:',
-            systemPrompt({ selectedChatModel, requestHints }).length,
+            systemPrompt({
+              selectedChatModel,
+              requestHints,
+              userPrompt: userMessageText,
+            }).length,
           );
 
           const result = streamText({
             model: userProvider.languageModel(selectedChatModel),
-            system: systemPrompt({ selectedChatModel, requestHints }),
+            system: systemPrompt({
+              selectedChatModel,
+              requestHints,
+              userPrompt: userMessageText,
+            }),
             messages: convertToModelMessages(uiMessages),
             stopWhen: stepCountIs(5),
             experimental_activeTools:
