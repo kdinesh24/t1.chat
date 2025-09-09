@@ -51,7 +51,6 @@ export function ModelSelector({
     [optimisticModelId, availableChatModels],
   );
 
-  // Prevent hydration mismatch by using consistent server/client state
   const hasApiKey = isClient ? hasValidApiKey() : false;
   const buttonText =
     isClient && hasApiKey

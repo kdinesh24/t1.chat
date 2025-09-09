@@ -14,7 +14,6 @@ export function FloatingSidebarToggle() {
   const { open, toggleSidebar } = useSidebar();
   const router = useRouter();
 
-  // Only show when sidebar is closed
   if (open) return null;
 
   return (

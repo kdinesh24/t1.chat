@@ -8,19 +8,16 @@ const components: Partial<Components> = {
   // @ts-expect-error
   code: CodeBlock,
   pre: ({ children, ...props }) => {
-    // Find the code block component among the children
+    
     const codeBlock = React.Children.toArray(children).find(
       (child: any) =>
         child.type === CodeBlock || child.type?.name === 'CodeBlock',
     );
 
     if (codeBlock) {
-      // If a code block is found, render it directly without a <pre> wrapper
-      // as the CodeBlock component handles its own formatting.
       return <>{codeBlock}</>;
     }
 
-    // Default rendering for other <pre> elements
     return (
       <pre
         className="not-prose text-sm w-full overflow-x-auto p-4 border border-zinc-200 dark:border-black rounded-xl dark:text-zinc-50 text-zinc-900"

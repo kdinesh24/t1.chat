@@ -21,12 +21,10 @@ export const Greeting = ({
   const getUserDisplayName = () => {
     if (!session?.user) return 'there';
 
-    // Check if it's a guest user
     if (session.user.type === 'guest') {
       return 'there';
     }
 
-    // For regular users, try to extract name from email
     if (session.user.email) {
       const emailPart = session.user.email.split('@')[0];
       // Capitalize first letter and handle common email patterns
