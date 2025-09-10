@@ -118,25 +118,19 @@ export function Chat({
       api: '/api/chat',
       fetch: fetchWithErrorHandlers,
       prepareSendMessagesRequest({ messages, id, body }) {
-        // Get the API key directly
         const apiKey = getApiKey('google');
-
-        // Check if user has API key
         if (!apiKey || apiKey.trim().length === 0) {
           throw new Error(
             'API key not configured. Please add your Google API key in settings.',
           );
         }
-
-        // Basic validation of API key format
         if (!apiKey.startsWith('AI') || apiKey.length <= 20) {
           throw new Error(
             'Invalid API key format. Please check your Google API key in settings.',
           );
         }
 
-        // If this is a new chat (no initial messages) and we're sending the first message,
-        // immediately add it to the sidebar for real-time feedback
+
         if (initialMessages.length === 0 && messages.length === 1) {
           const firstMessage = messages[0];
           const title = generateChatTitle(firstMessage);

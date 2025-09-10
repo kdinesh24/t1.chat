@@ -219,8 +219,6 @@ function PureMultimodalInput({
       scrollToBottom();
     }
   }, [status, scrollToBottom]);
-
-  // Prevent hydration mismatch by using consistent server/client state
   const hasApiKey = isClient ? hasValidApiKey() : false;
   const placeholderText =
     isClient && hasApiKey
@@ -439,7 +437,7 @@ function PureSendButton({
         event.preventDefault();
 
         if (!hasValidApiKey()) {
-          return; // Don't submit if no API key
+          return; 
         }
 
         console.log(
