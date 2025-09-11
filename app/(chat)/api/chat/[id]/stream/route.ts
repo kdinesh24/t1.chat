@@ -20,8 +20,70 @@ export async function GET(
   const streamContext = getStreamContext();
   const resumeRequestedAt = new Date();
 
+  // If no stream context, check if we have completed messages to return
   if (!streamContext) {
-    return new Response(null, { status: 204 });
+    const session = await auth();
+
+    if (!session?.user) {
+      return new ChatSDKError('unauthorized:chat').toResponse();
+    }
+
+    if (!chatId) {
+      return new ChatSDKError('bad_request:api').toResponse();
+    }
+
+    try {
+      const chat = await getChatById({ id: chatId });
+
+      if (!chat) {
+        return new ChatSDKError('not_found:chat').toResponse();
+      }
+
+      if (chat.visibility === 'private' && chat.userId !== session.user.id) {
+        return new ChatSDKError('forbidden:chat').toResponse();
+      }
+
+      const messages = await getMessagesByChatId({ id: chatId });
+      const mostRecentMessage = messages.at(-1);
+
+      // If we have messages and the most recent is from assistant, return completed conversation
+      if (mostRecentMessage && mostRecentMessage.role === 'assistant') {
+        const emptyDataStream = createUIMessageStream<ChatMessage>({
+          execute: () => {},
+        });
+
+        return new Response(
+          emptyDataStream.pipeThrough(new JsonToSseTransformStream()),
+          {
+            status: 200,
+            headers: {
+              'Content-Type': 'text/plain; charset=utf-8',
+              'Cache-Control': 'no-cache',
+              Connection: 'keep-alive',
+            },
+          },
+        );
+      }
+
+      // No assistant message found, return empty stream
+      const emptyDataStream = createUIMessageStream<ChatMessage>({
+        execute: () => {},
+      });
+
+      return new Response(
+        emptyDataStream.pipeThrough(new JsonToSseTransformStream()),
+        {
+          status: 200,
+          headers: {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Cache-Control': 'no-cache',
+            Connection: 'keep-alive',
+          },
+        },
+      );
+    } catch (error) {
+      return new ChatSDKError('not_found:chat').toResponse();
+    }
   }
 
   if (!chatId) {

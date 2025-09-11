@@ -31,20 +31,16 @@ export async function fetchWithErrorHandlers(
   init?: RequestInit,
 ) {
   try {
-    console.log('🌐 fetchWithErrorHandlers called with:', input, init?.method);
     const response = await fetch(input, init);
-    console.log('📡 Response received:', response.status, response.statusText);
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('❌ Response not OK:', errorData);
       const { code, cause } = errorData;
       throw new ChatSDKError(code as ErrorCode, cause);
     }
 
     return response;
   } catch (error: unknown) {
-    console.error('❌ fetchWithErrorHandlers error:', error);
     if (typeof navigator !== 'undefined' && !navigator.onLine) {
       throw new ChatSDKError('offline:chat');
     }

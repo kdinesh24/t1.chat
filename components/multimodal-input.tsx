@@ -121,7 +121,6 @@ function PureMultimodalInput({
   const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
 
   const submitForm = useCallback(() => {
-    console.log('📤 Submitting message:', input);
     window.history.replaceState({}, '', `/chat/${chatId}`);
 
     sendMessage({
@@ -317,10 +316,8 @@ function PureMultimodalInput({
             }
 
             if (status !== 'ready') {
-              console.log('⚠️ Model not ready, current status:', status);
               toast.error('Please wait for the model to finish its response!');
             } else {
-              console.log('✅ Submitting form via enter key');
               submitForm();
             }
           }
@@ -437,7 +434,7 @@ function PureSendButton({
         event.preventDefault();
 
         if (!hasValidApiKey()) {
-          return; 
+          return;
         }
 
         console.log(

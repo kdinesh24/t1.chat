@@ -60,24 +60,11 @@ export function getStreamContext() {
 }
 
 export async function POST(request: Request) {
-  console.log('🔥 POST /api/chat - Request received');
-  console.log('🌍 Environment check:');
-  console.log(
-    '  - GOOGLE_GENERATIVE_AI_API_KEY present:',
-    !!process.env.GOOGLE_GENERATIVE_AI_API_KEY,
-  );
-  console.log(
-    '  - GOOGLE_GENERATIVE_AI_API_KEY length:',
-    process.env.GOOGLE_GENERATIVE_AI_API_KEY?.length || 0,
-  );
-
   let requestBody: PostRequestBody;
 
   try {
     const json = await request.json();
-    console.log('📝 Raw request body:', JSON.stringify(json, null, 2));
     requestBody = postRequestBodySchema.parse(json);
-    console.log('✅ Request body parsed successfully');
   } catch (error) {
     console.error('❌ Request parsing failed:', error);
     return new ChatSDKError('bad_request:api').toResponse();
@@ -101,13 +88,11 @@ export async function POST(request: Request) {
     const session = await auth();
 
     if (!session?.user) {
-      console.error('❌ No authenticated user found');
       return new ChatSDKError('unauthorized:chat').toResponse();
     }
 
     // Check if user has provided an API key
     if (!apiKey) {
-      console.error('❌ No API key provided');
       return new Response(
         JSON.stringify({
           error:
@@ -119,18 +104,6 @@ export async function POST(request: Request) {
         },
       );
     }
-
-    console.log('✅ User authenticated:', session.user.id);
-    console.log('📋 Chat request details:');
-    console.log('  - Chat ID:', id);
-    console.log('  - Selected model:', selectedChatModel);
-    console.log('  - Selected visibility:', selectedVisibilityType);
-    console.log(
-      '  - Message content:',
-      message.parts
-        .map((p) => (p.type === 'text' ? p.text : `[${p.type}]`))
-        .join(' '),
-    );
 
     const userType: UserType = session.user.type;
 
@@ -206,18 +179,12 @@ export async function POST(request: Request) {
 
     const streamId = generateUUID();
     await createStreamId({ streamId, chatId: id });
-    console.log('🆔 Stream ID created:', streamId);
-
-    console.log('🤖 Initializing AI provider with user API key...');
-    console.log('  - Model ID:', selectedChatModel);
-    console.log('  - API key provided:', !!apiKey);
 
     // Create provider with user's API key
     const userProvider = createProviderWithApiKey(apiKey);
 
     try {
       const modelInstance = userProvider.languageModel(selectedChatModel);
-      console.log('✅ Model instance created:', modelInstance.modelId);
     } catch (modelError) {
       console.error('❌ Model creation failed:', modelError);
       throw modelError;
@@ -226,22 +193,10 @@ export async function POST(request: Request) {
     const stream = createUIMessageStream({
       execute: async ({ writer: dataStream }) => {
         try {
-          console.log('🚀 Starting streamText execution...');
-          console.log('  - Messages count:', uiMessages.length);
-
           const userMessageText = message.parts
             .filter((part) => part.type === 'text')
             .map((part) => part.text)
             .join(' ');
-
-          console.log(
-            '  - System prompt length:',
-            systemPrompt({
-              selectedChatModel,
-              requestHints,
-              userPrompt: userMessageText,
-            }).length,
-          );
 
           const result = streamText({
             model: userProvider.languageModel(selectedChatModel),
@@ -279,18 +234,14 @@ export async function POST(request: Request) {
             },
           });
 
-          console.log('✅ streamText instance created');
-
           // Handle stream consumption with error handling
           try {
-            console.log('🚀 Starting stream consumption...');
             result.consumeStream();
             dataStream.merge(
               result.toUIMessageStream({
                 sendReasoning: true,
               }),
             );
-            console.log('✅ Stream consumption started successfully');
           } catch (streamError) {
             console.error('❌ Stream consumption error:', streamError);
             throw streamError;
@@ -308,7 +259,6 @@ export async function POST(request: Request) {
       },
       generateId: generateUUID,
       onFinish: async ({ messages }) => {
-        console.log('🏁 Stream finished, saving messages:', messages.length);
         await saveMessages({
           messages: messages.map((message) => ({
             id: message.id,
@@ -319,7 +269,6 @@ export async function POST(request: Request) {
             chatId: id,
           })),
         });
-        console.log('✅ Messages saved successfully');
       },
       onError: (error) => {
         console.error('❌ UI Message Stream error:', error);
@@ -352,17 +301,14 @@ export async function POST(request: Request) {
     });
 
     const streamContext = getStreamContext();
-    console.log('🔄 Stream context available:', !!streamContext);
 
     if (streamContext) {
-      console.log('📡 Using resumable stream context');
       return new Response(
         await streamContext.resumableStream(streamId, () =>
           stream.pipeThrough(new JsonToSseTransformStream()),
         ),
       );
     } else {
-      console.log('📡 Using direct stream response');
       return new Response(stream.pipeThrough(new JsonToSseTransformStream()));
     }
   } catch (error) {
