@@ -96,7 +96,6 @@ export function CodeBlock({
     return !hasLanguage && isSingleLine;
   }, [inline, codeText, language]);
 
-  // Apply Shiki highlighting - optimized for SSR
   useEffect(() => {
     let isMounted = true;
 
@@ -104,7 +103,6 @@ export function CodeBlock({
       if (treatAsInline) return;
 
       try {
-        // Start highlighting immediately, even on server
         const result = await highlightAndFormatCode(
           codeText,
           language || 'text',

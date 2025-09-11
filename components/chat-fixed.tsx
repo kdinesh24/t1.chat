@@ -61,8 +61,7 @@ export function Chat({
   const { apiKeys, hasValidApiKey, getApiKey, hasApiKey } = useApiKeys();
 
   const [input, setInput] = useState<string>('');
-
-  // Generate a title for new chats based on the user's first message
+  
   const generateChatTitle = (message: ChatMessage): string => {
     const textParts = message.parts
       .filter((part) => part.type === 'text')
@@ -81,14 +80,11 @@ export function Chat({
       visibility: visibilityType,
       createdAt: new Date(),
     };
-
-    // Update all history cache entries to include the new chat at the top
     mutate(
       (key) => typeof key === 'string' && key.includes('/api/history'),
       (data: any) => {
         if (!data || !data.chats) return data;
 
-        // Check if chat already exists to avoid duplicates
         const chatExists = data.chats.some((chat: Chat) => chat.id === id);
         if (chatExists) return data;
 
