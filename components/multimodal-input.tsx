@@ -80,14 +80,16 @@ function PureMultimodalInput({
   const adjustHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 2}px`;
+      const maxHeight = window.innerHeight * 0.2; // Reduced to 20% of viewport height
+      const scrollHeight = textareaRef.current.scrollHeight + 2;
+      textareaRef.current.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
     }
   };
 
   const resetHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = '120px';
+      textareaRef.current.style.height = '80px'; // Reduced from 120px to 80px
     }
   };
 
@@ -235,13 +237,13 @@ function PureMultimodalInput({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="absolute left-[40%] bottom-32 -translate-x-1/2 z-50"
+            className="fixed left-1/2 bottom-44 transform -translate-x-1/2 ml-12 z-50"
           >
             <Button
               data-testid="scroll-to-bottom-button"
               variant="outline"
               size="sm"
-              className="scroll-to-bottom-btn flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors"
+              className="scroll-to-bottom-btn flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium transition-colors h-7"
               onClick={(event) => {
                 event.preventDefault();
                 scrollToBottom();
@@ -286,64 +288,72 @@ function PureMultimodalInput({
         </div>
       )}
 
-      <Textarea
-        data-testid="multimodal-input"
-        ref={textareaRef}
-        placeholder={placeholderText}
-        value={input}
-        onChange={handleInput}
-        disabled={isInputDisabled}
-        className={cx(
-          'min-h-[70px] max-h-[calc(80dvh)] overflow-hidden resize-none rounded-t-2xl !text-base pt-4 px-4 border-t-8 border-l-8 border-r-8 border-[#fae0fc] dark:border-[#261f2a] shadow-sm bg-[#faf5fa] dark:bg-[#2a232f] w-full focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 selection:bg-[#efbdeb] dark:selection:bg-[#3d334a] selection:text-black dark:selection:text-white',
-          hasApiKey
-            ? 'placeholder:text-[#8b5a8f] dark:placeholder:text-[#786e81] text-black dark:text-white'
-            : 'placeholder:text-[#a59ba8] dark:placeholder:text-[#5a5461] text-[#a59ba8] dark:text-[#5a5461] cursor-not-allowed',
-          className,
-        )}
-        rows={4}
-        autoFocus={shouldAutoFocus}
-        onKeyDown={(event) => {
-          if (
-            event.key === 'Enter' &&
-            !event.shiftKey &&
-            !event.nativeEvent.isComposing
-          ) {
-            event.preventDefault();
+      <div className="relative">
+        <Textarea
+          data-testid="multimodal-input"
+          ref={textareaRef}
+          placeholder={placeholderText}
+          value={input}
+          onChange={handleInput}
+          disabled={isInputDisabled}
+          className={cx(
+            'min-h-[70px] max-h-[20vh] overflow-y-auto resize-none rounded-t-2xl !text-base pt-4 px-4 pb-16 border-t-8 border-l-8 border-r-8 border-[#fae0fc] dark:border-[#261f2a] shadow-sm bg-[#faf5fa] dark:bg-[#2a232f] w-full focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 selection:bg-[#efbdeb] dark:selection:bg-[#3d334a] selection:text-black dark:selection:text-white',
+            hasApiKey
+              ? 'placeholder:text-[#8b5a8f] dark:placeholder:text-[#786e81] text-black dark:text-white'
+              : 'placeholder:text-[#a59ba8] dark:placeholder:text-[#5a5461] text-[#a59ba8] dark:text-[#5a5461] cursor-not-allowed',
+            className,
+          )}
+          rows={4}
+          autoFocus={shouldAutoFocus}
+          onKeyDown={(event) => {
+            if (
+              event.key === 'Enter' &&
+              !event.shiftKey &&
+              !event.nativeEvent.isComposing
+            ) {
+              event.preventDefault();
 
-            if (!hasApiKey) {
-              toast.error('Please add your Google API key in settings first!');
-              return;
+              if (!hasApiKey) {
+                toast.error(
+                  'Please add your Google API key in settings first!',
+                );
+                return;
+              }
+
+              if (status !== 'ready') {
+                toast.error(
+                  'Please wait for the model to finish its response!',
+                );
+              } else {
+                submitForm();
+              }
             }
-
-            if (status !== 'ready') {
-              toast.error('Please wait for the model to finish its response!');
-            } else {
-              submitForm();
-            }
-          }
-        }}
-      />
-
-      <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start gap-1 ml-3">
-        <ModelSelector
-          session={session}
-          selectedModelId={selectedModelId}
-          className="h-8 text-sm px-3"
+          }}
         />
-        <AttachmentsButton fileInputRef={fileInputRef} status={status} />
-      </div>
 
-      <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
-        {status === 'submitted' ? (
-          <StopButton stop={stop} setMessages={setMessages} />
-        ) : (
-          <SendButton
-            input={input}
-            submitForm={submitForm}
-            uploadQueue={uploadQueue}
-            hasValidApiKey={() => hasApiKey}
-          />
-        )}
+        <div className="absolute bottom-0 left-0 right-0 h-12 bg-[#faf5fa] dark:bg-[#2a232f] border-l-8 border-r-8 border-b-8 border-[#fae0fc] dark:border-[#261f2a] rounded-b-2xl flex justify-between items-center px-4">
+          <div className="flex flex-row gap-1">
+            <ModelSelector
+              session={session}
+              selectedModelId={selectedModelId}
+              className="h-8 text-sm px-3"
+            />
+            <AttachmentsButton fileInputRef={fileInputRef} status={status} />
+          </div>
+
+          <div className="flex flex-row justify-end">
+            {status === 'submitted' ? (
+              <StopButton stop={stop} setMessages={setMessages} />
+            ) : (
+              <SendButton
+                input={input}
+                submitForm={submitForm}
+                uploadQueue={uploadQueue}
+                hasValidApiKey={() => hasApiKey}
+              />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
