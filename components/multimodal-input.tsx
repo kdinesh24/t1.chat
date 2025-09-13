@@ -223,7 +223,7 @@ function PureMultimodalInput({
   const hasApiKey = isClient ? hasValidApiKey() : false;
   const placeholderText =
     isClient && hasApiKey
-      ? 'Send a message...'
+      ? 'Type your message here...'
       : 'Add your API key in settings to start chatting';
   const isInputDisabled = isClient ? !hasApiKey : true;
   const shouldAutoFocus = isClient ? hasApiKey : false;
@@ -299,7 +299,7 @@ function PureMultimodalInput({
           className={cx(
             'min-h-[70px] max-h-[20vh] overflow-y-auto resize-none rounded-t-2xl !text-base pt-4 px-4 pb-16 border-t-8 border-l-8 border-r-8 border-[#fae0fc] dark:border-[#261f2a] shadow-sm bg-[#faf5fa] dark:bg-[#2a232f] w-full focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 selection:bg-[#efbdeb] dark:selection:bg-[#3d334a] selection:text-black dark:selection:text-white',
             hasApiKey
-              ? 'placeholder:text-[#8b5a8f] dark:placeholder:text-[#786e81] text-black dark:text-white'
+              ? 'placeholder:text-[#6b4c6f] dark:placeholder:text-[#9f8fa3] text-black dark:text-white'
               : 'placeholder:text-[#a59ba8] dark:placeholder:text-[#5a5461] text-[#a59ba8] dark:text-[#5a5461] cursor-not-allowed',
             className,
           )}
