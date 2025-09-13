@@ -22,9 +22,6 @@ import type { ChatMessage } from '@/lib/types';
 import { useDataStream } from './data-stream-provider';
 import { toast } from 'sonner';
 
-// Type narrowing is handled by TypeScript's control flow analysis
-// The AI SDK provides proper discriminated unions for tool calls
-
 const PurePreviewMessage = ({
   chatId,
   message,
