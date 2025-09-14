@@ -30,24 +30,19 @@ export function SidebarUserNav({ user }: { user: User }) {
 
   const isGuest = guestRegex.test(data?.user?.email ?? '');
 
-  // Get chat ID from URL params
   const chatId = typeof params?.id === 'string' ? params.id : null;
 
-  // Use chat visibility hook if we have a chat ID
   const { visibilityType, setVisibilityType } = useChatVisibility({
     chatId: chatId || '',
     initialVisibilityType: 'private',
   });
 
-  // Only show visibility controls if we're in a chat and not readonly
   const showVisibilityControls = chatId && !isGuest;
 
-  // Extract name from email
   const getUserName = (email: string | null | undefined): string => {
     if (!email) return 'User';
     if (isGuest) return 'Guest';
 
-    // Extract the part before @ and format it
     const namePart = email.split('@')[0];
     // Replace dots and underscores with spaces, then capitalize each word
     return namePart
