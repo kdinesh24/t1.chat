@@ -44,7 +44,6 @@ export function SidebarUserNav({ user }: { user: User }) {
     if (isGuest) return 'Guest';
 
     const namePart = email.split('@')[0];
-    // Replace dots and underscores with spaces, then capitalize each word
     return namePart
       .replace(/[._]/g, ' ')
       .split(' ')
