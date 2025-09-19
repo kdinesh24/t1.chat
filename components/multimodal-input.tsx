@@ -80,16 +80,23 @@ function PureMultimodalInput({
   const adjustHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      const maxHeight = window.innerHeight * 0.2; // Reduced to 20% of viewport height
-      const scrollHeight = textareaRef.current.scrollHeight + 2;
-      textareaRef.current.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
+      const maxHeight = window.innerHeight * 0.2; // 20% of viewport height
+      const minHeight = 70; // Minimum height to match CSS min-h-[70px]
+      const scrollHeight = textareaRef.current.scrollHeight;
+
+      // Calculate target height, ensuring it's between min and max
+      const targetHeight = Math.max(
+        minHeight,
+        Math.min(scrollHeight, maxHeight),
+      );
+      textareaRef.current.style.height = `${targetHeight}px`;
     }
   };
 
   const resetHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = '80px'; // Reduced from 120px to 80px
+      textareaRef.current.style.height = '70px'; // Set to match min-h-[70px] from CSS
     }
   };
 
@@ -112,6 +119,10 @@ function PureMultimodalInput({
 
   useEffect(() => {
     setLocalStorageInput(input);
+    // Adjust height whenever input changes
+    if (textareaRef.current) {
+      adjustHeight();
+    }
   }, [input, setLocalStorageInput]);
 
   const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -143,7 +154,6 @@ function PureMultimodalInput({
 
     setAttachments([]);
     setLocalStorageInput('');
-    resetHeight();
     setInput('');
 
     if (width && width > 768) {
