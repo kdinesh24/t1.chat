@@ -15,7 +15,6 @@ export const entitlementsByUserType: Record<UserType, Entitlements> = {
     availableChatModelIds: [
       'gemini-2.0-flash-exp',
       'gemini-1.5-flash',
-      // Backward compatibility
       'chat-model', 
       'chat-model-reasoning'
     ],
@@ -36,8 +35,4 @@ export const entitlementsByUserType: Record<UserType, Entitlements> = {
       'chat-model-reasoning'
     ],
   },
-
-  /*
-   * TODO: For users with an account and a paid membership
-   */
 };

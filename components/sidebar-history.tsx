@@ -125,12 +125,10 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
   const handleDelete = async () => {
     const shouldRedirect = deleteId === id;
 
-    // Show immediate feedback
     toast.success('Deleting chat...');
     setShowDeleteDialog(false);
 
     try {
-      // Perform actual deletion first
       const response = await fetch(`/api/chat?id=${deleteId}`, {
         method: 'DELETE',
       });
